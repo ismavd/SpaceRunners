@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.GL10;
 
 public class GameScreen extends AbstractGameScreen
 {
-	// Modificado
-	
 	private static final String TAG = GameScreen.class.getName();
 	private WorldController worldController;
 	private WorldRenderer worldRenderer;
