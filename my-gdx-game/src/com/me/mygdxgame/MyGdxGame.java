@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.assets.AssetManager;
 
 public class MyGdxGame extends Game
 {
@@ -30,35 +31,13 @@ public class MyGdxGame extends Game
 	@Override
 	public void create() 
 	{
-		// TODO Auto-generated method stub
-		
 		// Set Libgdx log level to DEBUG
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		// Load assets
-		//Assets.instance.init(new AssetManager());
-		// Start game at menu screen
-		setScreen(new MenuScreen(this));
-		
-		/*float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
-		
-		camera = new OrthographicCamera(1, h / w);
-		batch = new SpriteBatch();
-		
-		texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		
-		sprite = new Sprite(region);
-		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		sprite.setOrigin(sprite.getWidth() / 2,
-		sprite.getHeight() / 2);
-		sprite.setPosition(-sprite.getWidth() / 2, -sprite.getHeight() / 2);*/
-		
-		//Gdx.app.log( MyGdxGame.LOG, "Creating game" );
-        //fpsLogger = new FPSLogger();
-		
+		Assets.instance.init(new AssetManager());
+		// Initialize controller and renderer
+		worldController = new WorldController();
+		worldRenderer = new WorldRenderer(worldController);
 	}
 
 	@Override
@@ -125,20 +104,15 @@ public class MyGdxGame extends Game
 	@Override
 	public void resume() 
 	{
-		// TODO Auto-generated method stub
-		//Gdx.app.log( MyGdxGame.LOG, "Resuming game" );
+		Assets.instance.init(new AssetManager());
 		paused = false;
 	}
 
 	@Override
 	public void dispose() 
 	{
-		// TODO Auto-generated method stub
-		//Gdx.app.log( MyGdxGame.LOG, "Disposing game" );
-		//batch.dispose();
-		//texture.dispose();
-		
 		worldRenderer.dispose();
+		Assets.instance.dispose();
 	}
 	
 	
