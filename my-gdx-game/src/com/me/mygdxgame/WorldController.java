@@ -23,6 +23,10 @@ public class WorldController extends InputAdapter {
 
 	public CameraHelper cameraHelper;
 
+	public WorldController() {
+		init();
+	}
+	
 	public WorldController(Game game) {
 		this.game = game;
 		init();
