@@ -140,6 +140,4 @@ public class MyGdxGame extends Game
 		
 		worldRenderer.dispose();
 	}
-	
-	
 }
