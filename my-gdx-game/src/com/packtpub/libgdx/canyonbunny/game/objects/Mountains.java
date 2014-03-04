@@ -3,7 +3,7 @@ package com.packtpub.libgdx.canyonbunny.game.objects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.packtpub.libgdx.canyonbunny.game.Assets;
+import com.me.mygdxgame.Assets;
 
 public class Mountains extends AbstractGameObject {
 	private TextureRegion regMountainLeft;
