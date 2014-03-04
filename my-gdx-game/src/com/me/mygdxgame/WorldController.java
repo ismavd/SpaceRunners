@@ -26,7 +26,7 @@ public class WorldController extends InputAdapter {
 	public WorldController() {
 		init();
 	}
-	
+
 	public WorldController(Game game) {
 		this.game = game;
 		init();
