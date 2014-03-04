@@ -1,5 +1,7 @@
 package com.packtpub.libgdx.canyonbunny.game.objects;
 
+//Version 1
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.Assets;
