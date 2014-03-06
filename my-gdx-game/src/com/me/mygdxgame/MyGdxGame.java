@@ -3,7 +3,15 @@ package com.me.mygdxgame;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+<<<<<<< HEAD
 import com.badlogic.gdx.graphics.GL10;
+=======
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.assets.AssetManager;
+import com.me.mygdxgame.game.Assets;
+import com.me.mygdxgame.game.WorldController;
+import com.me.mygdxgame.game.WorldRenderer;
+>>>>>>> branch 'master' of https://github.com/ismavd/SpaceRunners.git
 
 public class MyGdxGame extends Game
 {

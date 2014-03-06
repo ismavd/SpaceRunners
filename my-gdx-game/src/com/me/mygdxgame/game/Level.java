@@ -1,4 +1,4 @@
-package com.packtpub.libgdx.canyonbunny.gamee;
+package com.me.mygdxgame.game;
 
 //Version 1
 
