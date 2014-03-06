@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.me.mygdxgame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.me.mygdxgame.utils.Constants;
 
 public class Assets implements Disposable, AssetErrorListener {
 

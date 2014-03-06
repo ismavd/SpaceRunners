@@ -1,8 +1,10 @@
-package com.me.mygdxgame;
+package com.me.mygdxgame.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.me.mygdxgame.game.WorldController;
+import com.me.mygdxgame.game.WorldRenderer;
 
 public class GameScreen extends AbstractGameScreen
 {
