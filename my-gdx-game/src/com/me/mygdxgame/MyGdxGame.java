@@ -11,7 +11,6 @@ import com.me.mygdxgame.game.WorldRenderer;
 
 public class MyGdxGame extends Game
 {
-
 	//private OrthographicCamera camera;
 	//private SpriteBatch batch;
 	//private Texture texture;
