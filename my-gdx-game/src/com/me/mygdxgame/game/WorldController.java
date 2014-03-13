@@ -177,6 +177,7 @@ public class WorldController extends InputAdapter {
 		}
 		switch (bunnyHead.jumpState) {
 		case GROUNDED:
+			bunnyHead.jumpState = JUMP_STATE.JUMP_RISING;
 			break;
 		case FALLING:
 		case JUMP_FALLING:
@@ -187,6 +188,7 @@ public class WorldController extends InputAdapter {
 		case JUMP_RISING:
 			bunnyHead.position.y = rock.position.y + bunnyHead.bounds.height
 					+ bunnyHead.origin.y;
+			bunnyHead.jumpState = JUMP_STATE.JUMP_FALLING;
 			break;
 		}
 	}
