@@ -12,6 +12,7 @@ import com.me.mygdxgame.objects.WaterOverlay;
 import com.me.mygdxgame.objects.BunnyHead;
 import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.Feather;
+import com.me.mygdxgame.objects.Goal;
 
 public class Level {
 	public static final String TAG = Level.class.getName();
@@ -21,7 +22,9 @@ public class Level {
 		ROCK(0, 255, 0), // green
 		PLAYER_SPAWNPOINT(255, 255, 255), // white
 		ITEM_FEATHER(255, 0, 255), // purple
-		ITEM_GOLD_COIN(255, 255, 0); // yellow
+		ITEM_GOLD_COIN(255, 255, 0), // yellow
+		GOAL(255, 0, 0); // red
+
 		private int color;
 
 		private BLOCK_TYPE(int r, int g, int b) {
@@ -47,6 +50,8 @@ public class Level {
 	public BunnyHead bunnyHead;
 	public Array<GoldCoin> goldcoins;
 	public Array<Feather> feathers;
+	// goal
+	public Goal goal;
 
 	public Level(String filename) {
 		init(filename);
@@ -115,6 +120,13 @@ public class Level {
 							+ offsetHeight);
 					goldcoins.add((GoldCoin) obj);
 				}
+				// goal
+				else if (BLOCK_TYPE.GOAL.sameColor(currentPixel)) {
+					obj = new Goal();
+					offsetHeight = -7.0f;
+					obj.position.set(pixelX, baseHeight + offsetHeight);
+					goal = (Goal) obj;
+				}
 				// unknown object/pixel color
 				else {
 					int r = 0xff & (currentPixel >>> 24); // red color channel
@@ -143,6 +155,8 @@ public class Level {
 	public void render(SpriteBatch batch) {
 		// Draw Mountains
 		mountains.render(batch);
+		// Draw Goal
+		goal.render(batch);
 		// Draw Rocks
 		for (Rock rock : rocks)
 			rock.render(batch);

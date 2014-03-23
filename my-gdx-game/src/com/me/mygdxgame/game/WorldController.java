@@ -21,8 +21,17 @@ import com.badlogic.gdx.utils.Array;
 import com.me.mygdxgame.screens.MenuScreen;
 import com.me.mygdxgame.utils.CameraHelper;
 import com.me.mygdxgame.utils.Constants;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Disposable;
 
-public class WorldController extends InputAdapter {
+public class WorldController extends InputAdapter implements Disposable {
 	private static final String TAG = WorldController.class.getName();
 
 	private Game game;
@@ -37,6 +46,9 @@ public class WorldController extends InputAdapter {
 	public int score;
 
 	private float timeLeftGameOverDelay;
+
+	private boolean goalReached;
+	public World b2world;
 
 	public WorldController() {
 		init();
@@ -57,8 +69,10 @@ public class WorldController extends InputAdapter {
 
 	private void initLevel() {
 		score = 0;
+		goalReached = false;
 		level = new Level(Constants.LEVEL_01);
 		cameraHelper.setTarget(level.bunnyHead);
+		initPhysics();
 	}
 
 	@Override
@@ -75,20 +89,25 @@ public class WorldController extends InputAdapter {
 			Gdx.app.debug(TAG,
 					"Camera follow enabled: " + cameraHelper.hasTarget());
 		}
+		// Back to Menu
+		else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
+			backToMenu();
+		}
 		return false;
 	}
 
 	public void update(float deltaTime) {
 		handleDebugInput(deltaTime);
-		if (isGameOver()) {
+		if (isGameOver() || goalReached) {
 			timeLeftGameOverDelay -= deltaTime;
 			if (timeLeftGameOverDelay < 0)
-				init();
+				backToMenu();
 		} else {
 			handleInputGame(deltaTime);
 		}
 		level.update(deltaTime);
 		testCollisions();
+		b2world.step(deltaTime, 8, 3);
 		cameraHelper.update(deltaTime);
 		if (!isGameOver() && isPlayerInWater()) {
 			lives--;
@@ -205,6 +224,13 @@ public class WorldController extends InputAdapter {
 		level.bunnyHead.setFeatherPowerup(true);
 		Gdx.app.log(TAG, "Feather collected");
 	}
+	
+	private void onCollisionBunnyWithGoal() {
+		goalReached = true;
+		timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_FINISHED;
+		Vector2 centerPosBunnyHead = new Vector2(level.bunnyHead.position);
+		centerPosBunnyHead.x += level.bunnyHead.bounds.width;
+	}
 
 	private void testCollisions() {
 		r1.set(level.bunnyHead.position.x, level.bunnyHead.position.y,
@@ -241,6 +267,16 @@ public class WorldController extends InputAdapter {
 			onCollisionBunnyWithFeather(feather);
 			break;
 		}
+		// Test collision: Bunny Head <-> Goal
+		if (!goalReached) {
+			r2.set(level.goal.bounds);
+			r2.x += level.goal.position.x;
+			r2.y += level.goal.position.y;
+			if (r1.overlaps(r2))
+			{
+				onCollisionBunnyWithGoal();
+			}
+		}
 	}
 
 	private void handleInputGame(float deltaTime) {
@@ -270,5 +306,35 @@ public class WorldController extends InputAdapter {
 
 	public boolean isPlayerInWater() {
 		return level.bunnyHead.position.y < -5;
+	}
+	
+	private void initPhysics() {
+		if (b2world != null)
+			b2world.dispose();
+		b2world = new World(new Vector2(0, -9.81f), true);
+		// Rocks
+		Vector2 origin = new Vector2();
+		for (Rock rock : level.rocks) {
+			BodyDef bodyDef = new BodyDef();
+			bodyDef.type = BodyType.KinematicBody;
+			bodyDef.position.set(rock.position);
+			Body body = b2world.createBody(bodyDef);
+			rock.body = body;
+			PolygonShape polygonShape = new PolygonShape();
+			origin.x = rock.bounds.width / 2.0f;
+			origin.y = rock.bounds.height / 2.0f;
+			polygonShape.setAsBox(rock.bounds.width / 2.0f,
+					rock.bounds.height / 2.0f, origin, 0);
+			FixtureDef fixtureDef = new FixtureDef();
+			fixtureDef.shape = polygonShape;
+			body.createFixture(fixtureDef);
+			polygonShape.dispose();
+		}
+	}
+
+	@Override
+	public void dispose() {
+		if (b2world != null)
+			b2world.dispose();
 	}
 }

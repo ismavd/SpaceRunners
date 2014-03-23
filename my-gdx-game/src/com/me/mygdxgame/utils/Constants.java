@@ -1,7 +1,6 @@
 package com.me.mygdxgame.utils;
 
-public class Constants 
-{
+public class Constants {
 	// Visible game world is 5 meters wide
 	public static final float VIEWPORT_WIDTH = 5.0f;
 	// Visible game world is 5 meters tall
@@ -20,4 +19,15 @@ public class Constants
 	public static final float ITEM_FEATHER_POWERUP_DURATION = 9;
 	// Delay after game over
 	public static final float TIME_DELAY_GAME_OVER = 3;
+	// Delay after game finished
+	public static final float TIME_DELAY_GAME_FINISHED = 6;
+
+	// Game preferences file
+	public static final String PREFERENCES = "canyonbunny.prefs";
+
+	public static final String TEXTURE_ATLAS_UI = "images/canyonbunny-ui.pack";
+	public static final String TEXTURE_ATLAS_LIBGDX_UI = "images/uiskin.atlas";
+	// Location of description file for skins
+	public static final String SKIN_LIBGDX_UI = "images/uiskin.json";
+	public static final String SKIN_CANYONBUNNY_UI = "images/canyonbunny-ui.json";
 }

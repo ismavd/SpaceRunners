@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.me.mygdxgame.game.WorldController;
 import com.me.mygdxgame.game.WorldRenderer;
+import com.me.mygdxgame.utils.GamePreferences;
 
 public class GameScreen extends AbstractGameScreen
 {
@@ -35,6 +36,7 @@ public class GameScreen extends AbstractGameScreen
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		// Render game world to screen
 		worldRenderer.render();
+	
 	}
 	
 	@Override
@@ -46,6 +48,7 @@ public class GameScreen extends AbstractGameScreen
 	@Override
 	public void show () 
 	{
+		GamePreferences.instance.load();
 		worldController = new WorldController(game);
 		worldRenderer = new WorldRenderer(worldController);
 		Gdx.input.setCatchBackKey(true);
@@ -54,6 +57,7 @@ public class GameScreen extends AbstractGameScreen
 	@Override
 	public void hide () 
 	{
+		worldController.dispose();
 		worldRenderer.dispose();
 		Gdx.input.setCatchBackKey(false);
 	}
@@ -63,6 +67,7 @@ public class GameScreen extends AbstractGameScreen
 	{
 		paused = true;
 	}
+	
 	@Override
 	public void resume () 
 	{
