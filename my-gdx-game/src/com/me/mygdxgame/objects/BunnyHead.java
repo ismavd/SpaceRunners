@@ -67,13 +67,13 @@ public class BunnyHead extends AbstractGameObject {
 		case JUMP_RISING: // Rising in the air
 			if (!jumpKeyPressed)
 				jumpState = JUMP_STATE.JUMP_FALLING;
-			break;
-		case FALLING:// Falling down
-		case JUMP_FALLING: // Falling down after jump
-			if (jumpKeyPressed && hasFeatherPowerup) {
+			else if (jumpKeyPressed && hasFeatherPowerup) {
 				timeJumping = JUMP_TIME_OFFSET_FLYING;
 				jumpState = JUMP_STATE.JUMP_RISING;
 			}
+			break;
+		case FALLING:// Falling down
+		case JUMP_FALLING: // Falling down after jump
 			break;
 		}
 	}
@@ -82,7 +82,11 @@ public class BunnyHead extends AbstractGameObject {
 		hasFeatherPowerup = pickedUp;
 		if (pickedUp) {
 			timeLeftFeatherPowerup = Constants.ITEM_FEATHER_POWERUP_DURATION;
+			terminalVelocity.set(5.0f, 4.0f);
 		}
+		else {
+			terminalVelocity.set(3.0f, 4.0f);
+		}			
 	}
 
 	public boolean hasFeatherPowerup() {

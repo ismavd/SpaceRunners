@@ -127,6 +127,8 @@ public class WorldRenderer implements Disposable {
 		//renderGuiFpsCounter(batch);
 		// draw game over text
 		renderGuiGameOverMessage(batch);
+		// draw goal text
+		renderGuiGoalMessage(batch);
 		batch.end();
 	}
 
@@ -139,6 +141,18 @@ public class WorldRenderer implements Disposable {
 			fontGameOver.drawMultiLine(batch, "GAME OVER", x, y, 0,
 					BitmapFont.HAlignment.CENTER);
 			fontGameOver.setColor(1, 1, 1, 1);
+		}
+	}
+	
+	private void renderGuiGoalMessage(SpriteBatch batch) {
+		float x = cameraGUI.viewportWidth / 2;
+		float y = cameraGUI.viewportHeight / 2;
+		if (worldController.isGoalReached()) {
+			BitmapFont fontGoal = Assets.instance.fonts.defaultBig;
+			fontGoal.setColor(1, 0.75f, 0.25f, 1);
+			fontGoal.drawMultiLine(batch, "LEVEL COMPLETED!", x, y - 150, 0,
+					BitmapFont.HAlignment.CENTER);
+			fontGoal.setColor(1, 1, 1, 1);
 		}
 	}
 

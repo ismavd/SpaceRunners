@@ -3,6 +3,7 @@ package com.me.mygdxgame.game;
 import com.badlogic.gdx.math.Rectangle;
 import com.me.mygdxgame.objects.BunnyHead;
 import com.me.mygdxgame.objects.BunnyHead.JUMP_STATE;
+import com.me.mygdxgame.objects.Carrot;
 import com.me.mygdxgame.objects.Feather;
 import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.Rock;
@@ -202,7 +203,8 @@ public class WorldController extends InputAdapter implements Disposable {
 		case JUMP_FALLING:
 			bunnyHead.position.y = rock.position.y + bunnyHead.bounds.height
 					+ bunnyHead.origin.y;
-			bunnyHead.jumpState = JUMP_STATE.GROUNDED;
+			if (!Gdx.input.isTouched() && !Gdx.input.isKeyPressed(Keys.SPACE))
+				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			break;
 		case JUMP_RISING:
 			bunnyHead.position.y = rock.position.y + bunnyHead.bounds.height
@@ -223,6 +225,15 @@ public class WorldController extends InputAdapter implements Disposable {
 		score += feather.getScore();
 		level.bunnyHead.setFeatherPowerup(true);
 		Gdx.app.log(TAG, "Feather collected");
+	}
+	
+	private void onCollisionBunnyWithCarrot(Carrot carrot) {
+		carrot.collected = true;
+		if (lives == 3)
+			score += carrot.getScore();
+		else
+			lives++;
+		Gdx.app.log(TAG, "Carrot collected");
 	}
 	
 	private void onCollisionBunnyWithGoal() {
@@ -267,6 +278,17 @@ public class WorldController extends InputAdapter implements Disposable {
 			onCollisionBunnyWithFeather(feather);
 			break;
 		}
+		// Test collision: Bunny Head <-> Carrots
+				for (Carrot carrot : level.carrots) {
+					if (carrot.collected)
+						continue;
+					r2.set(carrot.position.x, carrot.position.y,
+							carrot.bounds.width, carrot.bounds.height);
+					if (!r1.overlaps(r2))
+						continue;
+					onCollisionBunnyWithCarrot(carrot);
+					break;
+				}
 		// Test collision: Bunny Head <-> Goal
 		if (!goalReached) {
 			r2.set(level.goal.bounds);
@@ -306,6 +328,10 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	public boolean isPlayerInWater() {
 		return level.bunnyHead.position.y < -5;
+	}
+	
+	public boolean isGoalReached() {
+		return goalReached;
 	}
 	
 	private void initPhysics() {

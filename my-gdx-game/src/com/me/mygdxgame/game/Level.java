@@ -12,6 +12,7 @@ import com.me.mygdxgame.objects.WaterOverlay;
 import com.me.mygdxgame.objects.BunnyHead;
 import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.Feather;
+import com.me.mygdxgame.objects.Carrot;
 import com.me.mygdxgame.objects.Goal;
 
 public class Level {
@@ -23,7 +24,8 @@ public class Level {
 		PLAYER_SPAWNPOINT(255, 255, 255), // white
 		ITEM_FEATHER(255, 0, 255), // purple
 		ITEM_GOLD_COIN(255, 255, 0), // yellow
-		GOAL(255, 0, 0); // red
+		GOAL(255, 0, 0), // red
+		ITEM_CARROT(0, 0, 255); // blue
 
 		private int color;
 
@@ -50,6 +52,7 @@ public class Level {
 	public BunnyHead bunnyHead;
 	public Array<GoldCoin> goldcoins;
 	public Array<Feather> feathers;
+	public Array<Carrot> carrots;
 	// goal
 	public Goal goal;
 
@@ -64,6 +67,7 @@ public class Level {
 		rocks = new Array<Rock>();
 		goldcoins = new Array<GoldCoin>();
 		feathers = new Array<Feather>();
+		carrots = new Array<Carrot>();
 		// load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
 		// scan pixels from top-left to bottom-right
@@ -120,6 +124,14 @@ public class Level {
 							+ offsetHeight);
 					goldcoins.add((GoldCoin) obj);
 				}
+				// carrot
+				else if (BLOCK_TYPE.ITEM_CARROT.sameColor(currentPixel)) {
+					obj = new Carrot();
+					offsetHeight = -1.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y
+							+ offsetHeight);
+					carrots.add((Carrot) obj);
+				}
 				// goal
 				else if (BLOCK_TYPE.GOAL.sameColor(currentPixel)) {
 					obj = new Goal();
@@ -166,6 +178,9 @@ public class Level {
 		// Draw Feathers
 		for (Feather feather : feathers)
 			feather.render(batch);
+		// Draw Carrots
+		for (Carrot carrot : carrots)
+			carrot.render(batch);
 		// Draw Player Character
 		bunnyHead.render(batch);
 		// Draw Water Overlay
@@ -182,6 +197,8 @@ public class Level {
 			goldCoin.update(deltaTime);
 		for (Feather feather : feathers)
 			feather.update(deltaTime);
+		for (Carrot carrot : carrots)
+			carrot.update(deltaTime);
 		clouds.update(deltaTime);
 	}
 }
