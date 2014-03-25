@@ -67,10 +67,8 @@ public class BunnyHead extends AbstractGameObject {
 		case JUMP_RISING: // Rising in the air
 			if (!jumpKeyPressed)
 				jumpState = JUMP_STATE.JUMP_FALLING;
-			else if (jumpKeyPressed && hasFeatherPowerup) {
+			else if (jumpKeyPressed && hasFeatherPowerup)
 				timeJumping = JUMP_TIME_OFFSET_FLYING;
-				jumpState = JUMP_STATE.JUMP_RISING;
-			}
 			break;
 		case FALLING:// Falling down
 		case JUMP_FALLING: // Falling down after jump
