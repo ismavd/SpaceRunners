@@ -15,7 +15,7 @@ public class WorldRenderer implements Disposable {
 	private OrthographicCamera cameraGUI;
 	private SpriteBatch batch;
 	private WorldController worldController;
-	
+
 	private static final boolean DEBUG_DRAW_BOX2D_WORLD = false;
 	private Box2DDebugRenderer b2debugRenderer;
 
@@ -121,10 +121,14 @@ public class WorldRenderer implements Disposable {
 		renderGuiFeatherPowerup(batch);
 		// draw extra lives icon + text (anchored to top right edge)
 		renderGuiExtraLive(batch);
+		// draw input buttons
+		renderGuiLeftButton(batch);
+		renderGuiRightButton(batch);
+		renderGuiJumpButton(batch);
 		// draw FPS text (anchored to bottom right edge)
 		if (GamePreferences.instance.showFpsCounter)
 			renderGuiFpsCounter(batch);
-		//renderGuiFpsCounter(batch);
+		// renderGuiFpsCounter(batch);
 		// draw game over text
 		renderGuiGameOverMessage(batch);
 		// draw goal text
@@ -143,7 +147,7 @@ public class WorldRenderer implements Disposable {
 			fontGameOver.setColor(1, 1, 1, 1);
 		}
 	}
-	
+
 	private void renderGuiGoalMessage(SpriteBatch batch) {
 		float x = cameraGUI.viewportWidth / 2;
 		float y = cameraGUI.viewportHeight / 2;
@@ -175,5 +179,23 @@ public class WorldRenderer implements Disposable {
 			Assets.instance.fonts.defaultSmall.draw(batch, ""
 					+ (int) timeLeftFeatherPowerup, x + 60, y + 57);
 		}
+	}
+
+	private void renderGuiLeftButton(SpriteBatch batch) {
+		float x = 0;
+		float y = cameraGUI.viewportHeight - 100;
+		batch.draw(Assets.instance.leftButton.left, x, y, 50, 50, 100, 100, 1f, -1f, 0);
+	}
+	
+	private void renderGuiRightButton(SpriteBatch batch) {
+		float x = 100;
+		float y = cameraGUI.viewportHeight - 100;
+		batch.draw(Assets.instance.rightButton.right, x, y, 50, 50, 100, 100, 1f, -1f, 0);
+	}
+	
+	private void renderGuiJumpButton(SpriteBatch batch) {
+		float x = cameraGUI.viewportWidth - 100;
+		float y = cameraGUI.viewportHeight - 100;
+		batch.draw(Assets.instance.jumpButton.jump, x, y, 50, 50, 100, 100, 1f, -1f, 0);
 	}
 }

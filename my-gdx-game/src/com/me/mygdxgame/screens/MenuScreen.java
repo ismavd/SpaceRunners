@@ -57,6 +57,10 @@ public class MenuScreen extends AbstractGameScreen {
 
 	private Skin skinLibgdx;
 
+	public MenuScreen(Game game) {
+		super(game);
+	}
+	
 	private void loadSettings() {
 		GamePreferences prefs = GamePreferences.instance;
 		prefs.load();
@@ -220,10 +224,6 @@ public class MenuScreen extends AbstractGameScreen {
 		winOptions.setVisible(true);
 	}
 
-	public MenuScreen(Game game) {
-		super(game);
-	}
-
 	private Table buildOptWinAudioSettings() {
 		Table tbl = new Table();
 		// + Title: "Audio"
@@ -362,6 +362,7 @@ public class MenuScreen extends AbstractGameScreen {
 		stage.dispose();
 		skinCanyonBunny.dispose();
 		skinLibgdx.dispose();
+		dispose();
 	}
 
 	@Override

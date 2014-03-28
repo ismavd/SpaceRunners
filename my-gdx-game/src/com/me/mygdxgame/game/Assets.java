@@ -18,6 +18,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public static final Assets instance = new Assets();
 	private AssetManager assetManager;
 	public AssetBunny bunny;
+	public AssetBunnyPower bunnyPower;
 	public AssetRock rock;
 	public AssetGoldCoin goldCoin;
 	public AssetFeather feather;
@@ -25,6 +26,10 @@ public class Assets implements Disposable, AssetErrorListener {
 	public AssetCarrot carrot;
 	public AssetLevelDecoration levelDecoration;
 	public AssetFonts fonts;
+	// Input buttons
+	public AssetLeftButton leftButton;
+	public AssetRightButton rightButton;
+	public AssetJumpButton jumpButton;
 
 	// singleton: prevent instantiation from other classes
 	private Assets() {
@@ -49,11 +54,16 @@ public class Assets implements Disposable, AssetErrorListener {
 		// create game resource objects
 		fonts = new AssetFonts();
 		bunny = new AssetBunny(atlas);
+		bunnyPower = new AssetBunnyPower(atlas);
 		rock = new AssetRock(atlas);
 		goldCoin = new AssetGoldCoin(atlas);
 		feather = new AssetFeather(atlas);
 		// Carrot
 		carrot = new AssetCarrot(atlas);
+		// Buttons
+		leftButton = new AssetLeftButton(atlas);
+		rightButton = new AssetRightButton(atlas);
+		jumpButton = new AssetJumpButton(atlas);
 		levelDecoration = new AssetLevelDecoration(atlas);
 	}
 
@@ -82,6 +92,14 @@ public class Assets implements Disposable, AssetErrorListener {
 
 		public AssetBunny(TextureAtlas atlas) {
 			head = atlas.findRegion("bunny_head");
+		}
+	}
+	
+	public class AssetBunnyPower {
+		public final AtlasRegion head;
+
+		public AssetBunnyPower(TextureAtlas atlas) {
+			head = atlas.findRegion("bunny_power");
 		}
 	}
 
@@ -113,10 +131,34 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	// Carrot
 	public class AssetCarrot {
-		public final AtlasRegion feather;
+		public final AtlasRegion carrot;
 
 		public AssetCarrot(TextureAtlas atlas) {
-			feather = atlas.findRegion("item_feather");
+			carrot = atlas.findRegion("carrot");
+		}
+	}
+	
+	public class AssetLeftButton {
+		public final AtlasRegion left;
+
+		public AssetLeftButton(TextureAtlas atlas) {
+			left = atlas.findRegion("boton_atras");
+		}
+	}
+	
+	public class AssetRightButton {
+		public final AtlasRegion right;
+
+		public AssetRightButton(TextureAtlas atlas) {
+			right = atlas.findRegion("boton_adelante");
+		}
+	}
+	
+	public class AssetJumpButton {
+		public final AtlasRegion jump;
+
+		public AssetJumpButton(TextureAtlas atlas) {
+			jump = atlas.findRegion("boton_jump");
 		}
 	}
 

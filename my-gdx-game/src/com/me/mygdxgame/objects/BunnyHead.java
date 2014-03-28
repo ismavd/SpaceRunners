@@ -23,6 +23,7 @@ public class BunnyHead extends AbstractGameObject {
 	}
 
 	private TextureRegion regHead;
+	private TextureRegion regPower;
 	public VIEW_DIRECTION viewDirection;
 	public float timeJumping;
 	public JUMP_STATE jumpState;
@@ -37,6 +38,7 @@ public class BunnyHead extends AbstractGameObject {
 	{
 		dimension.set(1, 1);
 		regHead = Assets.instance.bunny.head;
+		regPower = Assets.instance.bunnyPower.head;
 		// Center image on game object
 		origin.set(dimension.x / 2, dimension.y / 2);
 		// Bounding box for collision detection
@@ -158,8 +160,16 @@ public class BunnyHead extends AbstractGameObject {
 		// Set special color when game object has a feather power-up
 		if (hasFeatherPowerup)
 			batch.setColor(1.0f, 0.8f, 0.0f, 1.0f);
-		// Draw image
 		reg = regHead;
+		
+		// Código para cambiar de imagen al obtener una pluma (la imagen debe llamarse bunny_power.png)
+		/*if (hasFeatherPowerup)
+			reg = regPower;
+		else
+			reg = regHead;*/
+		
+		// Draw image
+		
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x,
 				origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation,
 				reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),

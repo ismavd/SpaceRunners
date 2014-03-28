@@ -102,9 +102,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		if (isGameOver() || goalReached) {
 			timeLeftGameOverDelay -= deltaTime;
 			if (timeLeftGameOverDelay < 0) {
-				game.dispose();
+				game.getScreen().hide();
 				backToMenu();
-			}	
+			}
 		} else {
 			handleInputGame(deltaTime);
 		}
@@ -228,7 +228,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		level.bunnyHead.setFeatherPowerup(true);
 		Gdx.app.log(TAG, "Feather collected");
 	}
-	
+
 	private void onCollisionBunnyWithCarrot(Carrot carrot) {
 		carrot.collected = true;
 		if (lives == 3)
@@ -237,7 +237,7 @@ public class WorldController extends InputAdapter implements Disposable {
 			lives++;
 		Gdx.app.log(TAG, "Carrot collected");
 	}
-	
+
 	private void onCollisionBunnyWithGoal() {
 		goalReached = true;
 		timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_FINISHED;
@@ -281,23 +281,22 @@ public class WorldController extends InputAdapter implements Disposable {
 			break;
 		}
 		// Test collision: Bunny Head <-> Carrots
-				for (Carrot carrot : level.carrots) {
-					if (carrot.collected)
-						continue;
-					r2.set(carrot.position.x, carrot.position.y,
-							carrot.bounds.width, carrot.bounds.height);
-					if (!r1.overlaps(r2))
-						continue;
-					onCollisionBunnyWithCarrot(carrot);
-					break;
-				}
+		for (Carrot carrot : level.carrots) {
+			if (carrot.collected)
+				continue;
+			r2.set(carrot.position.x, carrot.position.y, carrot.bounds.width,
+					carrot.bounds.height);
+			if (!r1.overlaps(r2))
+				continue;
+			onCollisionBunnyWithCarrot(carrot);
+			break;
+		}
 		// Test collision: Bunny Head <-> Goal
 		if (!goalReached) {
 			r2.set(level.goal.bounds);
 			r2.x += level.goal.position.x;
 			r2.y += level.goal.position.y;
-			if (r1.overlaps(r2))
-			{
+			if (r1.overlaps(r2)) {
 				onCollisionBunnyWithGoal();
 			}
 		}
@@ -312,12 +311,12 @@ public class WorldController extends InputAdapter implements Disposable {
 				level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
 			} else {
 				// Execute auto-forward movement on non-desktop platform
-				if (Gdx.app.getType() != ApplicationType.Desktop) {
+				/*if (Gdx.app.getType() != ApplicationType.Desktop) {
 					level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
-				}
+				}*/
 			}
 			// Bunny Jump
-			if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE))
+			if (/*Gdx.input.isTouched() ||*/ Gdx.input.isKeyPressed(Keys.SPACE))
 				level.bunnyHead.setJumping(true);
 		} else {
 			level.bunnyHead.setJumping(false);
@@ -331,11 +330,11 @@ public class WorldController extends InputAdapter implements Disposable {
 	public boolean isPlayerInWater() {
 		return level.bunnyHead.position.y < -5;
 	}
-	
+
 	public boolean isGoalReached() {
 		return goalReached;
 	}
-	
+
 	private void initPhysics() {
 		if (b2world != null)
 			b2world.dispose();
@@ -364,5 +363,17 @@ public class WorldController extends InputAdapter implements Disposable {
 	public void dispose() {
 		if (b2world != null)
 			b2world.dispose();
+	}
+	
+	public void LeftButtonAction() {
+	
+	}
+	
+	public void RightButtonAction() {
+		
+	}
+	
+	public void JumpButtonAction() {
+		
 	}
 }

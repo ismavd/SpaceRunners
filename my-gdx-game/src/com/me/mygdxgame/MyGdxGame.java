@@ -10,10 +10,6 @@ import com.me.mygdxgame.game.WorldController;
 import com.me.mygdxgame.game.WorldRenderer;
 import com.me.mygdxgame.screens.MenuScreen;
 
-/**
- * @author Isma
- *
- */
 public class MyGdxGame extends Game
 {
 	//private OrthographicCamera camera;
