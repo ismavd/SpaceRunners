@@ -1,0 +1,7 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+left: { down: boton_atras, up: boton_atras },
+right: { down: boton_adelante, up: boton_adelante },
+jump: { down: boton_jump, up: boton_jump },
+},
+}
