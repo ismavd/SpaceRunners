@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import com.me.mygdxgame.screens.MenuScreen;
 import com.me.mygdxgame.utils.CameraHelper;
 import com.me.mygdxgame.utils.Constants;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -41,6 +42,10 @@ public class WorldController extends InputAdapter implements Disposable {
 	private Rectangle r1 = new Rectangle();
 	private Rectangle r2 = new Rectangle();
 
+	public Circle cLeft = new Circle();
+	public Circle cRight = new Circle();
+	public Circle cJump = new Circle();
+
 	public CameraHelper cameraHelper;
 	public Level level;
 	public int lives;
@@ -49,7 +54,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	private float timeLeftGameOverDelay;
 
 	private boolean goalReached;
-	public World b2world;
+	//public World b2world;
 
 	public WorldController() {
 		init();
@@ -66,6 +71,19 @@ public class WorldController extends InputAdapter implements Disposable {
 		lives = Constants.LIVES_START;
 		timeLeftGameOverDelay = 0;
 		initLevel();
+		/*
+		 * cLeft.set(80, 650, 75); cRight.set(230, 650, 75); cJump.set(1200,
+		 * 650, 75);
+		 */
+		cLeft.set((float) 0.0625 * Gdx.graphics.getWidth(), (float) 0.9028
+				* Gdx.graphics.getHeight(),
+				(float) 0.058594 * Gdx.graphics.getWidth());
+		cRight.set((float) 0.1796875 * Gdx.graphics.getWidth(), (float) 0.9028
+				* Gdx.graphics.getHeight(),
+				(float) 0.058594 * Gdx.graphics.getWidth());
+		cJump.set((float) 0.9375 * Gdx.graphics.getWidth(), (float) 0.9028
+				* Gdx.graphics.getHeight(),
+				(float) 0.058594 * Gdx.graphics.getWidth());
 	}
 
 	private void initLevel() {
@@ -73,7 +91,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		goalReached = false;
 		level = new Level(Constants.LEVEL_01);
 		cameraHelper.setTarget(level.bunnyHead);
-		initPhysics();
+		//initPhysics();
 	}
 
 	@Override
@@ -85,15 +103,18 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 		// Toggle camera follow
 		else if (keycode == Keys.ENTER) {
-			cameraHelper.setTarget(cameraHelper.hasTarget() ? null
-					: level.bunnyHead);
-			Gdx.app.debug(TAG,
-					"Camera follow enabled: " + cameraHelper.hasTarget());
+			cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.bunnyHead);
+			Gdx.app.debug(TAG,"Camera follow enabled: " + cameraHelper.hasTarget());
 		}
 		// Back to Menu
 		else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
 			backToMenu();
 		}
+		// Pause menu
+		else if (keycode == Keys.MENU) {
+			game.getScreen().pause();
+		}
+		
 		return false;
 	}
 
@@ -102,7 +123,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		if (isGameOver() || goalReached) {
 			timeLeftGameOverDelay -= deltaTime;
 			if (timeLeftGameOverDelay < 0) {
-				game.getScreen().hide();
+				// game.getScreen().hide();
 				backToMenu();
 			}
 		} else {
@@ -110,7 +131,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 		level.update(deltaTime);
 		testCollisions();
-		b2world.step(deltaTime, 8, 3);
+		//b2world.step(deltaTime, 8, 3);
 		cameraHelper.update(deltaTime);
 		if (!isGameOver() && isPlayerInWater()) {
 			lives--;
@@ -303,24 +324,52 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void handleInputGame(float deltaTime) {
+		
+		 //Thread t = new Thread(new Runnable() { public void run() {
+		 
 		if (cameraHelper.hasTarget(level.bunnyHead)) {
-			// Player Movement
-			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-				level.bunnyHead.velocity.x = -level.bunnyHead.terminalVelocity.x;
-			} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
-			} else {
-				// Execute auto-forward movement on non-desktop platform
-				/*if (Gdx.app.getType() != ApplicationType.Desktop) {
+			for (int i = 0; i < 2; i++) {
+				// Player Movement
+				if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+					level.bunnyHead.velocity.x = -level.bunnyHead.terminalVelocity.x;
+				} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 					level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
-				}*/
+				} else {
+					// Execute auto-forward movement on non-desktop platform
+					/*
+					 * if (Gdx.app.getType() != ApplicationType.Desktop) {
+					 * level.bunnyHead.velocity.x =
+					 * level.bunnyHead.terminalVelocity.x; }
+					 */
+
+					if (Gdx.input.isTouched(i)
+							&& cLeft.contains((float) Gdx.input.getX(i),
+									(float) Gdx.input.getY(i))) {
+						level.bunnyHead.velocity.x = -level.bunnyHead.terminalVelocity.x;
+					} else if (Gdx.input.isTouched(i)
+							&& cRight.contains((float) Gdx.input.getX(i),
+									(float) Gdx.input.getY(i))) {
+						level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
+					}
+				}
+				// Bunny Jump
+				if (Gdx.input.isTouched(i)
+						&& cJump.contains((float) Gdx.input.getX(i),
+								(float) Gdx.input.getY(i))
+						/*
+						 * || Gdx.input.isTouched(1) && cJump.contains( (float)
+						 * Gdx.input.getX(),(float) Gdx.input.getY())
+						 */
+						|| Gdx.input.isKeyPressed(Keys.SPACE))
+					level.bunnyHead.setJumping(true);
 			}
-			// Bunny Jump
-			if (/*Gdx.input.isTouched() ||*/ Gdx.input.isKeyPressed(Keys.SPACE))
-				level.bunnyHead.setJumping(true);
+
 		} else {
 			level.bunnyHead.setJumping(false);
 		}
+		
+		  //} }); t.start();
+		 
 	}
 
 	public boolean isGameOver() {
@@ -335,7 +384,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		return goalReached;
 	}
 
-	private void initPhysics() {
+	/*private void initPhysics() {
 		if (b2world != null)
 			b2world.dispose();
 		b2world = new World(new Vector2(0, -9.81f), true);
@@ -357,23 +406,23 @@ public class WorldController extends InputAdapter implements Disposable {
 			body.createFixture(fixtureDef);
 			polygonShape.dispose();
 		}
-	}
+	}*/
 
 	@Override
 	public void dispose() {
-		if (b2world != null)
-			b2world.dispose();
+		/*if (b2world != null)
+			b2world.dispose();*/
 	}
-	
+
 	public void LeftButtonAction() {
-	
+
 	}
-	
+
 	public void RightButtonAction() {
-		
+
 	}
-	
+
 	public void JumpButtonAction() {
-		
+
 	}
 }

@@ -56,11 +56,8 @@ public class MenuScreen extends AbstractGameScreen {
 	private static final String TAG = MenuScreen.class.getName();
 
 	private Skin skinLibgdx;
+	private Button btnMenuExit;
 
-	public MenuScreen(Game game) {
-		super(game);
-	}
-	
 	private void loadSettings() {
 		GamePreferences prefs = GamePreferences.instance;
 		prefs.load();
@@ -184,9 +181,24 @@ public class MenuScreen extends AbstractGameScreen {
 				onOptionsClicked();
 			}
 		});
+		layer.row();
+		// + Options Button
+		btnMenuExit = new Button(skinCanyonBunny, "exit");
+		layer.add(btnMenuExit);
+		btnMenuExit.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				onExitClicked();
+			}
+		});
 		if (debugEnabled)
 			layer.debug();
 		return layer;
+	}
+
+	protected void onExitClicked() {
+		Gdx.app.exit();
+		
 	}
 
 	private Table buildOptionsWindowLayer() {
@@ -214,14 +226,20 @@ public class MenuScreen extends AbstractGameScreen {
 	}
 
 	private void onPlayClicked() {
-		game.setScreen(new GameScreen(game));
+		//game.setScreen(new GameScreen(game));
+		game.setScreen(new LevelScreen(game));
 	}
 
 	private void onOptionsClicked() {
 		loadSettings();
 		btnMenuPlay.setVisible(false);
 		btnMenuOptions.setVisible(false);
+		btnMenuExit.setVisible(false);
 		winOptions.setVisible(true);
+	}
+
+	public MenuScreen(Game game) {
+		super(game);
 	}
 
 	private Table buildOptWinAudioSettings() {
@@ -362,7 +380,6 @@ public class MenuScreen extends AbstractGameScreen {
 		stage.dispose();
 		skinCanyonBunny.dispose();
 		skinLibgdx.dispose();
-		dispose();
 	}
 
 	@Override

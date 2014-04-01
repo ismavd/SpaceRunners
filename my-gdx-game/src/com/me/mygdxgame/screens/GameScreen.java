@@ -20,16 +20,16 @@ import com.me.mygdxgame.utils.GamePreferences;
 public class GameScreen extends AbstractGameScreen {
 	private static final String TAG = GameScreen.class.getName();
 
-	private Stage stage;
+	//private Stage stage;
 
 	private WorldController worldController;
 	private WorldRenderer worldRenderer;
 	private boolean paused;
 
-	private Skin skinButtons;
+	/*private Skin skinButtons;
 	private Button btnLeft;
 	private Button btnRight;
-	private Button btnJump;
+	private Button btnJump;*/
 	
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
@@ -38,7 +38,7 @@ public class GameScreen extends AbstractGameScreen {
 		super(game);
 	}
 
-	private void rebuildStage() {
+	/*private void rebuildStage() {
 		skinButtons = new Skin(Gdx.files.internal(Constants.SKIN_BUTTONS),
 				new TextureAtlas(Constants.TEXTURE_ATLAS_OBJECTS));
 		// build all layers
@@ -85,10 +85,10 @@ public class GameScreen extends AbstractGameScreen {
 			}
 		});
 		layer.row();
-		/*if (debugEnabled)
-			layer.debug();*/
+		//if (debugEnabled)
+			//layer.debug();
 		return layer;
-	}
+	}*/
 
 	@Override
 	public void render(float deltaTime) {
@@ -120,9 +120,9 @@ public class GameScreen extends AbstractGameScreen {
 		worldController = new WorldController(game);
 		worldRenderer = new WorldRenderer(worldController);
 		Gdx.input.setCatchBackKey(true);
-		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
-		rebuildStage();
+		//stage = new Stage();
+		//Gdx.input.setInputProcessor(stage);
+		//rebuildStage();
 	}
 
 	@Override
@@ -143,5 +143,9 @@ public class GameScreen extends AbstractGameScreen {
 		super.resume();
 		// Only called on Android!
 		paused = false;
+	}
+	
+	public boolean isPaused() {
+		return paused;
 	}
 }
