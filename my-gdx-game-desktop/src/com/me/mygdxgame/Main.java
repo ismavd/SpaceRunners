@@ -21,11 +21,11 @@ public class Main {
 			TexturePacker2.process(settings, "assets-raw/images-ui",
 					"../my-gdx-game-android/assets/images",
 					"canyonbunny-ui.pack");
-			/*TexturePacker2.process(settings, "assets-raw/images",
+			TexturePacker2.process(settings, "assets-raw/images",
 					"bin/images", "canyonbunny.pack");
 			TexturePacker2.process(settings, "assets-raw/images-ui",
 					"bin/images",
-					"canyonbunny-ui.pack");*/
+					"canyonbunny-ui.pack");
 		}
 
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
