@@ -26,35 +26,42 @@ boton_jump
   index: -1
 bunny_head
   rotate: false
-  xy: 584, 173
+  xy: 775, 173
   size: 122, 82
   orig: 122, 82
   offset: 0, 0
   index: -1
 carrot
   rotate: false
-  xy: 60, 6
+  xy: 605, 116
   size: 20, 52
   orig: 20, 52
   offset: 0, 0
   index: -1
+checkpoint
+  rotate: false
+  xy: 204, 89
+  size: 185, 166
+  orig: 185, 166
+  offset: 0, 0
+  index: -1
 cloud01
   rotate: false
-  xy: 404, 177
+  xy: 391, 87
   size: 178, 78
   orig: 178, 78
   offset: 0, 0
   index: -1
 cloud02
   rotate: false
-  xy: 204, 167
+  xy: 391, 167
   size: 198, 88
   orig: 198, 88
   offset: 0, 0
   index: -1
 cloud03
   rotate: false
-  xy: 204, 80
+  xy: 591, 170
   size: 182, 85
   orig: 182, 85
   offset: 0, 0
@@ -68,7 +75,7 @@ goal
   index: -1
 item_feather
   rotate: false
-  xy: 742, 215
+  xy: 60, 18
   size: 46, 40
   orig: 46, 40
   offset: 0, 0
@@ -103,7 +110,7 @@ rock_middle
   index: -1
 water_overlay
   rotate: false
-  xy: 708, 95
+  xy: 571, 5
   size: 32, 160
   orig: 32, 160
   offset: 0, 0
