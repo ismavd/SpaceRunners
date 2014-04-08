@@ -247,7 +247,7 @@ public class WorldController extends InputAdapter implements Disposable {
 					+ bunnyHead.origin.y;
 			if ((Gdx.input.isTouched(0) && cJump.contains((float) Gdx.input.getX(0), (float) Gdx.input.getY(0)) || 
 					Gdx.input.isTouched(1) && cJump.contains((float) Gdx.input.getX(1), (float) Gdx.input.getY(1)))
-					&& !Gdx.input.isKeyPressed(Keys.SPACE))
+					|| !Gdx.input.isKeyPressed(Keys.SPACE))
 				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			break;
 		case JUMP_RISING:
@@ -395,7 +395,6 @@ public class WorldController extends InputAdapter implements Disposable {
 						&& cJump.contains((float) Gdx.input.getX(i),
 								(float) Gdx.input.getY(i))
 						|| Gdx.input.isKeyPressed(Keys.SPACE)) {
-					Gdx.app.log(TAG, i+" pointer in jump");
 					level.bunnyHead.setJumping(true);
 				}
 			}
