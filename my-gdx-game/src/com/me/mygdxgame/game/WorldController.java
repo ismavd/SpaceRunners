@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.me.mygdxgame.objects.BunnyHead;
 import com.me.mygdxgame.objects.BunnyHead.JUMP_STATE;
 import com.me.mygdxgame.objects.Carrot;
+import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Feather;
 import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.Rock;
@@ -50,11 +51,15 @@ public class WorldController extends InputAdapter implements Disposable {
 	public Level level;
 	public int lives;
 	public int score;
+	
+	public boolean checkpointReached;
+	private boolean paused; 
 
 	private float timeLeftGameOverDelay;
 
 	private boolean goalReached;
-	//public World b2world;
+
+	// public World b2world;
 
 	public WorldController() {
 		init();
@@ -89,9 +94,10 @@ public class WorldController extends InputAdapter implements Disposable {
 	private void initLevel() {
 		score = 0;
 		goalReached = false;
-		level = new Level(Constants.LEVEL_01);
+		level = new Level(Constants.LEVEL_01,checkpointReached);
 		cameraHelper.setTarget(level.bunnyHead);
-		//initPhysics();
+		paused = false;
+		// initPhysics();
 	}
 
 	@Override
@@ -103,18 +109,26 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 		// Toggle camera follow
 		else if (keycode == Keys.ENTER) {
-			cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.bunnyHead);
-			Gdx.app.debug(TAG,"Camera follow enabled: " + cameraHelper.hasTarget());
+			cameraHelper.setTarget(cameraHelper.hasTarget() ? null
+					: level.bunnyHead);
+			Gdx.app.debug(TAG,
+					"Camera follow enabled: " + cameraHelper.hasTarget());
 		}
 		// Back to Menu
-		else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
+		else if (/*keycode == Keys.ESCAPE ||*/ keycode == Keys.BACK) {
 			backToMenu();
 		}
 		// Pause menu
-		else if (keycode == Keys.MENU) {
-			game.getScreen().pause();
+		else if (keycode == Keys.MENU || keycode == Keys.ESCAPE) {
+			if (!paused) {
+				game.getScreen().pause(); 
+				paused = true;
+			}
+			else {
+				game.getScreen().resume();
+				paused = false;
+			}
 		}
-		
 		return false;
 	}
 
@@ -123,7 +137,6 @@ public class WorldController extends InputAdapter implements Disposable {
 		if (isGameOver() || goalReached) {
 			timeLeftGameOverDelay -= deltaTime;
 			if (timeLeftGameOverDelay < 0) {
-				// game.getScreen().hide();
 				backToMenu();
 			}
 		} else {
@@ -131,7 +144,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 		level.update(deltaTime);
 		testCollisions();
-		//b2world.step(deltaTime, 8, 3);
+		// b2world.step(deltaTime, 8, 3);
 		cameraHelper.update(deltaTime);
 		if (!isGameOver() && isPlayerInWater()) {
 			lives--;
@@ -140,6 +153,12 @@ public class WorldController extends InputAdapter implements Disposable {
 			else
 				initLevel();
 		}
+	}
+	
+	// En este método vamos a poner las acciones a realizar en el menú de pausa
+	public void updatePaused(float deltaTime) {
+		if (Gdx.input.justTouched())
+			backToMenu();
 	}
 
 	private void handleDebugInput(float deltaTime) {
@@ -226,7 +245,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		case JUMP_FALLING:
 			bunnyHead.position.y = rock.position.y + bunnyHead.bounds.height
 					+ bunnyHead.origin.y;
-			if (!Gdx.input.isTouched() && !Gdx.input.isKeyPressed(Keys.SPACE))
+			if ((Gdx.input.isTouched(0) && cJump.contains((float) Gdx.input.getX(0), (float) Gdx.input.getY(0)) || 
+					Gdx.input.isTouched(1) && cJump.contains((float) Gdx.input.getX(1), (float) Gdx.input.getY(1)))
+					&& !Gdx.input.isKeyPressed(Keys.SPACE))
 				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			break;
 		case JUMP_RISING:
@@ -257,6 +278,12 @@ public class WorldController extends InputAdapter implements Disposable {
 		else
 			lives++;
 		Gdx.app.log(TAG, "Carrot collected");
+	}
+
+	private void onCollisionBunnyWithCheckpoint(Checkpoint checkpoint) {
+		checkpoint.active = true;
+		checkpointReached = true;
+		Gdx.app.log(TAG, "Checkpoint reached");
 	}
 
 	private void onCollisionBunnyWithGoal() {
@@ -312,6 +339,17 @@ public class WorldController extends InputAdapter implements Disposable {
 			onCollisionBunnyWithCarrot(carrot);
 			break;
 		}
+		// Test collision: Bunny Head <-> Carrots
+		for (Checkpoint checkpoint : level.checkpoint) {
+			if (checkpoint.active)
+				continue;
+			r2.set(checkpoint.position.x, checkpoint.position.y, checkpoint.bounds.width,
+					checkpoint.bounds.height);
+			if (!r1.overlaps(r2))
+				continue;
+			onCollisionBunnyWithCheckpoint(checkpoint);
+			break;
+		}
 		// Test collision: Bunny Head <-> Goal
 		if (!goalReached) {
 			r2.set(level.goal.bounds);
@@ -324,9 +362,9 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void handleInputGame(float deltaTime) {
-		
-		 //Thread t = new Thread(new Runnable() { public void run() {
-		 
+
+		// Thread t = new Thread(new Runnable() { public void run() {
+
 		if (cameraHelper.hasTarget(level.bunnyHead)) {
 			for (int i = 0; i < 2; i++) {
 				// Player Movement
@@ -356,20 +394,18 @@ public class WorldController extends InputAdapter implements Disposable {
 				if (Gdx.input.isTouched(i)
 						&& cJump.contains((float) Gdx.input.getX(i),
 								(float) Gdx.input.getY(i))
-						/*
-						 * || Gdx.input.isTouched(1) && cJump.contains( (float)
-						 * Gdx.input.getX(),(float) Gdx.input.getY())
-						 */
-						|| Gdx.input.isKeyPressed(Keys.SPACE))
+						|| Gdx.input.isKeyPressed(Keys.SPACE)) {
+					Gdx.app.log(TAG, i+" pointer in jump");
 					level.bunnyHead.setJumping(true);
+				}
 			}
 
 		} else {
 			level.bunnyHead.setJumping(false);
 		}
-		
-		  //} }); t.start();
-		 
+
+		// } }); t.start();
+
 	}
 
 	public boolean isGameOver() {
@@ -383,46 +419,29 @@ public class WorldController extends InputAdapter implements Disposable {
 	public boolean isGoalReached() {
 		return goalReached;
 	}
+	
+	public boolean isPaused() {
+		return paused;
+	}
 
-	/*private void initPhysics() {
-		if (b2world != null)
-			b2world.dispose();
-		b2world = new World(new Vector2(0, -9.81f), true);
-		// Rocks
-		Vector2 origin = new Vector2();
-		for (Rock rock : level.rocks) {
-			BodyDef bodyDef = new BodyDef();
-			bodyDef.type = BodyType.KinematicBody;
-			bodyDef.position.set(rock.position);
-			Body body = b2world.createBody(bodyDef);
-			rock.body = body;
-			PolygonShape polygonShape = new PolygonShape();
-			origin.x = rock.bounds.width / 2.0f;
-			origin.y = rock.bounds.height / 2.0f;
-			polygonShape.setAsBox(rock.bounds.width / 2.0f,
-					rock.bounds.height / 2.0f, origin, 0);
-			FixtureDef fixtureDef = new FixtureDef();
-			fixtureDef.shape = polygonShape;
-			body.createFixture(fixtureDef);
-			polygonShape.dispose();
-		}
-	}*/
+	/*
+	 * private void initPhysics() { if (b2world != null) b2world.dispose();
+	 * b2world = new World(new Vector2(0, -9.81f), true); // Rocks Vector2
+	 * origin = new Vector2(); for (Rock rock : level.rocks) { BodyDef bodyDef =
+	 * new BodyDef(); bodyDef.type = BodyType.KinematicBody;
+	 * bodyDef.position.set(rock.position); Body body =
+	 * b2world.createBody(bodyDef); rock.body = body; PolygonShape polygonShape
+	 * = new PolygonShape(); origin.x = rock.bounds.width / 2.0f; origin.y =
+	 * rock.bounds.height / 2.0f; polygonShape.setAsBox(rock.bounds.width /
+	 * 2.0f, rock.bounds.height / 2.0f, origin, 0); FixtureDef fixtureDef = new
+	 * FixtureDef(); fixtureDef.shape = polygonShape;
+	 * body.createFixture(fixtureDef); polygonShape.dispose(); } }
+	 */
 
 	@Override
 	public void dispose() {
-		/*if (b2world != null)
-			b2world.dispose();*/
-	}
-
-	public void LeftButtonAction() {
-
-	}
-
-	public void RightButtonAction() {
-
-	}
-
-	public void JumpButtonAction() {
-
+		/*
+		 * if (b2world != null) b2world.dispose();
+		 */
 	}
 }

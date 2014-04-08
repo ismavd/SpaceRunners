@@ -133,6 +133,8 @@ public class WorldRenderer implements Disposable {
 		renderGuiGameOverMessage(batch);
 		// draw goal text
 		renderGuiGoalMessage(batch);
+		// draw pause menu
+		renderPauseMenu(batch);
 		batch.end();
 	}
 
@@ -155,6 +157,18 @@ public class WorldRenderer implements Disposable {
 			BitmapFont fontGoal = Assets.instance.fonts.defaultBig;
 			fontGoal.setColor(1, 0.75f, 0.25f, 1);
 			fontGoal.drawMultiLine(batch, "LEVEL COMPLETED!", x, y - 150, 0,
+					BitmapFont.HAlignment.CENTER);
+			fontGoal.setColor(1, 1, 1, 1);
+		}
+	}
+	
+	private void renderPauseMenu(SpriteBatch batch) {
+		float x = cameraGUI.viewportWidth / 2;
+		float y = cameraGUI.viewportHeight / 2;
+		if (worldController.isPaused()) {
+			BitmapFont fontGoal = Assets.instance.fonts.defaultBig;
+			fontGoal.setColor(1, 0.75f, 0.25f, 1);
+			fontGoal.drawMultiLine(batch, "PAUSE", x, y - 150, 0,
 					BitmapFont.HAlignment.CENTER);
 			fontGoal.setColor(1, 1, 1, 1);
 		}

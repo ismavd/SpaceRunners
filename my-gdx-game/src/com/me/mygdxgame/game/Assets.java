@@ -22,6 +22,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public AssetRock rock;
 	public AssetGoldCoin goldCoin;
 	public AssetFeather feather;
+	public AssetCheckpoint checkpoint;
 	// Carrot
 	public AssetCarrot carrot;
 	public AssetLevelDecoration levelDecoration;
@@ -58,6 +59,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		rock = new AssetRock(atlas);
 		goldCoin = new AssetGoldCoin(atlas);
 		feather = new AssetFeather(atlas);
+		checkpoint = new AssetCheckpoint(atlas);
 		// Carrot
 		carrot = new AssetCarrot(atlas);
 		// Buttons
@@ -126,6 +128,14 @@ public class Assets implements Disposable, AssetErrorListener {
 
 		public AssetFeather(TextureAtlas atlas) {
 			feather = atlas.findRegion("item_feather");
+		}
+	}
+	
+	public class AssetCheckpoint {
+		public final AtlasRegion checkpoint;
+
+		public AssetCheckpoint(TextureAtlas atlas) {
+			checkpoint = atlas.findRegion("checkpoint");
 		}
 	}
 	

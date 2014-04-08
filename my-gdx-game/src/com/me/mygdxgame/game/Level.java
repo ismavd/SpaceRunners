@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.me.mygdxgame.objects.AbstractGameObject;
+import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Clouds;
 import com.me.mygdxgame.objects.Mountains;
 import com.me.mygdxgame.objects.Rock;
@@ -25,7 +26,8 @@ public class Level {
 		ITEM_FEATHER(255, 0, 255), // purple
 		ITEM_GOLD_COIN(255, 255, 0), // yellow
 		GOAL(255, 0, 0), // red
-		ITEM_CARROT(0, 0, 255); // blue
+		ITEM_CARROT(0, 0, 255), // blue
+		CHECKPOINT(255, 69, 0); // orange
 
 		private int color;
 
@@ -53,14 +55,15 @@ public class Level {
 	public Array<GoldCoin> goldcoins;
 	public Array<Feather> feathers;
 	public Array<Carrot> carrots;
+	public Array<Checkpoint> checkpoint;
 	// goal
 	public Goal goal;
 
-	public Level(String filename) {
-		init(filename);
+	public Level(String filename, boolean checkpointReached) {
+		init(filename, checkpointReached);
 	}
 
-	private void init(String filename) {
+	private void init(String filename, boolean checkpointReached) {
 		// player character
 		bunnyHead = null;
 		// objects
@@ -68,6 +71,7 @@ public class Level {
 		goldcoins = new Array<GoldCoin>();
 		feathers = new Array<Feather>();
 		carrots = new Array<Carrot>();
+		checkpoint = new Array<Checkpoint>();
 		// load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
 		// scan pixels from top-left to bottom-right
@@ -94,14 +98,15 @@ public class Level {
 						float heightIncreaseFactor = 0.25f;
 						offsetHeight = -2.5f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
-								* heightIncreaseFactor + offsetHeight);
+								 * heightIncreaseFactor + offsetHeight);
 						rocks.add((Rock) obj);
 					} else {
 						rocks.get(rocks.size - 1).increaseLength(1);
 					}
 				}
 				// player spawn point
-				else if (BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)) {
+				else if (!checkpointReached
+						&& BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)) {
 					obj = new BunnyHead();
 					offsetHeight = -3.0f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
@@ -131,6 +136,21 @@ public class Level {
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					carrots.add((Carrot) obj);
+				}
+				// checkpoint
+				else if (BLOCK_TYPE.CHECKPOINT.sameColor(currentPixel)) {
+					obj = new Checkpoint();
+					offsetHeight = -1.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y
+							+ offsetHeight);
+					checkpoint.add((Checkpoint) obj);
+					if (checkpointReached) {
+						obj = new BunnyHead();
+						offsetHeight = -3.0f;
+						obj.position.set(pixelX, baseHeight * obj.dimension.y
+								+ offsetHeight);
+						bunnyHead = (BunnyHead) obj;
+					}
 				}
 				// goal
 				else if (BLOCK_TYPE.GOAL.sameColor(currentPixel)) {
@@ -181,6 +201,9 @@ public class Level {
 		// Draw Carrots
 		for (Carrot carrot : carrots)
 			carrot.render(batch);
+		// Draw Checkpoints
+		for (Checkpoint cp : checkpoint)
+			cp.render(batch);
 		// Draw Player Character
 		bunnyHead.render(batch);
 		// Draw Water Overlay
@@ -199,6 +222,8 @@ public class Level {
 			feather.update(deltaTime);
 		for (Carrot carrot : carrots)
 			carrot.update(deltaTime);
+		for (Checkpoint cp : checkpoint)
+			cp.update(deltaTime);
 		clouds.update(deltaTime);
 	}
 }

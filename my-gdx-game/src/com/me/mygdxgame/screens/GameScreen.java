@@ -97,6 +97,8 @@ public class GameScreen extends AbstractGameScreen {
 			// Update game world by the time that has passed
 			// since last rendered frame.
 			worldController.update(deltaTime);
+		} else {
+			worldController.updatePaused(deltaTime);
 		}
 
 		// Sets the clear screen color to: Cornflower Blue
@@ -143,9 +145,5 @@ public class GameScreen extends AbstractGameScreen {
 		super.resume();
 		// Only called on Android!
 		paused = false;
-	}
-	
-	public boolean isPaused() {
-		return paused;
 	}
 }
