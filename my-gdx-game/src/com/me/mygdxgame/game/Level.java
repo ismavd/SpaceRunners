@@ -7,7 +7,10 @@ import com.badlogic.gdx.utils.Array;
 import com.me.mygdxgame.objects.AbstractGameObject;
 import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Clouds;
+import com.me.mygdxgame.objects.Enemy;
+import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.Mountains;
+import com.me.mygdxgame.objects.Platform;
 import com.me.mygdxgame.objects.Rock;
 import com.me.mygdxgame.objects.WaterOverlay;
 import com.me.mygdxgame.objects.BunnyHead;
@@ -15,6 +18,7 @@ import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.Feather;
 import com.me.mygdxgame.objects.Carrot;
 import com.me.mygdxgame.objects.Goal;
+import com.me.mygdxgame.utils.AudioManager;
 
 public class Level {
 	public static final String TAG = Level.class.getName();
@@ -22,12 +26,15 @@ public class Level {
 	public enum BLOCK_TYPE {
 		EMPTY(0, 0, 0), // black
 		ROCK(0, 255, 0), // green
+		PLATFORM(128, 128, 128), // grey
 		PLAYER_SPAWNPOINT(255, 255, 255), // white
 		ITEM_FEATHER(255, 0, 255), // purple
 		ITEM_GOLD_COIN(255, 255, 0), // yellow
 		GOAL(255, 0, 0), // red
 		ITEM_CARROT(0, 0, 255), // blue
-		CHECKPOINT(255, 69, 0); // orange
+		CHECKPOINT(255, 69, 0), // orange
+		ENEMY(63,72,204), // indigo
+		GIANT(128,64,0); // brown
 
 		private int color;
 
@@ -46,12 +53,16 @@ public class Level {
 
 	// objects
 	public Array<Rock> rocks;
+	public Array<Platform> platforms;
 	// decoration
 	public Clouds clouds;
 	public Mountains mountains;
 	public WaterOverlay waterOverlay;
 	// actors
 	public BunnyHead bunnyHead;
+	public Array<Enemy> enemies;
+	public Giant giant;
+	// items
 	public Array<GoldCoin> goldcoins;
 	public Array<Feather> feathers;
 	public Array<Carrot> carrots;
@@ -61,13 +72,18 @@ public class Level {
 
 	public Level(String filename, boolean checkpointReached) {
 		init(filename, checkpointReached);
+		//AudioManager.instance.play(Assets.instance.music.song02);
 	}
 
 	private void init(String filename, boolean checkpointReached) {
 		// player character
 		bunnyHead = null;
+		// enemies
+		enemies = new Array<Enemy>();
+		giant = null;
 		// objects
 		rocks = new Array<Rock>();
+		platforms = new Array<Platform>();
 		goldcoins = new Array<GoldCoin>();
 		feathers = new Array<Feather>();
 		carrots = new Array<Carrot>();
@@ -102,6 +118,16 @@ public class Level {
 						rocks.add((Rock) obj);
 					} else {
 						rocks.get(rocks.size - 1).increaseLength(1);
+					}
+				}
+				else if (BLOCK_TYPE.PLATFORM.sameColor(currentPixel)) {
+					if (lastPixel != currentPixel) {
+						obj = new Platform();
+						offsetHeight = -1.5f;
+						obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);						
+						platforms.add((Platform) obj);
+					} else {
+						platforms.get(platforms.size - 1).increaseLength(1);
 					}
 				}
 				// player spawn point
@@ -152,6 +178,23 @@ public class Level {
 						bunnyHead = (BunnyHead) obj;
 					}
 				}
+				// enemies
+				else if (BLOCK_TYPE.ENEMY.sameColor(currentPixel)) {
+					obj = new Enemy();
+					offsetHeight = -1.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y
+							+ offsetHeight);
+					((Enemy)obj).initMove(obj.position.y);
+					enemies.add((Enemy) obj);
+				}
+				// giant
+				else if (BLOCK_TYPE.GIANT.sameColor(currentPixel)) {
+					obj = new Giant();
+					offsetHeight = -9f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y
+							+ offsetHeight);
+					giant = (Giant) obj;
+				}
 				// goal
 				else if (BLOCK_TYPE.GOAL.sameColor(currentPixel)) {
 					obj = new Goal();
@@ -192,6 +235,9 @@ public class Level {
 		// Draw Rocks
 		for (Rock rock : rocks)
 			rock.render(batch);
+		// Draw Platforms
+		for (Platform platform : platforms)
+			platform.render(batch);
 		// Draw Gold Coins
 		for (GoldCoin goldCoin : goldcoins)
 			goldCoin.render(batch);
@@ -201,6 +247,12 @@ public class Level {
 		// Draw Carrots
 		for (Carrot carrot : carrots)
 			carrot.render(batch);
+		// Draw Enemies
+		for (Enemy enemy : enemies)
+			enemy.render(batch);
+		// Draw Giant if he is in the level
+		if (giant!=null)
+			giant.render(batch);
 		// Draw Checkpoints
 		for (Checkpoint cp : checkpoint)
 			cp.render(batch);
@@ -216,6 +268,8 @@ public class Level {
 		bunnyHead.update(deltaTime);
 		for (Rock rock : rocks)
 			rock.update(deltaTime);
+		for (Platform platform : platforms)
+			platform.update(deltaTime);
 		for (GoldCoin goldCoin : goldcoins)
 			goldCoin.update(deltaTime);
 		for (Feather feather : feathers)
@@ -224,6 +278,10 @@ public class Level {
 			carrot.update(deltaTime);
 		for (Checkpoint cp : checkpoint)
 			cp.update(deltaTime);
+		for (Enemy enemy : enemies)
+			enemy.update(deltaTime);
+		if (giant != null)
+			giant.update(deltaTime);
 		clouds.update(deltaTime);
 	}
 }

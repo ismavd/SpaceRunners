@@ -5,8 +5,10 @@ import com.me.mygdxgame.objects.BunnyHead;
 import com.me.mygdxgame.objects.BunnyHead.JUMP_STATE;
 import com.me.mygdxgame.objects.Carrot;
 import com.me.mygdxgame.objects.Checkpoint;
+import com.me.mygdxgame.objects.Enemy;
 import com.me.mygdxgame.objects.Feather;
 import com.me.mygdxgame.objects.GoldCoin;
+import com.me.mygdxgame.objects.Platform;
 import com.me.mygdxgame.objects.Rock;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -33,6 +35,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
+import com.me.mygdxgame.utils.AudioManager;
 
 public class WorldController extends InputAdapter implements Disposable {
 	private static final String TAG = WorldController.class.getName();
@@ -51,13 +54,14 @@ public class WorldController extends InputAdapter implements Disposable {
 	public Level level;
 	public int lives;
 	public int score;
-	
+
 	public boolean checkpointReached;
-	private boolean paused; 
+	private boolean paused;
 
 	private float timeLeftGameOverDelay;
 
 	private boolean goalReached;
+	private boolean enemyHit;
 
 	// public World b2world;
 
@@ -94,7 +98,8 @@ public class WorldController extends InputAdapter implements Disposable {
 	private void initLevel() {
 		score = 0;
 		goalReached = false;
-		level = new Level(Constants.LEVEL_01,checkpointReached);
+		enemyHit = false;
+		level = new Level(Constants.LEVEL_01, checkpointReached);
 		cameraHelper.setTarget(level.bunnyHead);
 		paused = false;
 		// initPhysics();
@@ -115,16 +120,15 @@ public class WorldController extends InputAdapter implements Disposable {
 					"Camera follow enabled: " + cameraHelper.hasTarget());
 		}
 		// Back to Menu
-		else if (/*keycode == Keys.ESCAPE ||*/ keycode == Keys.BACK) {
+		else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
 			backToMenu();
 		}
 		// Pause menu
-		else if (keycode == Keys.MENU || keycode == Keys.ESCAPE) {
+		else if (keycode == Keys.MENU /* || keycode == Keys.ESCAPE */) {
 			if (!paused) {
-				game.getScreen().pause(); 
+				game.getScreen().pause();
 				paused = true;
-			}
-			else {
+			} else {
 				game.getScreen().resume();
 				paused = false;
 			}
@@ -146,7 +150,8 @@ public class WorldController extends InputAdapter implements Disposable {
 		testCollisions();
 		// b2world.step(deltaTime, 8, 3);
 		cameraHelper.update(deltaTime);
-		if (!isGameOver() && isPlayerInWater()) {
+		if (!isGameOver() && (isPlayerInWater() || enemyHit)) {
+			AudioManager.instance.play(Assets.instance.sounds.liveLost);
 			lives--;
 			if (isGameOver())
 				timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
@@ -154,7 +159,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				initLevel();
 		}
 	}
-	
+
 	// En este método vamos a poner las acciones a realizar en el menú de pausa
 	public void updatePaused(float deltaTime) {
 		if (Gdx.input.justTouched())
@@ -245,8 +250,12 @@ public class WorldController extends InputAdapter implements Disposable {
 		case JUMP_FALLING:
 			bunnyHead.position.y = rock.position.y + bunnyHead.bounds.height
 					+ bunnyHead.origin.y;
-			if ((Gdx.input.isTouched(0) && cJump.contains((float) Gdx.input.getX(0), (float) Gdx.input.getY(0)) || 
-					Gdx.input.isTouched(1) && cJump.contains((float) Gdx.input.getX(1), (float) Gdx.input.getY(1)))
+			if ((Gdx.input.isTouched(0)
+					&& cJump.contains((float) Gdx.input.getX(0),
+							(float) Gdx.input.getY(0)) || Gdx.input
+					.isTouched(1)
+					&& cJump.contains((float) Gdx.input.getX(1),
+							(float) Gdx.input.getY(1)))
 					|| !Gdx.input.isKeyPressed(Keys.SPACE))
 				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			break;
@@ -258,14 +267,40 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 	}
 
+	private void onCollisionBunnyHeadWithPlatform(Platform platform) {
+		BunnyHead bunnyHead = level.bunnyHead;
+		switch (bunnyHead.jumpState) {
+		case GROUNDED:
+			bunnyHead.jumpState = JUMP_STATE.JUMP_RISING;
+			break;
+		case FALLING:
+		case JUMP_FALLING:
+			bunnyHead.position.y = platform.position.y + bunnyHead.origin.y;
+			if ((Gdx.input.isTouched(0)
+					&& cJump.contains((float) Gdx.input.getX(0),
+							(float) Gdx.input.getY(0)) || Gdx.input
+					.isTouched(1)
+					&& cJump.contains((float) Gdx.input.getX(1),
+							(float) Gdx.input.getY(1)))
+					|| !Gdx.input.isKeyPressed(Keys.SPACE))
+				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
+			break;
+		case JUMP_RISING:
+			bunnyHead.jumpState = JUMP_STATE.JUMP_FALLING;
+			break;
+		}
+	}
+
 	private void onCollisionBunnyWithGoldCoin(GoldCoin goldcoin) {
 		goldcoin.collected = true;
+		AudioManager.instance.play(Assets.instance.sounds.pickupCoin);
 		score += goldcoin.getScore();
 		Gdx.app.log(TAG, "Gold coin collected");
 	}
 
 	private void onCollisionBunnyWithFeather(Feather feather) {
 		feather.collected = true;
+		AudioManager.instance.play(Assets.instance.sounds.pickupFeather);
 		score += feather.getScore();
 		level.bunnyHead.setFeatherPowerup(true);
 		Gdx.app.log(TAG, "Feather collected");
@@ -286,6 +321,10 @@ public class WorldController extends InputAdapter implements Disposable {
 		Gdx.app.log(TAG, "Checkpoint reached");
 	}
 
+	private void onCollisionBunnyWithEnemy() {
+		enemyHit = true;
+	}
+
 	private void onCollisionBunnyWithGoal() {
 		goalReached = true;
 		timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_FINISHED;
@@ -303,6 +342,20 @@ public class WorldController extends InputAdapter implements Disposable {
 			if (!r1.overlaps(r2))
 				continue;
 			onCollisionBunnyHeadWithRock(rock);
+			// IMPORTANT: must do all collisions for valid
+			// edge testing on rocks.
+		}
+		for (Platform platform : level.platforms) {
+			r2.set(platform.position.x, platform.position.y,
+					platform.bounds.width, platform.bounds.height);
+			Rectangle r1Bottom = new Rectangle();
+			// Rectangle r2Top = new Rectangle();
+			r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
+			// r2Top.set(r2.x,r2.y,r2.width,0.01f);
+			if (!r1Bottom.overlaps(r2))
+				// if (!r1.overlaps(r2))
+				continue;
+			onCollisionBunnyHeadWithPlatform(platform);
 			// IMPORTANT: must do all collisions for valid
 			// edge testing on rocks.
 		}
@@ -339,16 +392,34 @@ public class WorldController extends InputAdapter implements Disposable {
 			onCollisionBunnyWithCarrot(carrot);
 			break;
 		}
-		// Test collision: Bunny Head <-> Carrots
+		// Test collision: Bunny Head <-> Checkpoint
 		for (Checkpoint checkpoint : level.checkpoint) {
 			if (checkpoint.active)
 				continue;
-			r2.set(checkpoint.position.x, checkpoint.position.y, checkpoint.bounds.width,
-					checkpoint.bounds.height);
+			r2.set(checkpoint.position.x, checkpoint.position.y,
+					checkpoint.bounds.width, checkpoint.bounds.height);
 			if (!r1.overlaps(r2))
 				continue;
 			onCollisionBunnyWithCheckpoint(checkpoint);
 			break;
+		}
+		// Test collision: Bunny Head <-> Enemy
+		for (Enemy enemy : level.enemies) {
+			r2.set(enemy.position.x, enemy.position.y, enemy.bounds.width,
+					enemy.bounds.height);
+			if (!r1.overlaps(r2))
+				continue;
+			onCollisionBunnyWithEnemy();
+			break;
+		}
+		// Test collision: Bunny Head <-> Giant
+		if (level.giant != null) {
+			r2.set(level.giant.position.x, level.giant.position.y,
+					level.giant.bounds.width, level.giant.bounds.height);
+			if (goalReached)
+				level.giant.StopMoving();
+			else if (r1.overlaps(r2))
+				onCollisionBunnyWithEnemy();
 		}
 		// Test collision: Bunny Head <-> Goal
 		if (!goalReached) {
@@ -362,9 +433,6 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void handleInputGame(float deltaTime) {
-
-		// Thread t = new Thread(new Runnable() { public void run() {
-
 		if (cameraHelper.hasTarget(level.bunnyHead)) {
 			for (int i = 0; i < 2; i++) {
 				// Player Movement
@@ -402,9 +470,6 @@ public class WorldController extends InputAdapter implements Disposable {
 		} else {
 			level.bunnyHead.setJumping(false);
 		}
-
-		// } }); t.start();
-
 	}
 
 	public boolean isGameOver() {
@@ -418,7 +483,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	public boolean isGoalReached() {
 		return goalReached;
 	}
-	
+
 	public boolean isPaused() {
 		return paused;
 	}

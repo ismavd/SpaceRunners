@@ -24,6 +24,7 @@ import com.me.mygdxgame.game.Assets;
 import com.me.mygdxgame.utils.Constants;
 import com.me.mygdxgame.utils.GamePreferences;
 import com.me.mygdxgame.utils.CharacterSkin;
+import com.me.mygdxgame.utils.AudioManager;
 
 public class MenuScreen extends AbstractGameScreen {
 
@@ -89,12 +90,15 @@ public class MenuScreen extends AbstractGameScreen {
 	private void onSaveClicked() {
 		saveSettings();
 		onCancelClicked();
+		AudioManager.instance.onSettingsUpdated();
 	}
 
 	private void onCancelClicked() {
 		btnMenuPlay.setVisible(true);
 		btnMenuOptions.setVisible(true);
+		btnMenuExit.setVisible(true);
 		winOptions.setVisible(false);
+		AudioManager.instance.onSettingsUpdated();
 	}
 
 	private void rebuildStage() {
@@ -373,6 +377,7 @@ public class MenuScreen extends AbstractGameScreen {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		rebuildStage();
+		AudioManager.instance.play(Assets.instance.music.song01);
 	}
 
 	@Override

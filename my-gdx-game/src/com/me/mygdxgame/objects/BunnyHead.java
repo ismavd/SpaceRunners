@@ -7,6 +7,8 @@ import com.me.mygdxgame.game.Assets;
 import com.me.mygdxgame.utils.Constants;
 import com.me.mygdxgame.utils.GamePreferences;
 import com.me.mygdxgame.utils.CharacterSkin;
+import com.badlogic.gdx.math.MathUtils;
+import com.me.mygdxgame.utils.AudioManager;
 
 public class BunnyHead extends AbstractGameObject {
 	public static final String TAG = BunnyHead.class.getName();
@@ -61,6 +63,7 @@ public class BunnyHead extends AbstractGameObject {
 		switch (jumpState) {
 		case GROUNDED: // Character is standing on a platform
 			if (jumpKeyPressed) {
+				AudioManager.instance.play(Assets.instance.sounds.jump);
 				// Start counting jump time from the beginning
 				timeJumping = 0;
 				jumpState = JUMP_STATE.JUMP_RISING;
@@ -69,8 +72,10 @@ public class BunnyHead extends AbstractGameObject {
 		case JUMP_RISING: // Rising in the air
 			if (!jumpKeyPressed)
 				jumpState = JUMP_STATE.JUMP_FALLING;
-			else if (jumpKeyPressed && hasFeatherPowerup)
+			else if (jumpKeyPressed && hasFeatherPowerup) {
+				AudioManager.instance.play(Assets.instance.sounds.jumpWithFeather, 1, MathUtils.random(1.0f, 1.1f));
 				timeJumping = JUMP_TIME_OFFSET_FLYING;
+			}
 			break;
 		case FALLING:// Falling down
 		case JUMP_FALLING: // Falling down after jump
