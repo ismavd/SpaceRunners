@@ -1,5 +1,7 @@
 package com.me.mygdxgame.screens;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
@@ -38,6 +40,12 @@ public class LevelScreen extends AbstractGameScreen{
 	private Image imgBunny;
 	private Button btnMenuPlay;
 	private Button btnMenuOptions;
+	// level menu
+	private Button btnMenuPlay1;
+	private Button btnMenuPlay2;
+	private Button btnMenuPlay3;
+	private Button btnMenuPlay4;
+	private Button btnMenuPlay5;
 	// options
 	private Window winOptions;
 	private TextButton btnWinOptSave;
@@ -61,7 +69,17 @@ public class LevelScreen extends AbstractGameScreen{
 	
 	public LevelScreen(Game game) {
 		super(game);
-		// TODO Auto-generated constructor stub
+		cargarNiveles();
+	}
+	
+	private void cargarNiveles() {
+		Constants.niveles = new HashMap<Integer, String>();
+		Constants.niveles.put(1, Constants.LEVEL_01);
+		Constants.niveles.put(2, Constants.LEVEL_02);
+		Constants.niveles.put(3, Constants.LEVEL_03);
+		Constants.niveles.put(4, Constants.LEVEL_04);
+		Constants.niveles.put(5, Constants.LEVEL_05);
+		Constants.niveles.put(6, Constants.LEVEL_06);
 	}
 	
 	private void rebuildStage() {
@@ -98,35 +116,99 @@ public class LevelScreen extends AbstractGameScreen{
 		//layer.add().expand(100, 100);
 		layer.left().top();
 		// + Play Button
-		btnMenuPlay = new Button(skinCanyonBunny, "play");
+		btnMenuPlay = new Button(skinCanyonBunny, "level-01");
 		btnMenuPlay.setPosition(0, 0);
-		
-		
-		//layer.add(btnMenuPlay);
+		layer.add(btnMenuPlay);
 		
 		/*layer.defaults().expand().fill().padBottom(4f);
 		layer.columnDefaults(0).left();
 		layer.columnDefaults(1).right().width(50f);
 */		
-		layer.add(btnMenuPlay);
-		layer.add(btnMenuPlay);
 //		layer.setPosition(0, 0);
 		
 		btnMenuPlay.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				onPlayClicked();
+				onPlayClicked(1);
+			}
+		});
+		
+		btnMenuPlay1 = new Button(skinCanyonBunny, "level-02");
+		//btnMenuPlay1.setPosition(0, 100);
+		layer.add(btnMenuPlay1);
+		//layer.add(btnMenuPlay1);
+		//layer.setPosition(0, 0);
+		
+		btnMenuPlay1.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(2);
+			}
+		});
+		
+		//layer.row();
+		
+		btnMenuPlay2 = new Button(skinCanyonBunny, "level-03");
+		btnMenuPlay2.setPosition(0, 50);
+		layer.add(btnMenuPlay2);
+		//layer.add(btnMenuPlay2);
+		//layer.setPosition(0, 0);
+		
+		btnMenuPlay2.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(3);
 			}
 		});
 		
 		layer.row();
+		
+		btnMenuPlay3 = new Button(skinCanyonBunny, "level-04");
+		btnMenuPlay3.setPosition(0, 50);
+		layer.add(btnMenuPlay3);
+		//layer.add(btnMenuPlay3);
+		//layer.setPosition(0, 0);
+		
+		btnMenuPlay3.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(4);
+			}
+		});
+		
+		//layer.row();
+		
+		btnMenuPlay4 = new Button(skinCanyonBunny, "level-05");
+		btnMenuPlay4.setPosition(0, 50);
+		layer.add(btnMenuPlay4);
+		//layer.add(btnMenuPlay4);
+		//layer.setPosition(0, 0);
+		
+		btnMenuPlay4.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(5);
+			}
+		});
+		
+		//layer.row();
+		
+		btnMenuPlay5 = new Button(skinCanyonBunny, "level-06");
+		btnMenuPlay5.setPosition(0, 50);
+		layer.add(btnMenuPlay5);
+		//layer.add(btnMenuPlay5);
+		//layer.setPosition(0, 0);
+		
+		btnMenuPlay5.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(6);
+			}
+		});
+		
+		//layer.row();
 		
 		if (debugEnabled)
 			layer.debug();
 		return layer;
 	}
 	
-	private void onPlayClicked() {
-		game.setScreen(new GameScreen(game));
+	private void onPlayClicked(int level) {
+		game.setScreen(new GameScreen(game,level));
 	}
 	
 	@Override

@@ -19,17 +19,10 @@ import com.me.mygdxgame.utils.GamePreferences;
 
 public class GameScreen extends AbstractGameScreen {
 	private static final String TAG = GameScreen.class.getName();
-
-	//private Stage stage;
-
 	private WorldController worldController;
 	private WorldRenderer worldRenderer;
 	private boolean paused;
-
-	/*private Skin skinButtons;
-	private Button btnLeft;
-	private Button btnRight;
-	private Button btnJump;*/
+	private int nivel;
 	
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
@@ -37,58 +30,11 @@ public class GameScreen extends AbstractGameScreen {
 	public GameScreen(Game game) {
 		super(game);
 	}
-
-	/*private void rebuildStage() {
-		skinButtons = new Skin(Gdx.files.internal(Constants.SKIN_BUTTONS),
-				new TextureAtlas(Constants.TEXTURE_ATLAS_OBJECTS));
-		// build all layers
-		Table layerButtons = buildButtonsLayer();
-		// assemble stage for menu screen
-		stage.clear();
-		Stack stack = new Stack();
-		stage.addActor(stack);
-		stack.setSize(Constants.VIEWPORT_BUTTONS_WIDTH,
-				Constants.VIEWPORT_BUTTONS_HEIGHT);
-		stack.add(layerButtons);
+	
+	public GameScreen(Game game, int level) {
+		super(game);
+		this.nivel = level;
 	}
-
-	private Table buildButtonsLayer() {
-		Table layer = new Table();
-		// + Left Button
-		btnLeft = new Button(skinButtons, "left");
-		layer.add(btnLeft);
-		btnLeft.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				worldController.LeftButtonAction();
-			}
-		});
-		layer.row();
-		// + Right Button
-		btnRight = new Button(skinButtons, "right");
-		layer.add(btnRight);
-		btnRight.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				worldController.RightButtonAction();
-			}
-		});
-		layer.row();
-		//btnRight.setPosition(x, y)
-		// + Jump Button
-		btnJump = new Button(skinButtons, "jump");
-		layer.add(btnJump);
-		btnJump.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				worldController.JumpButtonAction();
-			}
-		});
-		layer.row();
-		//if (debugEnabled)
-			//layer.debug();
-		return layer;
-	}*/
 
 	@Override
 	public void render(float deltaTime) {
@@ -119,12 +65,9 @@ public class GameScreen extends AbstractGameScreen {
 	@Override
 	public void show() {
 		GamePreferences.instance.load();
-		worldController = new WorldController(game);
+		worldController = new WorldController(game,nivel);
 		worldRenderer = new WorldRenderer(worldController);
 		Gdx.input.setCatchBackKey(true);
-		//stage = new Stage();
-		//Gdx.input.setInputProcessor(stage);
-		//rebuildStage();
 	}
 
 	@Override

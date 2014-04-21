@@ -1,6 +1,8 @@
 package com.me.mygdxgame.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.game.Assets;
@@ -32,14 +34,27 @@ public class BunnyHead extends AbstractGameObject {
 	public boolean hasFeatherPowerup;
 	public float timeLeftFeatherPowerup;
 
+	public ParticleEffect dustParticles = new ParticleEffect();
+
+	private Animation animNormal;
+	private Animation animCopterTransform;
+	private Animation animCopterTransformBack;
+	private Animation animCopterRotate;
+
 	public BunnyHead() {
 		init();
 	}
 
-	public void init() 
-	{
+	public void init() {
 		dimension.set(1, 1);
-		regHead = Assets.instance.bunny.head;
+		// regHead = Assets.instance.bunny.head;
+
+		animNormal = Assets.instance.bunny.animNormal;
+		animCopterTransform = Assets.instance.bunny.animCopterTransform;
+		animCopterTransformBack = Assets.instance.bunny.animCopterTransformBack;
+		animCopterRotate = Assets.instance.bunny.animCopterRotate;
+		setAnimation(animNormal);
+
 		regPower = Assets.instance.bunnyPower.head;
 		// Center image on game object
 		origin.set(dimension.x / 2, dimension.y / 2);
@@ -57,6 +72,10 @@ public class BunnyHead extends AbstractGameObject {
 		// Power-ups
 		hasFeatherPowerup = false;
 		timeLeftFeatherPowerup = 0;
+
+		// Particles
+		dustParticles.load(Gdx.files.internal("particles/dust.pfx"),
+				Gdx.files.internal("particles"));
 	}
 
 	public void setJumping(boolean jumpKeyPressed) {
@@ -73,7 +92,9 @@ public class BunnyHead extends AbstractGameObject {
 			if (!jumpKeyPressed)
 				jumpState = JUMP_STATE.JUMP_FALLING;
 			else if (jumpKeyPressed && hasFeatherPowerup) {
-				AudioManager.instance.play(Assets.instance.sounds.jumpWithFeather, 1, MathUtils.random(1.0f, 1.1f));
+				AudioManager.instance.play(
+						Assets.instance.sounds.jumpWithFeather, 1,
+						MathUtils.random(1.0f, 1.1f));
 				timeJumping = JUMP_TIME_OFFSET_FLYING;
 			}
 			break;
@@ -88,10 +109,9 @@ public class BunnyHead extends AbstractGameObject {
 		if (pickedUp) {
 			timeLeftFeatherPowerup = Constants.ITEM_FEATHER_POWERUP_DURATION;
 			terminalVelocity.set(5.0f, 4.0f);
-		}
-		else {
+		} else {
 			terminalVelocity.set(3.0f, 4.0f);
-		}			
+		}
 	}
 
 	public boolean hasFeatherPowerup() {
@@ -99,40 +119,64 @@ public class BunnyHead extends AbstractGameObject {
 	}
 
 	@Override
-	public void update(float deltaTime) 
-	{
+	public void update(float deltaTime) {
 		super.update(deltaTime);
-		if (velocity.x != 0) 
-		{
+		if (velocity.x != 0) {
 			viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT
 					: VIEW_DIRECTION.RIGHT;
 		}
-		if (timeLeftFeatherPowerup > 0) 
-		{
+		if (timeLeftFeatherPowerup > 0) {
+			if (animation == animCopterTransformBack) {
+				// Restart "Transform" animation if another feather power-up
+				// was picked up during "TransformBack" animation. Otherwise,
+				// the "TransformBack" animation would be stuck while the
+				// power-up is still active.
+				setAnimation(animCopterTransform);
+			}
 			timeLeftFeatherPowerup -= deltaTime;
-			if (timeLeftFeatherPowerup < 0) 
-			{
+			if (timeLeftFeatherPowerup < 0) {
 				// disable power-up
 				timeLeftFeatherPowerup = 0;
 				setFeatherPowerup(false);
+				setAnimation(animCopterTransformBack);
+			}
+		}
+		dustParticles.update(deltaTime);
+		// Change animation state according to feather power-up
+		if (hasFeatherPowerup) {
+			if (animation == animNormal) {
+				setAnimation(animCopterTransform);
+			} else if (animation == animCopterTransform) {
+				if (animation.isAnimationFinished(stateTime))
+					setAnimation(animCopterRotate);
+			}
+		} else {
+			if (animation == animCopterRotate) {
+				if (animation.isAnimationFinished(stateTime))
+					setAnimation(animCopterTransformBack);
+			} else if (animation == animCopterTransformBack) {
+				if (animation.isAnimationFinished(stateTime))
+					setAnimation(animNormal);
 			}
 		}
 	}
 
 	@Override
-	protected void updateMotionY(float deltaTime) 
-	{
-		switch (jumpState) 
-		{
+	protected void updateMotionY(float deltaTime) {
+		switch (jumpState) {
 		case GROUNDED:
 			jumpState = JUMP_STATE.FALLING;
+			if (velocity.x != 0) {
+				dustParticles.setPosition(position.x + dimension.x / 2,
+						position.y);
+				dustParticles.start();
+			}
 			break;
 		case JUMP_RISING:
 			// Keep track of jump time
 			timeJumping += deltaTime;
 			// Jump time left?
-			if (timeJumping <= JUMP_TIME_MAX) 
-			{
+			if (timeJumping <= JUMP_TIME_MAX) {
 				// Still jumping
 				velocity.y = terminalVelocity.y;
 			}
@@ -143,40 +187,51 @@ public class BunnyHead extends AbstractGameObject {
 			// Add delta times to track jump time
 			timeJumping += deltaTime;
 			// Jump to minimal height if jump key was pressed too short
-			if (timeJumping > 0 && timeJumping <= JUMP_TIME_MIN) 
-			{
+			if (timeJumping > 0 && timeJumping <= JUMP_TIME_MIN) {
 				// Still jumping
 				velocity.y = terminalVelocity.y;
 			}
 		}
-		if (jumpState != JUMP_STATE.GROUNDED)
+		if (jumpState != JUMP_STATE.GROUNDED) {
+			dustParticles.allowCompletion();
 			super.updateMotionY(deltaTime);
+		}
 	}
 
 	@Override
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
-		
+
+		// Draw Particles
+		dustParticles.draw(batch);
+
 		// Apply Skin Color
-		batch.setColor(
-		CharacterSkin.values()[GamePreferences.instance.charSkin]
-		.getColor());
-		
+		batch.setColor(CharacterSkin.values()[GamePreferences.instance.charSkin]
+				.getColor());
+
+		float dimCorrectionX = 0;
+		float dimCorrectionY = 0;
+		if (animation != animNormal) {
+			dimCorrectionX = 0.05f;
+			dimCorrectionY = 0.2f;
+		}
+
 		// Set special color when game object has a feather power-up
 		if (hasFeatherPowerup)
 			batch.setColor(1.0f, 0.8f, 0.0f, 1.0f);
 		reg = regHead;
-		
-		// Código para cambiar de imagen al obtener una pluma (la imagen debe llamarse bunny_power.png)
-		/*if (hasFeatherPowerup)
-			reg = regPower;
-		else
-			reg = regHead;*/
-		
+
+		// Código para cambiar de imagen al obtener una pluma (la imagen debe
+		// llamarse bunny_power.png)
+		/*
+		 * if (hasFeatherPowerup) reg = regPower; else reg = regHead;
+		 */
+
 		// Draw image
-		
+		reg = animation.getKeyFrame(stateTime, true);
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x,
-				origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation,
+				origin.y, dimension.x + dimCorrectionX, dimension.y
+						+ dimCorrectionY, scale.x, scale.y, rotation,
 				reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
 				reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT,
 				false);

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.me.mygdxgame.objects.AbstractGameObject;
+import com.me.mygdxgame.objects.Box;
 import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Clouds;
 import com.me.mygdxgame.objects.Enemy;
@@ -34,8 +35,9 @@ public class Level {
 		ITEM_CARROT(0, 0, 255), // blue
 		CHECKPOINT(255, 69, 0), // orange
 		ENEMY(63,72,204), // indigo
-		GIANT(128,64,0); // brown
-
+		GIANT(128,64,0), // brown
+		BOX(255,128,128); // pink
+		
 		private int color;
 
 		private BLOCK_TYPE(int r, int g, int b) {
@@ -67,6 +69,7 @@ public class Level {
 	public Array<Feather> feathers;
 	public Array<Carrot> carrots;
 	public Array<Checkpoint> checkpoint;
+	public Array<Box> boxes;
 	// goal
 	public Goal goal;
 
@@ -88,6 +91,7 @@ public class Level {
 		feathers = new Array<Feather>();
 		carrots = new Array<Carrot>();
 		checkpoint = new Array<Checkpoint>();
+		boxes = new Array<Box>();
 		// load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
 		// scan pixels from top-left to bottom-right
@@ -178,6 +182,14 @@ public class Level {
 						bunnyHead = (BunnyHead) obj;
 					}
 				}
+				//boxes
+				else if (BLOCK_TYPE.BOX.sameColor(currentPixel)) {
+					obj = new Box();
+					offsetHeight = -1.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y
+							+ offsetHeight);
+					boxes.add((Box) obj);
+				}
 				// enemies
 				else if (BLOCK_TYPE.ENEMY.sameColor(currentPixel)) {
 					obj = new Enemy();
@@ -256,6 +268,9 @@ public class Level {
 		// Draw Checkpoints
 		for (Checkpoint cp : checkpoint)
 			cp.render(batch);
+		// Draw Boxes
+		for (Box box : boxes)
+			box.render(batch);
 		// Draw Player Character
 		bunnyHead.render(batch);
 		// Draw Water Overlay
@@ -278,6 +293,8 @@ public class Level {
 			carrot.update(deltaTime);
 		for (Checkpoint cp : checkpoint)
 			cp.update(deltaTime);
+		for (Box box : boxes)
+			box.update(deltaTime);
 		for (Enemy enemy : enemies)
 			enemy.update(deltaTime);
 		if (giant != null)

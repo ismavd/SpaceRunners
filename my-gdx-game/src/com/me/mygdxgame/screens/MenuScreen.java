@@ -201,8 +201,7 @@ public class MenuScreen extends AbstractGameScreen {
 	}
 
 	protected void onExitClicked() {
-		Gdx.app.exit();
-		
+		Gdx.app.exit();	
 	}
 
 	private Table buildOptionsWindowLayer() {

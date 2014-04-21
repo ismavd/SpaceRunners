@@ -1,5 +1,7 @@
 package com.me.mygdxgame.utils;
 
+import java.util.HashMap;
+
 public class Constants {
 	// Visible game world is 5 meters wide
 	public static final float VIEWPORT_WIDTH = 5.0f;
@@ -17,6 +19,20 @@ public class Constants {
 	public static final String TEXTURE_ATLAS_OBJECTS = "images/canyonbunny.pack";
 	// Location of image file for level 01
 	public static final String LEVEL_01 = "levels/level-01.png";
+	// Location of image file for level 02
+	public static final String LEVEL_02 = "levels/level-02.png";
+	// Location of image file for level 02
+	public static final String LEVEL_03 = "levels/level-03.png";
+	// Location of image file for level 02
+	public static final String LEVEL_04 = "levels/level-04.png";
+	// Location of image file for level 02
+	public static final String LEVEL_05 = "levels/level-05.png";
+	// Location of image file for level 02
+	public static final String LEVEL_06 = "levels/level-06.png";
+
+	// Aquí se cargarán los niveles en la pantalla LevelScreen
+	public static HashMap<Integer, String> niveles;
+
 	// Amount of extra lives at level start
 	public static final int LIVES_START = 3;
 	// Duration of feather power-up in seconds

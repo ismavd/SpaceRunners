@@ -1,9 +1,11 @@
 package com.me.mygdxgame.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
@@ -27,6 +29,8 @@ public class Assets implements Disposable, AssetErrorListener {
 	//Platforms
 	public AssetRock rock;
 	public AssetPlatform platform;
+	// Boxes
+	public AssetBox box;
 	//Items
 	public AssetGoldCoin goldCoin;
 	public AssetFeather feather;
@@ -80,6 +84,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		giant = new AssetGiant(atlas);
 		rock = new AssetRock(atlas);
 		platform = new AssetPlatform(atlas);
+		box = new AssetBox(atlas);
 		goldCoin = new AssetGoldCoin(atlas);
 		feather = new AssetFeather(atlas);
 		checkpoint = new AssetCheckpoint(atlas);
@@ -117,9 +122,31 @@ public class Assets implements Disposable, AssetErrorListener {
 
 	public class AssetBunny {
 		public final AtlasRegion head;
+		public final Animation animNormal;
+		public final Animation animCopterTransform;
+		public final Animation animCopterTransformBack;
+		public final Animation animCopterRotate;
 
 		public AssetBunny(TextureAtlas atlas) {
 			head = atlas.findRegion("bunny_head");
+			Array<AtlasRegion> regions = null;
+			AtlasRegion region = null;
+			// Animation: Bunny Normal
+			regions = atlas.findRegions("anim_bunny_normal");
+			animNormal = new Animation(1.0f / 10.0f, regions,
+			Animation.LOOP_PINGPONG);
+			// Animation: Bunny Copter - knot ears
+			regions = atlas.findRegions("anim_bunny_copter");
+			animCopterTransform = new Animation(1.0f / 10.0f, regions);
+			// Animation: Bunny Copter - unknot ears
+			regions = atlas.findRegions("anim_bunny_copter");
+			animCopterTransformBack = new Animation(1.0f / 10.0f, regions,
+			Animation.REVERSED);
+			// Animation: Bunny Copter - rotate ears
+			regions = new Array<AtlasRegion>();
+			regions.add(atlas.findRegion("anim_bunny_copter", 4));
+			regions.add(atlas.findRegion("anim_bunny_copter", 5));
+			animCopterRotate = new Animation(1.0f / 15.0f, regions);
 		}
 	}
 
@@ -164,12 +191,27 @@ public class Assets implements Disposable, AssetErrorListener {
 			platform = atlas.findRegion("platform");
 		}
 	}
+	
+	public class AssetBox {
+		public final AtlasRegion box;
+
+		public AssetBox(TextureAtlas atlas) {
+			box = atlas.findRegion("box");
+		}
+	}
 
 	public class AssetGoldCoin {
 		public final AtlasRegion goldCoin;
+		public final Animation animGoldCoin;
 
 		public AssetGoldCoin(TextureAtlas atlas) {
-			goldCoin = atlas.findRegion("item_gold_coin");
+			goldCoin = atlas.findRegion("item_gold_coin");		
+			// Animation: Gold Coin
+			Array<AtlasRegion> regions = atlas.findRegions("anim_gold_coin");
+			AtlasRegion region = regions.first();
+			for (int i = 0; i < 10; i++)
+				regions.insert(0, region);
+			animGoldCoin = new Animation(1.0f / 20.0f, regions, Animation.LOOP_PINGPONG);
 		}
 	}
 
@@ -177,7 +219,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final AtlasRegion feather;
 
 		public AssetFeather(TextureAtlas atlas) {
-			feather = atlas.findRegion("item_feather");
+			feather = atlas.findRegion("PowerUp");
 		}
 	}
 
