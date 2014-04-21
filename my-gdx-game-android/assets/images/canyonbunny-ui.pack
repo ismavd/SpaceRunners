@@ -6,8 +6,8 @@ repeat: none
 background
   rotate: false
   xy: 2, 513
-  size: 801, 481
-  orig: 801, 481
+  size: 800, 480
+  orig: 800, 480
   offset: 0, 0
   index: -1
 bunny
@@ -26,7 +26,49 @@ coins
   index: -1
 exit
   rotate: false
-  xy: 805, 844
+  xy: 804, 843
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-01
+  rotate: false
+  xy: 804, 691
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-02
+  rotate: false
+  xy: 804, 539
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-03
+  rotate: false
+  xy: 344, 2
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-04
+  rotate: false
+  xy: 804, 387
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-05
+  rotate: false
+  xy: 785, 235
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-06
+  rotate: false
+  xy: 785, 83
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
@@ -38,34 +80,6 @@ logo
   orig: 340, 119
   offset: 0, 0
   index: -1
-options-dn
-  rotate: false
-  xy: 805, 692
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-options-up
-  rotate: false
-  xy: 805, 540
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-play-dn
-  rotate: false
-  xy: 344, 2
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-play-up
-  rotate: false
-  xy: 805, 388
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
 
 canyonbunny-ui2.png
 format: RGBA8888
@@ -73,8 +87,36 @@ filter: Nearest,Nearest
 repeat: none
 info
   rotate: false
-  xy: 2, 2
+  xy: 2, 154
   size: 329, 82
   orig: 329, 82
+  offset: 0, 0
+  index: -1
+options-dn
+  rotate: false
+  xy: 2, 2
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+options-up
+  rotate: false
+  xy: 154, 2
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+play-dn
+  rotate: false
+  xy: 333, 86
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+play-up
+  rotate: false
+  xy: 485, 86
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
