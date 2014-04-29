@@ -16,7 +16,7 @@ public class Main {
 			settings.maxHeight = 1024;
 			settings.debug = drawDebugOutline;
 
-			TexturePacker2.process(settings, "assets-raw/images",
+			/*TexturePacker2.process(settings, "assets-raw/images",
 					"../my-gdx-game-android/assets/images", "canyonbunny.pack");
 			TexturePacker2.process(settings, "assets-raw/images-ui",
 					"../my-gdx-game-android/assets/images",
@@ -25,7 +25,7 @@ public class Main {
 					"bin/images", "canyonbunny.pack");
 			TexturePacker2.process(settings, "assets-raw/images-ui",
 					"bin/images",
-					"canyonbunny-ui.pack");
+					"canyonbunny-ui.pack");*/
 		}
 
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
