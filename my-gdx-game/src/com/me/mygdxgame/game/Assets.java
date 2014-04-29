@@ -16,21 +16,27 @@ import com.me.mygdxgame.utils.Constants;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
-public class Assets implements Disposable, AssetErrorListener {
+public class Assets implements Disposable, AssetErrorListener 
+{
 
 	public static final String TAG = Assets.class.getName();
 	public static final Assets instance = new Assets();
 	private AssetManager assetManager;
 	public AssetBunny bunny;
 	public AssetBunnyPower bunnyPower;
+	
 	//Enemies
 	public AssetEnemy enemy;
 	public AssetGiant giant;
+	
 	//Platforms
 	public AssetRock rock;
 	public AssetPlatform platform;
+	public AssetMovingPlatform movingPlatform;
+	
 	// Boxes
 	public AssetBox box;
+	
 	//Items
 	public AssetGoldCoin goldCoin;
 	public AssetFeather feather;
@@ -39,19 +45,24 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public AssetLevelDecoration levelDecoration;
 	public AssetFonts fonts;
+	
 	// Input buttons
 	public AssetLeftButton leftButton;
 	public AssetRightButton rightButton;
 	public AssetJumpButton jumpButton;
+	
 	// Sound
 	public AssetSounds sounds;
 	public AssetMusic music;
 
 	// singleton: prevent instantiation from other classes
-	private Assets() {
+	private Assets() 
+	{
+		
 	}
 
-	public void init(AssetManager assetManager) {
+	public void init(AssetManager assetManager) 
+	{
 		this.assetManager = assetManager;
 		// set asset manager error handler
 		assetManager.setErrorListener(this);
@@ -84,6 +95,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		giant = new AssetGiant(atlas);
 		rock = new AssetRock(atlas);
 		platform = new AssetPlatform(atlas);
+		movingPlatform = new AssetMovingPlatform(atlas);
 		box = new AssetBox(atlas);
 		goldCoin = new AssetGoldCoin(atlas);
 		feather = new AssetFeather(atlas);
@@ -101,7 +113,8 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 
 	@Override
-	public void dispose() {
+	public void dispose() 
+	{
 		assetManager.dispose();
 		fonts.defaultSmall.dispose();
 		fonts.defaultNormal.dispose();
@@ -109,9 +122,9 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 
 	@Override
-	public void error(AssetDescriptor asset, Throwable throwable) {
-		Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'",
-				(Exception) throwable);
+	public void error(AssetDescriptor asset, Throwable throwable) 
+	{
+		Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception) throwable);
 	}
 
 	/*
@@ -120,14 +133,16 @@ public class Assets implements Disposable, AssetErrorListener {
 	 * (Exception) throwable); }
 	 */
 
-	public class AssetBunny {
+	public class AssetBunny 
+	{
 		public final AtlasRegion head;
 		public final Animation animNormal;
 		public final Animation animCopterTransform;
 		public final Animation animCopterTransformBack;
 		public final Animation animCopterRotate;
 
-		public AssetBunny(TextureAtlas atlas) {
+		public AssetBunny(TextureAtlas atlas) 
+		{
 			head = atlas.findRegion("bunny_head");
 			Array<AtlasRegion> regions = null;
 			AtlasRegion region = null;
@@ -150,61 +165,85 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 	}
 
-	public class AssetBunnyPower {
+	public class AssetBunnyPower
+	{
 		public final AtlasRegion head;
 
-		public AssetBunnyPower(TextureAtlas atlas) {
+		public AssetBunnyPower(TextureAtlas atlas) 
+		{
 			head = atlas.findRegion("bunny_power");
 		}
 	}
 	
-	public class AssetEnemy {
+	public class AssetEnemy 
+	{
 		public final AtlasRegion enemy;
 		
-		public AssetEnemy(TextureAtlas atlas) {
+		public AssetEnemy(TextureAtlas atlas) 
+		{
 			enemy = atlas.findRegion("enemy");
 		}
 	}
 	
-	public class AssetGiant {
+	public class AssetGiant
+	{
 		public final AtlasRegion giant;
 		
-		public AssetGiant(TextureAtlas atlas) {
+		public AssetGiant(TextureAtlas atlas) 
+		{
 			giant = atlas.findRegion("giant");
 		}
 	}
 
-	public class AssetRock {
+	public class AssetRock 
+	{
 		public final AtlasRegion edge;
 		public final AtlasRegion middle;
 
-		public AssetRock(TextureAtlas atlas) {
+		public AssetRock(TextureAtlas atlas)
+		{
 			edge = atlas.findRegion("rock_edge");
 			middle = atlas.findRegion("rock_middle");
 		}
 	}
 
-	public class AssetPlatform {
+	public class AssetPlatform 
+	{
 		public final AtlasRegion platform;
 
-		public AssetPlatform(TextureAtlas atlas) {
+		public AssetPlatform(TextureAtlas atlas)
+		{
 			platform = atlas.findRegion("platform");
 		}
 	}
 	
-	public class AssetBox {
+	public class AssetMovingPlatform 
+	{
+		public final AtlasRegion platform;
+
+		public AssetMovingPlatform(TextureAtlas atlas)
+		{
+			platform = atlas.findRegion("platform");
+		}
+	}
+	
+	public class AssetBox 
+	{
 		public final AtlasRegion box;
 
-		public AssetBox(TextureAtlas atlas) {
+		public AssetBox(TextureAtlas atlas)
+		{
 			box = atlas.findRegion("box");
 		}
 	}
 
-	public class AssetGoldCoin {
+	public class AssetGoldCoin 
+	{
 		public final AtlasRegion goldCoin;
 		public final Animation animGoldCoin;
 
-		public AssetGoldCoin(TextureAtlas atlas) {
+		public AssetGoldCoin(TextureAtlas atlas) 
+		{
 			goldCoin = atlas.findRegion("item_gold_coin");		
 			// Animation: Gold Coin
 			Array<AtlasRegion> regions = atlas.findRegions("anim_gold_coin");
@@ -215,56 +254,69 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 	}
 
-	public class AssetFeather {
+	public class AssetFeather 
+	{
 		public final AtlasRegion feather;
 
-		public AssetFeather(TextureAtlas atlas) {
+		public AssetFeather(TextureAtlas atlas)
+		{
 			feather = atlas.findRegion("PowerUp");
 		}
 	}
 
-	public class AssetCheckpoint {
+	public class AssetCheckpoint 
+	{
 		public final AtlasRegion checkpoint;
 
-		public AssetCheckpoint(TextureAtlas atlas) {
+		public AssetCheckpoint(TextureAtlas atlas) 
+		{
 			checkpoint = atlas.findRegion("checkpoint");
 		}
 	}
 
 	// Carrot
-	public class AssetCarrot {
+	public class AssetCarrot
+	{
 		public final AtlasRegion carrot;
 
-		public AssetCarrot(TextureAtlas atlas) {
+		public AssetCarrot(TextureAtlas atlas)
+		{
 			carrot = atlas.findRegion("carrot");
 		}
 	}
 
-	public class AssetLeftButton {
+	public class AssetLeftButton 
+	{
 		public final AtlasRegion left;
 
-		public AssetLeftButton(TextureAtlas atlas) {
+		public AssetLeftButton(TextureAtlas atlas) 
+		{
 			left = atlas.findRegion("boton_atras");
 		}
 	}
 
-	public class AssetRightButton {
+	public class AssetRightButton 
+	{
 		public final AtlasRegion right;
 
-		public AssetRightButton(TextureAtlas atlas) {
+		public AssetRightButton(TextureAtlas atlas) 
+		{
 			right = atlas.findRegion("boton_adelante");
 		}
 	}
 
-	public class AssetJumpButton {
+	public class AssetJumpButton 
+	{
 		public final AtlasRegion jump;
 
-		public AssetJumpButton(TextureAtlas atlas) {
+		public AssetJumpButton(TextureAtlas atlas) 
+		{
 			jump = atlas.findRegion("boton_jump");
 		}
 	}
 
-	public class AssetLevelDecoration {
+	public class AssetLevelDecoration 
+	{
 		public final AtlasRegion cloud01;
 		public final AtlasRegion cloud02;
 		public final AtlasRegion cloud03;
@@ -273,7 +325,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final AtlasRegion waterOverlay;
 		public final AtlasRegion goal;
 
-		public AssetLevelDecoration(TextureAtlas atlas) {
+		public AssetLevelDecoration(TextureAtlas atlas) 
+		{
 			cloud01 = atlas.findRegion("cloud01");
 			cloud02 = atlas.findRegion("cloud02");
 			cloud03 = atlas.findRegion("cloud03");
@@ -284,12 +337,14 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 	}
 
-	public class AssetFonts {
+	public class AssetFonts
+	{
 		public final BitmapFont defaultSmall;
 		public final BitmapFont defaultNormal;
 		public final BitmapFont defaultBig;
 
-		public AssetFonts() {
+		public AssetFonts() 
+		{
 			// create three fonts using Libgdx's 15px bitmap font
 			defaultSmall = new BitmapFont(
 					Gdx.files.internal("images/arial-15.fnt"), true);
@@ -311,14 +366,16 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 	}
 
-	public class AssetSounds {
+	public class AssetSounds
+	{
 		public final Sound jump;
 		public final Sound jumpWithFeather;
 		public final Sound pickupCoin;
 		public final Sound pickupFeather;
 		public final Sound liveLost;
 
-		public AssetSounds(AssetManager am) {
+		public AssetSounds(AssetManager am) 
+		{
 			jump = am.get("sounds/jump.wav", Sound.class);
 			jumpWithFeather = am.get("sounds/jump_with_feather.wav",
 					Sound.class);
@@ -328,11 +385,13 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 	}
 
-	public class AssetMusic {
+	public class AssetMusic 
+	{
 		public final Music song01;
 		//public final Music song02;
 
-		public AssetMusic(AssetManager am) {
+		public AssetMusic(AssetManager am) 
+		{
 			song01 = am.get("music/keith303_-_brand_new_highscore.mp3",
 					Music.class);
 			/*song02 = am.get("music/song02.mp3",

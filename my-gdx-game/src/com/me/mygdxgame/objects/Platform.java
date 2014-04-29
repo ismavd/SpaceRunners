@@ -18,6 +18,7 @@ public class Platform extends AbstractGameObject {
 		regPlatform = Assets.instance.platform.platform;
 		// Start length of this platform
 		setLength(1);
+		terminalVelocity.set(2.0f, 3.0f);
 	}
 	
 	public void setLength(int length) {

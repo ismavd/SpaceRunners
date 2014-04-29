@@ -23,6 +23,7 @@ public class Enemy extends AbstractGameObject{
 		// Set bounding box for collision detection
 		bounds.set(0, 0, dimension.x, dimension.y);
 		terminalVelocity.set(2.0f, 3.0f);
+		//initMove(this.position.y);
 		//Gdx.app.log(WorldController.class.getName(), Float.toString(position.y));
 	}
 	
