@@ -13,6 +13,8 @@ public class Enemy extends AbstractGameObject{
 	private float minHeight;
 	private boolean goingUp;
 	
+	public boolean alive;
+	
 	public Enemy() {
 		init();
 	}
@@ -23,8 +25,7 @@ public class Enemy extends AbstractGameObject{
 		// Set bounding box for collision detection
 		bounds.set(0, 0, dimension.x, dimension.y);
 		terminalVelocity.set(2.0f, 3.0f);
-		//initMove(this.position.y);
-		//Gdx.app.log(WorldController.class.getName(), Float.toString(position.y));
+		alive = true;
 	}
 	
 	public void initMove(float minHeight) {
@@ -54,5 +55,9 @@ public class Enemy extends AbstractGameObject{
 			if (position.y <= minHeight)
 				goingUp = true;
 		}
+	}
+	
+	public int getScore() {
+		return 200;
 	}
 }

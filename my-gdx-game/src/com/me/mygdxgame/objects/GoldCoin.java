@@ -36,7 +36,7 @@ public class GoldCoin extends AbstractGameObject {
 	}
 
 	public int getScore() {
-		return 1;
+		return 100;
 	}
 
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.me.mygdxgame.objects.Laser;
 import com.me.mygdxgame.utils.Constants;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -36,6 +37,9 @@ public class Assets implements Disposable, AssetErrorListener
 	
 	// Boxes
 	public AssetBox box;
+	
+	// Laser
+	public AssetLaser laser;
 	
 	//Items
 	public AssetGoldCoin goldCoin;
@@ -97,6 +101,7 @@ public class Assets implements Disposable, AssetErrorListener
 		platform = new AssetPlatform(atlas);
 		movingPlatform = new AssetMovingPlatform(atlas);
 		box = new AssetBox(atlas);
+		laser = new AssetLaser(atlas);
 		goldCoin = new AssetGoldCoin(atlas);
 		feather = new AssetFeather(atlas);
 		checkpoint = new AssetCheckpoint(atlas);
@@ -234,6 +239,16 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetBox(TextureAtlas atlas)
 		{
 			box = atlas.findRegion("box");
+		}
+	}
+	
+	public class AssetLaser 
+	{
+		public final AtlasRegion laser;
+
+		public AssetLaser(TextureAtlas atlas)
+		{
+			laser = atlas.findRegion("laser");
 		}
 	}
 

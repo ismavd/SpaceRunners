@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.me.mygdxgame.objects.AbstractGameObject;
+import com.me.mygdxgame.objects.BunnyHead;
+import com.me.mygdxgame.objects.Enemy;
+import com.me.mygdxgame.objects.Laser;
 import com.me.mygdxgame.utils.Constants;
 import com.me.mygdxgame.utils.GamePreferences;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -81,12 +85,20 @@ public class WorldRenderer implements Disposable
 		batch.dispose();
 	}
 
-	private void renderGuiScore(SpriteBatch batch) 
+	private void renderGuiScrews(SpriteBatch batch) 
 	{
 		float x = -15;
 		float y = -15;
 		batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
-		Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.score, x + 75, y + 37);
+		Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+	}
+	
+	private void renderGuiScore(SpriteBatch batch) 
+	{
+		float x = cameraGUI.viewportWidth - 600;
+		float y = -15;
+		Assets.instance.fonts.defaultBig.draw(batch, "SCORE:", x + 75, y + 37);
+		Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.score, x + 200, y + 37);
 	}
 
 	private void renderGuiExtraLive(SpriteBatch batch) 
@@ -140,6 +152,8 @@ public class WorldRenderer implements Disposable
 		
 		// draw collected gold coins icon + text
 		// (anchored to top left edge)
+		renderGuiScrews(batch);
+		// draw total score (anchored to top center)
 		renderGuiScore(batch);
 		// draw collected feather icon (anchored to top left edge)
 		renderGuiFeatherPowerup(batch);
@@ -151,6 +165,7 @@ public class WorldRenderer implements Disposable
 		{
 			renderGuiLeftButton(batch);
 			renderGuiRightButton(batch);
+			renderGuiShootButton(batch);
 			renderGuiJumpButton(batch);
 		}
 		// draw FPS text (anchored to bottom right edge)
@@ -250,6 +265,13 @@ public class WorldRenderer implements Disposable
 		float x = 100;
 		float y = cameraGUI.viewportHeight - 100;
 		batch.draw(Assets.instance.rightButton.right, x, y, 50, 50, 100, 100, 1f, -1f, 0);
+	}
+	
+	private void renderGuiShootButton(SpriteBatch batch)
+	{
+		float x = cameraGUI.viewportWidth - 200;
+		float y = cameraGUI.viewportHeight - 100;
+		batch.draw(Assets.instance.jumpButton.jump, x, y, 50, 50, 100, 100, 1f, -1f, 0);
 	}
 	
 	private void renderGuiJumpButton(SpriteBatch batch)

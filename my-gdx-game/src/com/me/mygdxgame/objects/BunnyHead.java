@@ -33,6 +33,8 @@ public class BunnyHead extends AbstractGameObject {
 	public JUMP_STATE jumpState;
 	public boolean hasFeatherPowerup;
 	public float timeLeftFeatherPowerup;
+	
+	public boolean shooting;
 
 	public ParticleEffect dustParticles = new ParticleEffect();
 
@@ -73,6 +75,8 @@ public class BunnyHead extends AbstractGameObject {
 		hasFeatherPowerup = false;
 		timeLeftFeatherPowerup = 0;
 
+		shooting = false;
+		
 		// Particles
 		dustParticles.load(Gdx.files.internal("particles/dust.pfx"),
 				Gdx.files.internal("particles"));
