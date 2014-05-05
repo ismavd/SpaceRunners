@@ -55,6 +55,10 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetRightButton rightButton;
 	public AssetJumpButton jumpButton;
 	
+	// Pause menu
+	public AssetPause pause;
+	//public Asset
+	
 	// Sound
 	public AssetSounds sounds;
 	public AssetMusic music;
@@ -72,6 +76,7 @@ public class Assets implements Disposable, AssetErrorListener
 		assetManager.setErrorListener(this);
 		// load texture atlas
 		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+		assetManager.load(Constants.TEXTURE_ATLAS_PAUSE, TextureAtlas.class);
 		// load sounds
 		assetManager.load("sounds/jump.wav", Sound.class);
 		assetManager.load("sounds/jump_with_feather.wav", Sound.class);
@@ -91,6 +96,11 @@ public class Assets implements Disposable, AssetErrorListener
 		// enable texture filtering for pixel smoothing
 		for (Texture t : atlas.getTextures())
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		TextureAtlas atlasPause = assetManager.get(Constants.TEXTURE_ATLAS_PAUSE);
+		for (Texture t : atlasPause.getTextures())
+			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
 		// create game resource objects
 		fonts = new AssetFonts();
 		bunny = new AssetBunny(atlas);
@@ -115,6 +125,8 @@ public class Assets implements Disposable, AssetErrorListener
 		// Sound
 		sounds = new AssetSounds(assetManager);
 		music = new AssetMusic(assetManager);
+		// Pause menu
+		pause = new AssetPause(atlasPause);
 	}
 
 	@Override
@@ -327,6 +339,32 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetJumpButton(TextureAtlas atlas) 
 		{
 			jump = atlas.findRegion("boton_jump");
+		}
+	}
+	
+	public class AssetPause
+	{
+		public final AtlasRegion pause;
+		public final AtlasRegion play;
+		public final AtlasRegion restart;
+		public final AtlasRegion selectLevel;
+		public final AtlasRegion home;
+		public final AtlasRegion sound;
+		
+		public AssetPause(TextureAtlas atlas)
+		{
+			pause = atlas.findRegion("background-pausa");
+			pause.flip(false, true);
+			play = atlas.findRegion("boton-jugar");
+			play.flip(false, true);
+			restart = atlas.findRegion("boton-restart");
+			restart.flip(false, true);
+			selectLevel = atlas.findRegion("boton-seleccion-nivel");
+			selectLevel.flip(false, true);
+			home = atlas.findRegion("boton-menu-principal");
+			home.flip(false, true);
+			sound = atlas.findRegion("boton-sonido");
+			sound.flip(false, true);
 		}
 	}
 

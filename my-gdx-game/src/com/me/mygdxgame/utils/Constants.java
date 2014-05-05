@@ -15,8 +15,6 @@ public class Constants {
 	public static final float VIEWPORT_BUTTONS_WIDTH = 100.0f;
 	// GUI Height
 	public static final float VIEWPORT_BUTTONS_HEIGHT = 50.0f;
-	// Location of description file for texture atlas
-	public static final String TEXTURE_ATLAS_OBJECTS = "images/canyonbunny.pack";
 	// Location of image file for level 01
 	public static final String LEVEL_01 = "levels/level-01.png";
 	// Location of image file for level 02
@@ -45,7 +43,10 @@ public class Constants {
 	// Game preferences file
 	public static final String PREFERENCES = "canyonbunny.prefs";
 
-	public static final String TEXTURE_ATLAS_UI = "images/canyonbunny-ui.pack";
+	// Location of description file for texture atlas
+	public static final String TEXTURE_ATLAS_OBJECTS = "images/spacerunners.pack";
+	public static final String TEXTURE_ATLAS_UI = "images/spacerunners-ui.pack";
+	public static final String TEXTURE_ATLAS_PAUSE = "images/spacerunners-pause.pack";
 	public static final String TEXTURE_ATLAS_LIBGDX_UI = "images/uiskin.atlas";
 	// Location of description file for skins
 	public static final String SKIN_LIBGDX_UI = "images/uiskin.json";

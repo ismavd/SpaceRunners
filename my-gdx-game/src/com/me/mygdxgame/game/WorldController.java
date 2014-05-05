@@ -25,9 +25,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.me.mygdxgame.screens.GameScreen;
+import com.me.mygdxgame.screens.LevelScreen;
 import com.me.mygdxgame.screens.MenuScreen;
 import com.me.mygdxgame.utils.CameraHelper;
 import com.me.mygdxgame.utils.Constants;
+import com.me.mygdxgame.utils.GamePreferences;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -50,10 +52,18 @@ public class WorldController extends InputAdapter implements Disposable {
 	private Rectangle r2 = new Rectangle();
 	private Rectangle r3 = new Rectangle();
 
+	// Botones para los controles en la versión para móvil
 	public Circle cLeft = new Circle();
 	public Circle cRight = new Circle();
 	public Circle cJump = new Circle();
 	public Circle cShoot = new Circle();
+
+	// Botones del menú de pausa
+	public Circle cPlay = new Circle();
+	public Circle cRestart = new Circle();
+	public Circle cLevels = new Circle();
+	public Circle cHome = new Circle();
+	public Circle cSound = new Circle();
 
 	public CameraHelper cameraHelper;
 	public Level level;
@@ -106,6 +116,27 @@ public class WorldController extends InputAdapter implements Disposable {
 		cShoot.set((float) 0.8203125 * Gdx.graphics.getWidth(), (float) 0.9028
 				* Gdx.graphics.getHeight(),
 				(float) 0.058594 * Gdx.graphics.getWidth());
+
+		System.out.println(Gdx.graphics.getWidth() + " - "
+				+ Gdx.graphics.getHeight());
+		// Dimensiones de la pantalla en versión Desktop: Width = 1280; Height =
+		// 720
+		// Botones del menú de pausa
+		cPlay.set((float) 0.1515625 * Gdx.graphics.getWidth(),
+				(float) 0.2833333333333333 * Gdx.graphics.getHeight(),
+				(float) 0.058594 * Gdx.graphics.getWidth());
+		cRestart.set((float) 0.1515625 * Gdx.graphics.getWidth(),
+				(float) 0.5041666666666667 * Gdx.graphics.getHeight(),
+				(float) 0.058594 * Gdx.graphics.getWidth());
+		cLevels.set((float) 0.1515625 * Gdx.graphics.getWidth(),
+				(float) 0.6944444444444444 * Gdx.graphics.getHeight(),
+				(float) 0.058594 * Gdx.graphics.getWidth());
+		cHome.set((float) 0.078125 * Gdx.graphics.getWidth(),
+				(float) 0.9097222222222222 * Gdx.graphics.getHeight(),
+				(float) 0.058594 * Gdx.graphics.getWidth());
+		cSound.set((float) 0.24609375 * Gdx.graphics.getWidth(),
+				(float) 0.9097222222222222 * Gdx.graphics.getHeight(),
+				(float) 0.058594 * Gdx.graphics.getWidth());
 	}
 
 	private void initLevel() {
@@ -153,8 +184,9 @@ public class WorldController extends InputAdapter implements Disposable {
 					"Camera follow enabled: " + cameraHelper.hasTarget());
 		}
 		// Back to Menu
-		else if (/* keycode == Keys.ESCAPE || */keycode == Keys.BACK) {
-			backToMenu();
+		else if (/* keycode == Keys.ESCAPE || */keycode == Keys.BACKSPACE) {
+			// backToMenu();
+			initLevel();
 		}
 		// Pause menu
 		else if (keycode == Keys.MENU || keycode == Keys.ESCAPE) {
@@ -230,8 +262,39 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	// En este método vamos a poner las acciones a realizar en el menú de pausa
 	public void updatePaused(float deltaTime) {
-		if (Gdx.input.justTouched()) {
+		// TODO
+		// Continuar
+		if (Gdx.input.isTouched() && cPlay.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
+			game.getScreen().resume();
+			paused = false;
+		}
+		// Reiniciar
+		if (Gdx.input.isTouched() && cRestart.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
+			game.getScreen().resume();
+			paused = false;
+			initLevel();
+		}
+		// Selección de nivel
+		if (Gdx.input.isTouched() && cLevels.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
+			game.getScreen().resume();
+			paused = false;
+			game.setScreen(new LevelScreen(game));
+		}
+		// Menu principal
+		if (Gdx.input.isTouched() && cHome.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
+			game.getScreen().resume();
+			paused = false;
 			backToMenu();
+		}
+		// Sonido
+		if (Gdx.input.isTouched() && cSound.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
+			game.getScreen().resume();
+			paused = false;
+			GamePreferences prefs = GamePreferences.instance;
+			prefs.sound = !prefs.sound;
+			prefs.music = !prefs.music;
+			prefs.save();
+			AudioManager.instance.onSettingsUpdated();
 		}
 	}
 
@@ -502,7 +565,6 @@ public class WorldController extends InputAdapter implements Disposable {
 		enemy.alive = false;
 	}
 
-	
 	private void testCollisions() {
 		if (!enemyHitEffectOn) {
 			r1.set(level.bunnyHead.position.x, level.bunnyHead.position.y,

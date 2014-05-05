@@ -215,15 +215,17 @@ public class WorldRenderer implements Disposable
 	
 	private void renderPauseMenu(SpriteBatch batch) 
 	{
-		float x = cameraGUI.viewportWidth / 2;
-		float y = cameraGUI.viewportHeight / 2;
+		float x = 0;
+		float y = 0;
 		
 		if (worldController.isPaused()) 
 		{
-			BitmapFont fontGoal = Assets.instance.fonts.defaultBig;
-			fontGoal.setColor(1, 0.75f, 0.25f, 1);
-			fontGoal.drawMultiLine(batch, "PAUSE", x, y - 150, 0, BitmapFont.HAlignment.CENTER);
-			fontGoal.setColor(1, 1, 1, 1);
+			batch.draw(Assets.instance.pause.pause, x, y, 0, 0, 280, -480, 1f, -1f, 0);
+			batch.draw(Assets.instance.pause.play, x, y, 90, 90, 800, -800, 0.1f, -0.1f, 0);
+			batch.draw(Assets.instance.pause.restart, x, y, 90, 180, 800, -800, 0.1f, -0.1f, 0);
+			batch.draw(Assets.instance.pause.selectLevel, x, y, 90, 270, 800, -800, 0.1f, -0.1f, 0);
+			batch.draw(Assets.instance.pause.home, x, y, 20, 360, 800, -800, 0.1f, -0.1f, 0);
+			batch.draw(Assets.instance.pause.sound, x, y, 180, 360, 800, -800, 0.1f, -0.1f, 0);	
 		}
 	}
 
