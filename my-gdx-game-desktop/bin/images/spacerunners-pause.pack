@@ -1,0 +1,71 @@
+
+spacerunners-pause.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+boton -pausa
+  rotate: false
+  xy: 496, 502
+  size: 498, 498
+  orig: 498, 498
+  offset: 0, 0
+  index: -1
+boton-jugar
+  rotate: false
+  xy: 2, 2
+  size: 498, 498
+  orig: 498, 498
+  offset: 0, 0
+  index: -1
+boton-menu-principal
+  rotate: false
+  xy: 91, 597
+  size: 403, 403
+  orig: 403, 403
+  offset: 0, 0
+  index: -1
+boton-restart
+  rotate: false
+  xy: 502, 2
+  size: 498, 498
+  orig: 498, 498
+  offset: 0, 0
+  index: -1
+silencio
+  rotate: false
+  xy: 2, 995
+  size: 87, 5
+  orig: 87, 5
+  offset: 0, 0
+  index: -1
+
+spacerunners-pause2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background-pausa
+  rotate: false
+  xy: 2, 2
+  size: 559, 948
+  orig: 559, 948
+  offset: 0, 0
+  index: -1
+
+spacerunners-pause3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+boton-seleccion-nivel
+  rotate: false
+  xy: 2, 2
+  size: 498, 498
+  orig: 498, 498
+  offset: 0, 0
+  index: -1
+boton-sonido
+  rotate: false
+  xy: 502, 2
+  size: 498, 498
+  orig: 498, 498
+  offset: 0, 0
+  index: -1
