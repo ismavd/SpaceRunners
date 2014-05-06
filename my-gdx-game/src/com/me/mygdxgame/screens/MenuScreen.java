@@ -36,8 +36,10 @@ public class MenuScreen extends AbstractGameScreen
 	private Image imgBackground;
 	private Image imgLogo;
 	private Image imgInfo;
-	private Image imgCoins;
-	private Image imgBunny;
+	/*private Image imgCoins;
+	private Image imgBunny;*/
+	private Image imgMoon;
+	private Image imgAstronaut;
 	private Button btnMenuPlay;
 	private Button btnMenuOptions;
 	
@@ -154,15 +156,25 @@ public class MenuScreen extends AbstractGameScreen
 
 	private Table buildObjectsLayer() 
 	{
-		Table layer = new Table();
+		
 		// + Coins
-		imgCoins = new Image(skinCanyonBunny, "coins");
+		/*imgCoins = new Image(skinCanyonBunny, "coins");
 		layer.addActor(imgCoins);
 		imgCoins.setPosition(135, 80);
 		// + Bunny
 		imgBunny = new Image(skinCanyonBunny, "bunny");
 		layer.addActor(imgBunny);
 		imgBunny.setPosition(355, 40);
+		*/
+		Table layer = new Table();
+		// + Moon
+		imgMoon = new Image(skinCanyonBunny, "moon");
+		layer.addActor(imgMoon);
+		imgMoon.setPosition(30, 10);
+		// + Astronaut
+		imgAstronaut = new Image(skinCanyonBunny, "astronaut");
+		layer.addActor(imgAstronaut);
+		imgAstronaut.setPosition(80, 50);
 		return layer;
 	}
 
@@ -173,13 +185,13 @@ public class MenuScreen extends AbstractGameScreen
 		layer.left().top();
 		
 		// + Game Logo
-		imgLogo = new Image(skinCanyonBunny, "logo");
+		/*imgLogo = new Image(skinCanyonBunny, "logo");
 		layer.add(imgLogo);
 		layer.row().expandY();
 		
 		// + Info Logos
 		imgInfo = new Image(skinCanyonBunny, "info");
-		layer.add(imgInfo).bottom();
+		layer.add(imgInfo).bottom();*/
 		
 		if (debugEnabled)
 		{

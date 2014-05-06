@@ -23,6 +23,7 @@ public class GameScreen extends AbstractGameScreen {
 	private WorldRenderer worldRenderer;
 	private boolean paused;
 	private int nivel;
+	private int score;
 	
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
@@ -31,9 +32,10 @@ public class GameScreen extends AbstractGameScreen {
 		super(game);
 	}
 	
-	public GameScreen(Game game, int level) {
+	public GameScreen(Game game, int level, int score) {
 		super(game);
 		this.nivel = level;
+		this.score = score;
 	}
 
 	@Override
@@ -48,7 +50,9 @@ public class GameScreen extends AbstractGameScreen {
 		}
 
 		// Sets the clear screen color to: Cornflower Blue
-		Gdx.gl.glClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xed / 255.0f,
+		/*Gdx.gl.glClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xed / 255.0f,
+				0xff / 255.0f);*/
+		Gdx.gl.glClearColor(0x9 / 255.0f, 0x23 / 255.0f, 0x47 / 255.0f,
 				0xff / 255.0f);
 		// Clears the screen
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -65,7 +69,7 @@ public class GameScreen extends AbstractGameScreen {
 	@Override
 	public void show() {
 		GamePreferences.instance.load();
-		worldController = new WorldController(game,nivel);
+		worldController = new WorldController(game,nivel,score);
 		worldRenderer = new WorldRenderer(worldController);
 		Gdx.input.setCatchBackKey(true);
 	}

@@ -28,6 +28,7 @@ public class Assets implements Disposable, AssetErrorListener
 	
 	//Enemies
 	public AssetEnemy enemy;
+	public AssetEnemyForward enemyFwd;
 	public AssetGiant giant;
 	
 	//Platforms
@@ -106,6 +107,7 @@ public class Assets implements Disposable, AssetErrorListener
 		bunny = new AssetBunny(atlas);
 		bunnyPower = new AssetBunnyPower(atlas);
 		enemy = new AssetEnemy(atlas);
+		enemyFwd = new AssetEnemyForward(atlas);
 		giant = new AssetGiant(atlas);
 		rock = new AssetRock(atlas);
 		platform = new AssetPlatform(atlas);
@@ -199,6 +201,16 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetEnemy(TextureAtlas atlas) 
 		{
 			enemy = atlas.findRegion("enemy");
+		}
+	}
+	
+	public class AssetEnemyForward 
+	{
+		public final AtlasRegion enemy;
+		
+		public AssetEnemyForward(TextureAtlas atlas) 
+		{
+			enemy = atlas.findRegion("enemy-forward");
 		}
 	}
 	
@@ -350,6 +362,7 @@ public class Assets implements Disposable, AssetErrorListener
 		public final AtlasRegion selectLevel;
 		public final AtlasRegion home;
 		public final AtlasRegion sound;
+		public final AtlasRegion slash;
 		
 		public AssetPause(TextureAtlas atlas)
 		{
@@ -365,14 +378,16 @@ public class Assets implements Disposable, AssetErrorListener
 			home.flip(false, true);
 			sound = atlas.findRegion("boton-sonido");
 			sound.flip(false, true);
+			slash = atlas.findRegion("silencio");
 		}
 	}
 
 	public class AssetLevelDecoration 
 	{
-		public final AtlasRegion cloud01;
+		/*public final AtlasRegion cloud01;
 		public final AtlasRegion cloud02;
-		public final AtlasRegion cloud03;
+		public final AtlasRegion cloud03;*/
+		public final AtlasRegion cloud;
 		public final AtlasRegion mountainLeft;
 		public final AtlasRegion mountainRight;
 		public final AtlasRegion waterOverlay;
@@ -380,9 +395,10 @@ public class Assets implements Disposable, AssetErrorListener
 
 		public AssetLevelDecoration(TextureAtlas atlas) 
 		{
-			cloud01 = atlas.findRegion("cloud01");
+			/*cloud01 = atlas.findRegion("cloud01");
 			cloud02 = atlas.findRegion("cloud02");
-			cloud03 = atlas.findRegion("cloud03");
+			cloud03 = atlas.findRegion("cloud03");*/
+			cloud = atlas.findRegion("nube-de-polvo");
 			mountainLeft = atlas.findRegion("mountain_left");
 			mountainRight = atlas.findRegion("mountain_right");
 			waterOverlay = atlas.findRegion("water_overlay");

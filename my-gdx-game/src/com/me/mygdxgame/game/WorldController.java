@@ -7,7 +7,9 @@ import com.me.mygdxgame.objects.BunnyHead.JUMP_STATE;
 import com.me.mygdxgame.objects.Carrot;
 import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Enemy;
+import com.me.mygdxgame.objects.EnemyForward;
 import com.me.mygdxgame.objects.Feather;
+import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.MovingPlatform;
 import com.me.mygdxgame.objects.Platform;
@@ -70,6 +72,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	public int lives;
 	public int screws;
 	public int score;
+	public int lastScore;
 
 	public boolean checkpointReached;
 
@@ -81,6 +84,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	private boolean enemyHit;
 	private boolean enemyHitEffectOn;
 	private int hitStopCounter;
+	private boolean soundButtonTouched;
 
 	private int nivel;
 	private boolean finMundo = false;
@@ -91,9 +95,11 @@ public class WorldController extends InputAdapter implements Disposable {
 		init();
 	}
 
-	public WorldController(Game game, int level) {
+	public WorldController(Game game, int level, int score) {
 		this.game = game;
 		this.nivel = level;
+		this.score = score;
+		this.lastScore = score;
 		init();
 	}
 
@@ -103,6 +109,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		lives = Constants.LIVES_START;
 		timeLeftGameOverDelay = 0;
 		enemyHitEffectOn = false;
+		soundButtonTouched = false;
 		initLevel();
 		cLeft.set((float) 0.0625 * Gdx.graphics.getWidth(), (float) 0.9028
 				* Gdx.graphics.getHeight(),
@@ -141,7 +148,7 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	private void initLevel() {
 		screws = 0;
-		score = 0;
+		score = lastScore;
 		goalReached = false;
 		enemyHit = false;
 		level = new Level(getLevel(nivel), checkpointReached);
@@ -192,9 +199,11 @@ public class WorldController extends InputAdapter implements Disposable {
 		else if (keycode == Keys.MENU || keycode == Keys.ESCAPE) {
 			if (!paused) {
 				game.getScreen().pause();
+				cameraHelper.addZoom(-0.5f);
 				paused = true;
 			} else {
 				game.getScreen().resume();
+				cameraHelper.addZoom(0.5f);
 				paused = false;
 			}
 		}
@@ -257,44 +266,65 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void nextLevel() {
-		game.setScreen(new GameScreen(game, nivel + 1));
+		game.setScreen(new GameScreen(game, nivel + 1, score));
 	}
 
 	// En este método vamos a poner las acciones a realizar en el menú de pausa
 	public void updatePaused(float deltaTime) {
-		// TODO
-		// Continuar
-		if (Gdx.input.isTouched() && cPlay.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
-			game.getScreen().resume();
-			paused = false;
-		}
-		// Reiniciar
-		if (Gdx.input.isTouched() && cRestart.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
-			game.getScreen().resume();
-			paused = false;
-			initLevel();
-		}
-		// Selección de nivel
-		if (Gdx.input.isTouched() && cLevels.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
-			game.getScreen().resume();
-			paused = false;
-			game.setScreen(new LevelScreen(game));
-		}
-		// Menu principal
-		if (Gdx.input.isTouched() && cHome.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
-			game.getScreen().resume();
-			paused = false;
-			backToMenu();
-		}
-		// Sonido
-		if (Gdx.input.isTouched() && cSound.contains((float) Gdx.input.getX(), (float) Gdx.input.getY())) {
-			game.getScreen().resume();
-			paused = false;
-			GamePreferences prefs = GamePreferences.instance;
-			prefs.sound = !prefs.sound;
-			prefs.music = !prefs.music;
-			prefs.save();
-			AudioManager.instance.onSettingsUpdated();
+		if (!soundButtonTouched) {
+			// Continuar
+			if (Gdx.input.isTouched()
+					&& cPlay.contains((float) Gdx.input.getX(),
+							(float) Gdx.input.getY())) {
+				game.getScreen().resume();
+				cameraHelper.addZoom(0.5f);
+				paused = false;
+			}
+			// Reiniciar
+			if (Gdx.input.isTouched()
+					&& cRestart.contains((float) Gdx.input.getX(),
+							(float) Gdx.input.getY())) {
+				game.getScreen().resume();
+				cameraHelper.addZoom(0.5f);
+				paused = false;
+				initLevel();
+			}
+			// Selección de nivel
+			if (Gdx.input.isTouched()
+					&& cLevels.contains((float) Gdx.input.getX(),
+							(float) Gdx.input.getY())) {
+				game.getScreen().resume();
+				paused = false;
+				game.setScreen(new LevelScreen(game));
+			}
+			// Menu principal
+			if (Gdx.input.isTouched()
+					&& cHome.contains((float) Gdx.input.getX(),
+							(float) Gdx.input.getY())) {
+				game.getScreen().resume();
+				paused = false;
+				backToMenu();
+			}
+			// Sonido
+			if (Gdx.input.isTouched()
+					&& cSound.contains((float) Gdx.input.getX(),
+							(float) Gdx.input.getY())) {
+				soundButtonTouched = true;
+				GamePreferences prefs = GamePreferences.instance;
+				if (!prefs.sound && !prefs.music) {
+					prefs.sound = true;
+					prefs.music = true;
+				} else {
+					prefs.sound = false;
+					prefs.music = false;
+				}
+				prefs.save();
+				AudioManager.instance.onSettingsUpdated();
+			}
+		} else {
+			soundButtonTouched = Gdx.input.isTouched()
+					&& cSound.contains((float) Gdx.input.getX(),
+							(float) Gdx.input.getY());
 		}
 	}
 
@@ -557,12 +587,27 @@ public class WorldController extends InputAdapter implements Disposable {
 		Vector2 centerPosBunnyHead = new Vector2(level.bunnyHead.position);
 		centerPosBunnyHead.x += level.bunnyHead.bounds.width;
 	}
-
+	
 	private void onCollisionLaserWithEnemy(Enemy enemy) {
 		if (enemy.alive)
 			score += enemy.getScore();
 		level.bunnyHead.shooting = false;
 		enemy.alive = false;
+	}
+	
+	private void onCollisionLaserWithEnemy(EnemyForward enemy) {
+		if (enemy.alive)
+			score += enemy.getScore();
+		level.bunnyHead.shooting = false;
+		enemy.alive = false;
+	}
+	
+	private void onCollisionLaserWithGiant(Giant giant) {
+		level.bunnyHead.shooting = false;
+		if (giant.hp <= 0)
+			score += giant.getScore();
+		else
+			giant.hp--;
 	}
 
 	private void testCollisions() {
@@ -735,11 +780,40 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
+			// Test collision: Bunny Head <-> Enemy Forward || Laser <-> Enemy Forward
+			for (EnemyForward enemy : level.enemiesFwd) {
+				r2.set(enemy.position.x, enemy.position.y, enemy.bounds.width,
+						enemy.bounds.height);
+				if (level.laser != null) {
+					r3.set(level.laser.position.x, level.laser.position.y,
+							level.laser.bounds.width, level.laser.bounds.height);
+					if (r2.overlaps(r3)) {
+						onCollisionLaserWithEnemy(enemy);
+					}
+				}
+				// Si te acercas al enemigo este se comenzará a mover hacia la izquierda
+				if (r2.x - r1.x < 4)
+					enemy.moving = true;
+				if (!r1.overlaps(r2)) {
+					continue;
+				}
+				if (enemy.alive) {
+					onCollisionBunnyWithEnemy();
+				}
+				break;
+			}
+
 			// Test collision: Bunny Head <-> Giant
 			if (level.giant != null) {
 				r2.set(level.giant.position.x, level.giant.position.y,
 						level.giant.bounds.width, level.giant.bounds.height);
-
+				if (level.laser != null) {
+					r3.set(level.laser.position.x, level.laser.position.y,
+							level.laser.bounds.width, level.laser.bounds.height);
+					if (r2.overlaps(r3)) {
+						onCollisionLaserWithGiant(level.giant);
+					}
+				}
 				if (goalReached) {
 					level.giant.StopMoving();
 				} else if (r1.overlaps(r2)) {

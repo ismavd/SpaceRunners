@@ -1,32 +1,33 @@
 package com.me.mygdxgame.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.game.Assets;
+import com.me.mygdxgame.game.WorldController;
 
-public class Giant extends AbstractGameObject {
-
-	private TextureRegion regGiant;
-	private boolean moving;
-	public int hp;
+public class EnemyForward extends AbstractGameObject {
+	private TextureRegion regEnemy;
+	public boolean moving;
+	public boolean alive;
 	
-	public Giant() {
+	public EnemyForward() {
 		init();
 	}
 	
 	private void init() {
-		dimension.set(3.5f,4f);
-		regGiant = Assets.instance.giant.giant;
+		dimension.set(0.5f,0.5f);
+		regEnemy = Assets.instance.enemyFwd.enemy;
 		// Set bounding box for collision detection
-		bounds.set(0, 0, dimension.x - 1, dimension.y);
+		bounds.set(0, 0, dimension.x, dimension.y);
 		terminalVelocity.set(2.0f, 3.0f);
-		moving = true;
-		hp = 30;
+		alive = true;
+		moving = false;
 	}
 	
 	@Override
 	public void render(SpriteBatch batch) {
-		TextureRegion reg = regGiant;
+		TextureRegion reg = regEnemy;
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x,
 				origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation,
 				reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
@@ -37,7 +38,7 @@ public class Giant extends AbstractGameObject {
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		if (moving)
-			velocity.x = terminalVelocity.x;
+			velocity.x = -terminalVelocity.x;
 		else
 			velocity.x = 0;
 	}
@@ -47,7 +48,6 @@ public class Giant extends AbstractGameObject {
 	}
 	
 	public int getScore() {
-		return 20000;
+		return 200;
 	}
-
 }

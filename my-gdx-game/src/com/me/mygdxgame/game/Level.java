@@ -9,6 +9,7 @@ import com.me.mygdxgame.objects.Box;
 import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Clouds;
 import com.me.mygdxgame.objects.Enemy;
+import com.me.mygdxgame.objects.EnemyForward;
 import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.Laser;
 import com.me.mygdxgame.objects.Mountains;
@@ -38,6 +39,7 @@ public class Level {
 		ITEM_CARROT(0, 0, 255), // blue
 		CHECKPOINT(255, 69, 0), // orange
 		ENEMY(63, 72, 204), // indigo
+		ENEMY_FORWARD(163, 73, 164), // purple
 		GIANT(128, 64, 0), // brown
 		BOX(255, 128, 128); // pink
 
@@ -69,6 +71,7 @@ public class Level {
 	// Personajes del juego.
 	public BunnyHead bunnyHead;
 	public Array<Enemy> enemies;
+	public Array<EnemyForward> enemiesFwd;
 	public Giant giant;
 
 	// Elementos
@@ -96,6 +99,7 @@ public class Level {
 
 		// Enemigos
 		enemies = new Array<Enemy>();
+		enemiesFwd = new Array<EnemyForward>();
 		giant = null; // Gigante en el nivel de correr.
 
 		// Otros objetos del nivel.
@@ -242,6 +246,13 @@ public class Level {
 							+ offsetHeight);
 					((Enemy) obj).initMove(obj.position.y);
 					enemies.add((Enemy) obj);
+				} else if (BLOCK_TYPE.ENEMY_FORWARD.sameColor(currentPixel)) // Enemigo 2
+				{
+					obj = new EnemyForward();
+					offsetHeight = -1.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y
+							+ offsetHeight);
+					enemiesFwd.add((EnemyForward) obj);
 				} else if (BLOCK_TYPE.GIANT.sameColor(currentPixel)) // Gigante
 				{
 					obj = new Giant();
@@ -329,10 +340,21 @@ public class Level {
 				enemy = null;
 		}
 
-		// Si el nivel contiene un gigante, lo colocamos.
-		if (giant != null) {
-			giant.render(batch);
+		// Colocamos los enemigos que te atacan en línea recta.
+		for (EnemyForward enemy : enemiesFwd) {	
+			if (enemy.alive)
+				enemy.render(batch);
+			else
+				enemy = null;
 		}
+
+		// Si el nivel contiene un gigante, lo colocamos.
+		if (giant != null && giant.hp > 0) {
+			giant.render(batch);
+		} else {
+			giant = null;
+		}
+			
 
 		// Colocamos el checkpoint.
 		for (Checkpoint cp : checkpoint) {
@@ -348,11 +370,13 @@ public class Level {
 			Laser l = new Laser(bunnyHead.viewDirection);
 			if (laser == null) {
 				if (bunnyHead.viewDirection == bunnyHead.viewDirection.RIGHT)
-					l.position.set(bunnyHead.position.x + bunnyHead.bounds.width,
-							bunnyHead.position.y + bunnyHead.bounds.height / 2);
+					l.position.set(bunnyHead.position.x
+							+ bunnyHead.bounds.width, bunnyHead.position.y
+							+ bunnyHead.bounds.height / 2);
 				else
-					l.position.set(bunnyHead.position.x - bunnyHead.bounds.width,
-							bunnyHead.position.y + bunnyHead.bounds.height / 2);
+					l.position.set(bunnyHead.position.x
+							- bunnyHead.bounds.width, bunnyHead.position.y
+							+ bunnyHead.bounds.height / 2);
 				laser = l;
 			}
 			if (laser.duracion < laser.maxDuracion)
@@ -361,8 +385,7 @@ public class Level {
 				bunnyHead.shooting = false;
 				laser = null;
 			}
-		}
-		else
+		} else
 			laser = null;
 
 		bunnyHead.render(batch); // Renderizar el personaje.
@@ -409,12 +432,17 @@ public class Level {
 			if (enemy.alive && enemy != null)
 				enemy.update(deltaTime);
 		}
+		
+		for (EnemyForward enemy : enemiesFwd) {
+			if (enemy.alive && enemy != null)
+				enemy.update(deltaTime);
+		}
 
 		if (bunnyHead.shooting && laser != null) {
 			laser.update(deltaTime);
 		}
 
-		if (giant != null) {
+		if (giant != null && giant.hp > 0) {
 			giant.update(deltaTime);
 		}
 

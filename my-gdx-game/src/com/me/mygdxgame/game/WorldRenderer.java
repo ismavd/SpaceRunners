@@ -225,7 +225,9 @@ public class WorldRenderer implements Disposable
 			batch.draw(Assets.instance.pause.restart, x, y, 90, 180, 800, -800, 0.1f, -0.1f, 0);
 			batch.draw(Assets.instance.pause.selectLevel, x, y, 90, 270, 800, -800, 0.1f, -0.1f, 0);
 			batch.draw(Assets.instance.pause.home, x, y, 20, 360, 800, -800, 0.1f, -0.1f, 0);
-			batch.draw(Assets.instance.pause.sound, x, y, 180, 360, 800, -800, 0.1f, -0.1f, 0);	
+			batch.draw(Assets.instance.pause.sound, x, y, 180, 360, 800, -800, 0.1f, -0.1f, 0);
+			if (!GamePreferences.instance.sound)
+				batch.draw(Assets.instance.pause.sound, x, y, 180, 360, 800, -800, 0.1f, -0.1f, 0);
 		}
 	}
 
