@@ -16,16 +16,21 @@ public class Main {
 			settings.maxHeight = 1024;
 			settings.debug = drawDebugOutline;
 
-			TexturePacker2.process(settings, "assets-raw/images",
-					"../my-gdx-game-android/assets/images", "canyonbunny.pack");
+			/*TexturePacker2.process(settings, "assets-raw/images",
+					"../my-gdx-game-android/assets/images", "spacerunners.pack");
 			TexturePacker2.process(settings, "assets-raw/images-ui",
 					"../my-gdx-game-android/assets/images",
-					"canyonbunny-ui.pack");
+					"spacerunners-ui.pack");
+			TexturePacker2.process(settings, "assets-raw/images-pause",
+					"../my-gdx-game-android/assets/images", "spacerunners-pause.pack");
 			TexturePacker2.process(settings, "assets-raw/images",
-					"bin/images", "canyonbunny.pack");
+					"bin/images", "spacerunners.pack");
 			TexturePacker2.process(settings, "assets-raw/images-ui",
 					"bin/images",
-					"canyonbunny-ui.pack");
+					"spacerunners-ui.pack");
+			TexturePacker2.process(settings, "assets-raw/images-pause",
+					"bin/images", "spacerunners-pause.pack");*/
+			
 		}
 
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();

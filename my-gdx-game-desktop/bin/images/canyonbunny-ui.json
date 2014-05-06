@@ -16,5 +16,7 @@ logo: { drawable: logo },
 info: { drawable: info },
 coins: { drawable: coins },
 bunny: { drawable: bunny },
+moon: { drawable: moon },
+astronaut: { drawable: astronaut },
 },
 }
