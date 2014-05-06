@@ -199,11 +199,11 @@ public class WorldController extends InputAdapter implements Disposable {
 		else if (keycode == Keys.MENU || keycode == Keys.ESCAPE) {
 			if (!paused) {
 				game.getScreen().pause();
-				cameraHelper.addZoom(-0.5f);
+				moveCamera(-1f,0);
 				paused = true;
 			} else {
 				game.getScreen().resume();
-				cameraHelper.addZoom(0.5f);
+				moveCamera(1f,0);
 				paused = false;
 			}
 		}
@@ -277,7 +277,7 @@ public class WorldController extends InputAdapter implements Disposable {
 					&& cPlay.contains((float) Gdx.input.getX(),
 							(float) Gdx.input.getY())) {
 				game.getScreen().resume();
-				cameraHelper.addZoom(0.5f);
+				moveCamera(1.5f,0);
 				paused = false;
 			}
 			// Reiniciar
@@ -285,7 +285,7 @@ public class WorldController extends InputAdapter implements Disposable {
 					&& cRestart.contains((float) Gdx.input.getX(),
 							(float) Gdx.input.getY())) {
 				game.getScreen().resume();
-				cameraHelper.addZoom(0.5f);
+				moveCamera(1.5f,0);
 				paused = false;
 				initLevel();
 			}
@@ -539,13 +539,14 @@ public class WorldController extends InputAdapter implements Disposable {
 		case JUMP_FALLING:
 			bunnyHead.position.y = box.position.y + bunnyHead.bounds.height / 2
 					+ bunnyHead.origin.y;
-			if ((Gdx.input.isTouched(0)
-					&& cJump.contains((float) Gdx.input.getX(0),
-							(float) Gdx.input.getY(0)) || Gdx.input
-					.isTouched(1)
-					&& cJump.contains((float) Gdx.input.getX(1),
-							(float) Gdx.input.getY(1)))
-					|| !Gdx.input.isKeyPressed(Keys.SPACE)) {
+			/*(Gdx.input.isTouched(0)
+			&& cJump.contains((float) Gdx.input.getX(0),
+					(float) Gdx.input.getY(0)) || Gdx.input
+			.isTouched(1)
+			&& cJump.contains((float) Gdx.input.getX(1),
+					(float) Gdx.input.getY(1)))
+			|| !Gdx.input.isKeyPressed(Keys.SPACE)*/
+			if (isJumpPressed(0) || isJumpPressed(1)) {
 				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			}
 			break;
@@ -587,27 +588,31 @@ public class WorldController extends InputAdapter implements Disposable {
 		Vector2 centerPosBunnyHead = new Vector2(level.bunnyHead.position);
 		centerPosBunnyHead.x += level.bunnyHead.bounds.width;
 	}
-	
+
 	private void onCollisionLaserWithEnemy(Enemy enemy) {
-		if (enemy.alive)
+		if (enemy.alive) {
 			score += enemy.getScore();
-		level.bunnyHead.shooting = false;
-		enemy.alive = false;
+			level.bunnyHead.shooting = false;
+			enemy.alive = false;
+			enemy.dying = true;
+		}
 	}
-	
+
 	private void onCollisionLaserWithEnemy(EnemyForward enemy) {
-		if (enemy.alive)
+		if (enemy.alive) {
 			score += enemy.getScore();
-		level.bunnyHead.shooting = false;
-		enemy.alive = false;
+			level.bunnyHead.shooting = false;
+			enemy.alive = false;
+			enemy.dying = true;
+		}		
 	}
-	
+
 	private void onCollisionLaserWithGiant(Giant giant) {
-		level.bunnyHead.shooting = false;
+		/*level.bunnyHead.shooting = false;
 		if (giant.hp <= 0)
 			score += giant.getScore();
 		else
-			giant.hp--;
+			giant.hp--;*/
 	}
 
 	private void testCollisions() {
@@ -780,7 +785,8 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Bunny Head <-> Enemy Forward || Laser <-> Enemy Forward
+			// Test collision: Bunny Head <-> Enemy Forward || Laser <-> Enemy
+			// Forward
 			for (EnemyForward enemy : level.enemiesFwd) {
 				r2.set(enemy.position.x, enemy.position.y, enemy.bounds.width,
 						enemy.bounds.height);
@@ -791,7 +797,8 @@ public class WorldController extends InputAdapter implements Disposable {
 						onCollisionLaserWithEnemy(enemy);
 					}
 				}
-				// Si te acercas al enemigo este se comenzará a mover hacia la izquierda
+				// Si te acercas al enemigo este se comenzará a mover hacia la
+				// izquierda
 				if (r2.x - r1.x < 4)
 					enemy.moving = true;
 				if (!r1.overlaps(r2)) {
@@ -838,9 +845,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		if (cameraHelper.hasTarget(level.bunnyHead)) {
 			for (int i = 0; i < 2; i++) {
 				// Controlamos si el usuario pulsa alguno de los controles.
-				if (isLeftPressed(i)) {
+				if (isLeftPressed(i) && !isRightPressed(i)) {
 					level.bunnyHead.velocity.x = -level.bunnyHead.terminalVelocity.x;
-				} else if (isRightPressed(i)) {
+				} else if (isRightPressed(i) && !isLeftPressed(i)) {
 					level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
 				}
 

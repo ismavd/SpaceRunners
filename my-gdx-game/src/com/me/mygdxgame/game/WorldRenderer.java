@@ -89,16 +89,32 @@ public class WorldRenderer implements Disposable
 	{
 		float x = -15;
 		float y = -15;
-		batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
-		Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+		if (!worldController.isPaused()) {
+			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+		} else {
+			x = cameraGUI.viewportWidth - 200;
+			y = 110;
+			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+		}
 	}
 	
 	private void renderGuiScore(SpriteBatch batch) 
 	{
-		float x = cameraGUI.viewportWidth - 600;
-		float y = -15;
-		Assets.instance.fonts.defaultBig.draw(batch, "SCORE:", x + 75, y + 37);
-		Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.score, x + 200, y + 37);
+		float x;
+		float y;
+		if (!worldController.isPaused()) {
+			x = cameraGUI.viewportWidth - 600;
+			y = -15;
+			Assets.instance.fonts.defaultBig.draw(batch, "PUNTOS:", x + 75, y + 37);
+			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.score, x + 220, y + 37);
+		} else {
+			x = cameraGUI.viewportWidth - 160;
+			y = 70;
+			Assets.instance.fonts.defaultBig.draw(batch, "PUNTOS:", x, y);
+			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.score, x, y + 37);
+		}
 	}
 
 	private void renderGuiExtraLive(SpriteBatch batch) 
@@ -221,6 +237,7 @@ public class WorldRenderer implements Disposable
 		if (worldController.isPaused()) 
 		{
 			batch.draw(Assets.instance.pause.pause, x, y, 0, 0, 280, -480, 1f, -1f, 0);
+			batch.draw(Assets.instance.pause.title, x + 50, y, 0, 10, 150, -40, 1f, -1f, 0);
 			batch.draw(Assets.instance.pause.play, x, y, 90, 90, 800, -800, 0.1f, -0.1f, 0);
 			batch.draw(Assets.instance.pause.restart, x, y, 90, 180, 800, -800, 0.1f, -0.1f, 0);
 			batch.draw(Assets.instance.pause.selectLevel, x, y, 90, 270, 800, -800, 0.1f, -0.1f, 0);

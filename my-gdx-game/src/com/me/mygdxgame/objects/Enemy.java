@@ -14,6 +14,7 @@ public class Enemy extends AbstractGameObject{
 	private boolean goingUp;
 	
 	public boolean alive;
+	public boolean dying;
 	
 	public Enemy() {
 		init();
@@ -26,6 +27,7 @@ public class Enemy extends AbstractGameObject{
 		bounds.set(0, 0, dimension.x, dimension.y);
 		terminalVelocity.set(2.0f, 3.0f);
 		alive = true;
+		dying = false;
 	}
 	
 	public void initMove(float minHeight) {

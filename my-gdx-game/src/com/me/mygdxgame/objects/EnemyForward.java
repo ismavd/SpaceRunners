@@ -10,6 +10,7 @@ public class EnemyForward extends AbstractGameObject {
 	private TextureRegion regEnemy;
 	public boolean moving;
 	public boolean alive;
+	public boolean dying;
 	
 	public EnemyForward() {
 		init();
@@ -23,6 +24,7 @@ public class EnemyForward extends AbstractGameObject {
 		terminalVelocity.set(2.0f, 3.0f);
 		alive = true;
 		moving = false;
+		dying = true;
 	}
 	
 	@Override

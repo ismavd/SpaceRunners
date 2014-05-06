@@ -365,7 +365,6 @@ public class Level {
 		for (Box box : boxes) {
 			box.render(batch);
 		}
-
 		if (bunnyHead.shooting) {
 			Laser l = new Laser(bunnyHead.viewDirection);
 			if (laser == null) {
@@ -431,11 +430,19 @@ public class Level {
 		for (Enemy enemy : enemies) {
 			if (enemy.alive && enemy != null)
 				enemy.update(deltaTime);
+			if (enemy.dying) {
+				bunnyHead.shooting = false;
+				enemy.dying = false;
+			}
 		}
 		
 		for (EnemyForward enemy : enemiesFwd) {
 			if (enemy.alive && enemy != null)
 				enemy.update(deltaTime);
+			if (enemy.dying) {
+				bunnyHead.shooting = false;
+				enemy.dying = false;
+			}
 		}
 
 		if (bunnyHead.shooting && laser != null) {

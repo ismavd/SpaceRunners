@@ -357,6 +357,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public class AssetPause
 	{
 		public final AtlasRegion pause;
+		public final AtlasRegion title;
 		public final AtlasRegion play;
 		public final AtlasRegion restart;
 		public final AtlasRegion selectLevel;
@@ -368,6 +369,8 @@ public class Assets implements Disposable, AssetErrorListener
 		{
 			pause = atlas.findRegion("background-pausa");
 			pause.flip(false, true);
+			title = atlas.findRegion("texto-pausa");
+			title.flip(false, true);
 			play = atlas.findRegion("boton-jugar");
 			play.flip(false, true);
 			restart = atlas.findRegion("boton-restart");
