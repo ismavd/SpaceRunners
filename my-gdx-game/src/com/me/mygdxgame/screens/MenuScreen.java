@@ -167,6 +167,8 @@ public class MenuScreen extends AbstractGameScreen {
 		imgAstronaut = new Image(skinCanyonBunny, "astronaut");
 		layer.addActor(imgAstronaut);
 		imgAstronaut.setPosition(80, 50);
+		imgAstronaut.setOrigin(imgAstronaut.getWidth(), imgAstronaut.getHeight());
+		//imgAstronaut.rotate(22.5f);
 		imgAstronaut.addAction(Actions.forever(Actions.sequence(
 				rotateBy(22.5f, 2, Interpolation.linear),
 				rotateBy(-22.5f, 2, Interpolation.linear),

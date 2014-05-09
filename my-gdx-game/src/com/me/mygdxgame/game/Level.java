@@ -10,6 +10,7 @@ import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Clouds;
 import com.me.mygdxgame.objects.Enemy;
 import com.me.mygdxgame.objects.EnemyForward;
+import com.me.mygdxgame.objects.ForwardPlatform;
 import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.Laser;
 import com.me.mygdxgame.objects.Mountains;
@@ -32,6 +33,7 @@ public class Level {
 		ROCK(0, 255, 0), // green
 		PLATFORM(128, 128, 128), // grey
 		MOVING_PLATFORM(64, 64, 4), // dark yellow
+		FORWARD_PLATFORM(255, 0, 128), // pink
 		PLAYER_SPAWNPOINT(255, 255, 255), // white
 		ITEM_FEATHER(255, 0, 255), // purple
 		ITEM_GOLD_COIN(255, 255, 0), // yellow
@@ -62,6 +64,7 @@ public class Level {
 	public Array<Rock> rocks;
 	public Array<Platform> platforms;
 	public Array<MovingPlatform> movingPlatforms;
+	public Array<ForwardPlatform> fwdPlatforms;
 
 	// Elementos decorativos
 	public Clouds clouds;
@@ -106,6 +109,7 @@ public class Level {
 		rocks = new Array<Rock>();
 		platforms = new Array<Platform>();
 		movingPlatforms = new Array<MovingPlatform>();
+		fwdPlatforms = new Array<ForwardPlatform>();
 		goldcoins = new Array<GoldCoin>();
 		feathers = new Array<Feather>();
 		carrots = new Array<Carrot>();
@@ -178,6 +182,19 @@ public class Level {
 						movingPlatforms.get(movingPlatforms.size - 1)
 								.increaseLength(1);
 					}
+				} else if (BLOCK_TYPE.FORWARD_PLATFORM.sameColor(currentPixel)) // Plataforma móvil horizontal
+				{
+					if (lastPixel != currentPixel) {
+						obj = new ForwardPlatform();
+						offsetHeight = -1.5f;
+						obj.position.set(pixelX, baseHeight * obj.dimension.y
+								+ offsetHeight);
+						fwdPlatforms.add((ForwardPlatform) obj);
+						((ForwardPlatform) obj).initMove(obj.position.x);
+					} else {
+						fwdPlatforms.get(fwdPlatforms.size - 1)
+								.increaseLength(1);
+					}
 				} else if (!checkpointReached
 						&& BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)) // Punto
 																					// aparición
@@ -246,7 +263,8 @@ public class Level {
 							+ offsetHeight);
 					((Enemy) obj).initMove(obj.position.y);
 					enemies.add((Enemy) obj);
-				} else if (BLOCK_TYPE.ENEMY_FORWARD.sameColor(currentPixel)) // Enemigo 2
+				} else if (BLOCK_TYPE.ENEMY_FORWARD.sameColor(currentPixel)) // Enemigo
+																				// 2
 				{
 					obj = new EnemyForward();
 					offsetHeight = -1.5f;
@@ -312,8 +330,13 @@ public class Level {
 			platform.render(batch);
 		}
 
-		// Colocamos las plataformas flotantes que se mueven.
+		// Colocamos las plataformas flotantes que se mueven verticalmente.
 		for (MovingPlatform platform : movingPlatforms) {
+			platform.render(batch);
+		}
+		
+		// Colocamos las plataformas flotantes que se mueven horizontalmente.
+		for (ForwardPlatform platform : fwdPlatforms) {
 			platform.render(batch);
 		}
 
@@ -341,7 +364,7 @@ public class Level {
 		}
 
 		// Colocamos los enemigos que te atacan en línea recta.
-		for (EnemyForward enemy : enemiesFwd) {	
+		for (EnemyForward enemy : enemiesFwd) {
 			if (enemy.alive)
 				enemy.render(batch);
 			else
@@ -354,7 +377,6 @@ public class Level {
 		} else {
 			giant = null;
 		}
-			
 
 		// Colocamos el checkpoint.
 		for (Checkpoint cp : checkpoint) {
@@ -406,6 +428,10 @@ public class Level {
 		for (MovingPlatform platform : movingPlatforms) {
 			platform.update(deltaTime);
 		}
+		
+		for (ForwardPlatform platform : fwdPlatforms) {
+			platform.update(deltaTime);
+		}
 
 		for (GoldCoin goldCoin : goldcoins) {
 			goldCoin.update(deltaTime);
@@ -435,7 +461,7 @@ public class Level {
 				enemy.dying = false;
 			}
 		}
-		
+
 		for (EnemyForward enemy : enemiesFwd) {
 			if (enemy.alive && enemy != null)
 				enemy.update(deltaTime);

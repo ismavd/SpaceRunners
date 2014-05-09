@@ -9,6 +9,7 @@ import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Enemy;
 import com.me.mygdxgame.objects.EnemyForward;
 import com.me.mygdxgame.objects.Feather;
+import com.me.mygdxgame.objects.ForwardPlatform;
 import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.MovingPlatform;
@@ -124,8 +125,6 @@ public class WorldController extends InputAdapter implements Disposable {
 				* Gdx.graphics.getHeight(),
 				(float) 0.058594 * Gdx.graphics.getWidth());
 
-		System.out.println(Gdx.graphics.getWidth() + " - "
-				+ Gdx.graphics.getHeight());
 		// Dimensiones de la pantalla en versión Desktop: Width = 1280; Height =
 		// 720
 		// Botones del menú de pausa
@@ -471,6 +470,41 @@ public class WorldController extends InputAdapter implements Disposable {
 			break;
 		}
 	}
+	
+	private void onCollisionBunnyHeadWithForwardPlatform(Platform platform) {
+		BunnyHead bunnyHead = level.bunnyHead;
+
+		switch (bunnyHead.jumpState) {
+		case GROUNDED:
+			bunnyHead.jumpState = JUMP_STATE.JUMP_RISING;
+			break;
+		case FALLING:
+		case JUMP_FALLING:
+			bunnyHead.position.y = platform.position.y + bunnyHead.origin.y;
+			if ((Gdx.input.isTouched(0)
+					&& cJump.contains((float) Gdx.input.getX(0),
+							(float) Gdx.input.getY(0)) || Gdx.input
+					.isTouched(1)
+					&& cJump.contains((float) Gdx.input.getX(1),
+							(float) Gdx.input.getY(1)))
+					|| !Gdx.input.isKeyPressed(Keys.SPACE)) {
+				bunnyHead.jumpState = JUMP_STATE.GROUNDED; 
+			}
+			if (isLeftPressed(0) || isLeftPressed(1)) {
+				bunnyHead.velocity.x = - level.bunnyHead.terminalVelocity.x - platform.velocity.x;
+				//bunnyHead.position.x = platform.position.x + bunnyHead.origin.x + bunnyHead.velocity.x;
+			} else if (isRightPressed(0) || isRightPressed(1)) {
+				bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x + platform.velocity.x;
+				//bunnyHead.position.x = platform.position.x + bunnyHead.origin.x + bunnyHead.velocity.x;
+			} else {
+				bunnyHead.position.x = platform.position.x; //+ bunnyHead.origin.x;
+			}
+			break;
+		case JUMP_RISING:
+			bunnyHead.jumpState = JUMP_STATE.JUMP_FALLING;
+			break;
+		}
+	}
 
 	private void onCollisionBunnyWithGoldCoin(GoldCoin goldcoin) {
 		goldcoin.collected = true;
@@ -665,6 +699,24 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 
 				onCollisionBunnyHeadWithPlatform(platform);
+				// IMPORTANT: must do all collisions for valid
+				// edge testing on rocks.
+			}
+			
+			for (ForwardPlatform platform : level.fwdPlatforms) {
+				r2.set(platform.position.x, platform.position.y,
+						platform.bounds.width, platform.bounds.height);
+				Rectangle r1Bottom = new Rectangle();
+				// Rectangle r2Top = new Rectangle();
+				r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
+				// r2Top.set(r2.x,r2.y,r2.width,0.01f);
+
+				if (!r1Bottom.overlaps(r2)) {
+					// if (!r1.overlaps(r2))
+					continue;
+				}
+
+				onCollisionBunnyHeadWithForwardPlatform(platform);
 				// IMPORTANT: must do all collisions for valid
 				// edge testing on rocks.
 			}

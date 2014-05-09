@@ -35,6 +35,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetRock rock;
 	public AssetPlatform platform;
 	public AssetMovingPlatform movingPlatform;
+	public AssetForwardPlatform fwdPlatform;
 	
 	// Boxes
 	public AssetBox box;
@@ -112,6 +113,7 @@ public class Assets implements Disposable, AssetErrorListener
 		rock = new AssetRock(atlas);
 		platform = new AssetPlatform(atlas);
 		movingPlatform = new AssetMovingPlatform(atlas);
+		fwdPlatform = new AssetForwardPlatform(atlas);
 		box = new AssetBox(atlas);
 		laser = new AssetLaser(atlas);
 		goldCoin = new AssetGoldCoin(atlas);
@@ -251,6 +253,16 @@ public class Assets implements Disposable, AssetErrorListener
 		public final AtlasRegion platform;
 
 		public AssetMovingPlatform(TextureAtlas atlas)
+		{
+			platform = atlas.findRegion("platform");
+		}
+	}
+	
+	public class AssetForwardPlatform 
+	{
+		public final AtlasRegion platform;
+
+		public AssetForwardPlatform(TextureAtlas atlas)
 		{
 			platform = atlas.findRegion("platform");
 		}
