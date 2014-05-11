@@ -13,7 +13,7 @@ public class Platform extends AbstractGameObject {
 		init();
 	}
 	
-	private void init() {
+	protected void init() {
 		dimension.set(1f, 0.5f);
 		regPlatform = Assets.instance.platform.platform;
 		// Start length of this platform

@@ -4,10 +4,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.me.mygdxgame.objects.Box;
 import com.me.mygdxgame.objects.BunnyHead;
 import com.me.mygdxgame.objects.BunnyHead.JUMP_STATE;
+import com.me.mygdxgame.objects.BunnyHead.VIEW_DIRECTION;
 import com.me.mygdxgame.objects.Carrot;
 import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Enemy;
 import com.me.mygdxgame.objects.EnemyForward;
+import com.me.mygdxgame.objects.FallingPlatform;
 import com.me.mygdxgame.objects.Feather;
 import com.me.mygdxgame.objects.ForwardPlatform;
 import com.me.mygdxgame.objects.Giant;
@@ -455,13 +457,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		case FALLING:
 		case JUMP_FALLING:
 			bunnyHead.position.y = platform.position.y + bunnyHead.origin.y;
-			if ((Gdx.input.isTouched(0)
-					&& cJump.contains((float) Gdx.input.getX(0),
-							(float) Gdx.input.getY(0)) || Gdx.input
-					.isTouched(1)
-					&& cJump.contains((float) Gdx.input.getX(1),
-							(float) Gdx.input.getY(1)))
-					|| !Gdx.input.isKeyPressed(Keys.SPACE)) {
+			if (!((Gdx.input.isTouched(0) && cJump.contains((float) Gdx.input.getX(0), (float) Gdx.input.getY(0)))
+					|| Gdx.input.isTouched(1) && cJump.contains((float) Gdx.input.getX(1), (float) Gdx.input.getY(1))
+					|| Gdx.input.isKeyPressed(Keys.SPACE))) {
 				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			}
 			break;
@@ -473,7 +471,6 @@ public class WorldController extends InputAdapter implements Disposable {
 	
 	private void onCollisionBunnyHeadWithForwardPlatform(Platform platform) {
 		BunnyHead bunnyHead = level.bunnyHead;
-
 		switch (bunnyHead.jumpState) {
 		case GROUNDED:
 			bunnyHead.jumpState = JUMP_STATE.JUMP_RISING;
@@ -487,17 +484,28 @@ public class WorldController extends InputAdapter implements Disposable {
 					.isTouched(1)
 					&& cJump.contains((float) Gdx.input.getX(1),
 							(float) Gdx.input.getY(1)))
-					|| !Gdx.input.isKeyPressed(Keys.SPACE)) {
-				bunnyHead.jumpState = JUMP_STATE.GROUNDED; 
+					|| Gdx.input.isKeyPressed(Keys.SPACE)) {
+				((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
 			}
+			else {
+				if (bunnyHead.jumpState == JUMP_STATE.GROUNDED)
+					((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
+				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
+			}
+			
 			if (isLeftPressed(0) || isLeftPressed(1)) {
+				((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
 				bunnyHead.velocity.x = - level.bunnyHead.terminalVelocity.x - platform.velocity.x;
-				//bunnyHead.position.x = platform.position.x + bunnyHead.origin.x + bunnyHead.velocity.x;
 			} else if (isRightPressed(0) || isRightPressed(1)) {
+				((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
 				bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x + platform.velocity.x;
-				//bunnyHead.position.x = platform.position.x + bunnyHead.origin.x + bunnyHead.velocity.x;
 			} else {
-				bunnyHead.position.x = platform.position.x; //+ bunnyHead.origin.x;
+				//((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
+				//bunnyHead.position.x = platform.position.x + ((ForwardPlatform)platform).playerPosition;
+				bunnyHead.dustOn = false;
+				bunnyHead.viewDirectionOn = false;
+				bunnyHead.velocity.x = platform.velocity.x;
+				//System.out.println(platform.bounds.x);
 			}
 			break;
 		case JUMP_RISING:
@@ -717,6 +725,24 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 
 				onCollisionBunnyHeadWithForwardPlatform(platform);
+				// IMPORTANT: must do all collisions for valid
+				// edge testing on rocks.
+			}
+			
+			for (FallingPlatform platform : level.fallPlatforms) {
+				r2.set(platform.position.x, platform.position.y,
+						platform.bounds.width, platform.bounds.height);
+				Rectangle r1Bottom = new Rectangle();
+				// Rectangle r2Top = new Rectangle();
+				r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
+				// r2Top.set(r2.x,r2.y,r2.width,0.01f);
+
+				if (!r1Bottom.overlaps(r2)) {
+					// if (!r1.overlaps(r2))
+					continue;
+				}
+				((FallingPlatform)platform).active = true;
+				onCollisionBunnyHeadWithPlatform(platform);
 				// IMPORTANT: must do all collisions for valid
 				// edge testing on rocks.
 			}

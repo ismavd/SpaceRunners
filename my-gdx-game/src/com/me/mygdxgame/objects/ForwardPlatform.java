@@ -5,6 +5,8 @@ public class ForwardPlatform extends Platform{
 	private float minDistance;
 	private boolean goingRight;
 	
+	public float playerPosition;
+	
 	public void initMove(float minDistance) {
 		this.maxDistance = minDistance + 2;
 		this.minDistance = minDistance;

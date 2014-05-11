@@ -32,6 +32,8 @@ public class BunnyHead extends AbstractGameObject {
 	public float timeJumping;
 	public JUMP_STATE jumpState;
 	public boolean hasFeatherPowerup;
+	public boolean dustOn;
+	public boolean viewDirectionOn;
 	public float timeLeftFeatherPowerup;
 	
 	public boolean shooting;
@@ -80,6 +82,8 @@ public class BunnyHead extends AbstractGameObject {
 		// Particles
 		dustParticles.load(Gdx.files.internal("particles/dust.pfx"),
 				Gdx.files.internal("particles"));
+		dustOn = true;
+		viewDirectionOn = true;
 	}
 
 	public void setJumping(boolean jumpKeyPressed) {
@@ -125,10 +129,12 @@ public class BunnyHead extends AbstractGameObject {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		if (velocity.x != 0) {
+		if (velocity.x != 0 && viewDirectionOn) {
 			viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT
 					: VIEW_DIRECTION.RIGHT;
 		}
+		if (!viewDirectionOn)
+			viewDirectionOn = true;
 		if (timeLeftFeatherPowerup > 0) {
 			if (animation == animCopterTransformBack) {
 				// Restart "Transform" animation if another feather power-up
@@ -170,7 +176,7 @@ public class BunnyHead extends AbstractGameObject {
 		switch (jumpState) {
 		case GROUNDED:
 			jumpState = JUMP_STATE.FALLING;
-			if (velocity.x != 0) {
+			if (velocity.x != 0 && dustOn) {
 				dustParticles.setPosition(position.x + dimension.x / 2,
 						position.y);
 				dustParticles.start();
@@ -197,7 +203,9 @@ public class BunnyHead extends AbstractGameObject {
 			}
 		}
 		if (jumpState != JUMP_STATE.GROUNDED) {
-			dustParticles.allowCompletion();
+			if (dustOn)
+				dustParticles.allowCompletion();
+			dustOn = true;
 			super.updateMotionY(deltaTime);
 		}
 	}

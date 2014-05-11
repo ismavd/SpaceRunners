@@ -10,6 +10,7 @@ import com.me.mygdxgame.objects.Checkpoint;
 import com.me.mygdxgame.objects.Clouds;
 import com.me.mygdxgame.objects.Enemy;
 import com.me.mygdxgame.objects.EnemyForward;
+import com.me.mygdxgame.objects.FallingPlatform;
 import com.me.mygdxgame.objects.ForwardPlatform;
 import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.Laser;
@@ -34,6 +35,7 @@ public class Level {
 		PLATFORM(128, 128, 128), // grey
 		MOVING_PLATFORM(64, 64, 4), // dark yellow
 		FORWARD_PLATFORM(255, 0, 128), // pink
+		FALLING_PLATFORM(64, 128, 128), // blue
 		PLAYER_SPAWNPOINT(255, 255, 255), // white
 		ITEM_FEATHER(255, 0, 255), // purple
 		ITEM_GOLD_COIN(255, 255, 0), // yellow
@@ -65,6 +67,7 @@ public class Level {
 	public Array<Platform> platforms;
 	public Array<MovingPlatform> movingPlatforms;
 	public Array<ForwardPlatform> fwdPlatforms;
+	public Array<FallingPlatform> fallPlatforms;
 
 	// Elementos decorativos
 	public Clouds clouds;
@@ -109,6 +112,7 @@ public class Level {
 		rocks = new Array<Rock>();
 		platforms = new Array<Platform>();
 		movingPlatforms = new Array<MovingPlatform>();
+		fallPlatforms = new Array<FallingPlatform>();
 		fwdPlatforms = new Array<ForwardPlatform>();
 		goldcoins = new Array<GoldCoin>();
 		feathers = new Array<Feather>();
@@ -182,7 +186,9 @@ public class Level {
 						movingPlatforms.get(movingPlatforms.size - 1)
 								.increaseLength(1);
 					}
-				} else if (BLOCK_TYPE.FORWARD_PLATFORM.sameColor(currentPixel)) // Plataforma móvil horizontal
+				} else if (BLOCK_TYPE.FORWARD_PLATFORM.sameColor(currentPixel)) // Plataforma
+																				// móvil
+																				// horizontal
 				{
 					if (lastPixel != currentPixel) {
 						obj = new ForwardPlatform();
@@ -192,7 +198,21 @@ public class Level {
 						fwdPlatforms.add((ForwardPlatform) obj);
 						((ForwardPlatform) obj).initMove(obj.position.x);
 					} else {
-						fwdPlatforms.get(fwdPlatforms.size - 1)
+						fwdPlatforms.get(fwdPlatforms.size - 1).increaseLength(
+								1);
+					}
+				} else if (BLOCK_TYPE.FALLING_PLATFORM.sameColor(currentPixel)) // Plataforma
+																				// móvil
+																				// horizontal
+				{
+					if (lastPixel != currentPixel) {
+						obj = new FallingPlatform();
+						offsetHeight = -1.5f;
+						obj.position.set(pixelX, baseHeight * obj.dimension.y
+								+ offsetHeight);
+						fallPlatforms.add((FallingPlatform) obj);
+					} else {
+						fallPlatforms.get(fallPlatforms.size - 1)
 								.increaseLength(1);
 					}
 				} else if (!checkpointReached
@@ -334,9 +354,15 @@ public class Level {
 		for (MovingPlatform platform : movingPlatforms) {
 			platform.render(batch);
 		}
-		
+
 		// Colocamos las plataformas flotantes que se mueven horizontalmente.
 		for (ForwardPlatform platform : fwdPlatforms) {
+			platform.render(batch);
+		}
+
+		// Colocamos las plataformas que caen cuando el jugador se mantiene un
+		// tiempo en ellas
+		for (FallingPlatform platform : fallPlatforms) {
 			platform.render(batch);
 		}
 
@@ -428,8 +454,12 @@ public class Level {
 		for (MovingPlatform platform : movingPlatforms) {
 			platform.update(deltaTime);
 		}
-		
+
 		for (ForwardPlatform platform : fwdPlatforms) {
+			platform.update(deltaTime);
+		}
+		
+		for (FallingPlatform platform : fallPlatforms) {
 			platform.update(deltaTime);
 		}
 
