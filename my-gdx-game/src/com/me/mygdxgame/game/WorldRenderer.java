@@ -93,16 +93,23 @@ public class WorldRenderer implements Disposable
 			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
 			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
 		} else {
-			x = cameraGUI.viewportWidth - 200;
-			y = 110;
+			
+			x = cameraGUI.viewportWidth - 190;
+			y = 40;
 			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
 			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+			
+			// Cuando decidamos incluir puntuación habrá que poner este código
+			/*x = cameraGUI.viewportWidth - 200;
+			y = 110;
+			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);*/
 		}
 	}
 	
 	private void renderGuiScore(SpriteBatch batch) 
 	{
-		float x;
+		/*float x;
 		float y;
 		if (!worldController.isPaused()) {
 			x = cameraGUI.viewportWidth - 600;
@@ -114,7 +121,7 @@ public class WorldRenderer implements Disposable
 			y = 70;
 			Assets.instance.fonts.defaultBig.draw(batch, "PUNTOS:", x, y);
 			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.score, x, y + 37);
-		}
+		}*/
 	}
 
 	private void renderGuiExtraLive(SpriteBatch batch) 

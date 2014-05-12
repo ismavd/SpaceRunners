@@ -205,16 +205,16 @@ public class Level {
 																				// móvil
 																				// horizontal
 				{
-					if (lastPixel != currentPixel) {
+					///if (lastPixel != currentPixel) {
 						obj = new FallingPlatform();
 						offsetHeight = -1.5f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
 								+ offsetHeight);
 						fallPlatforms.add((FallingPlatform) obj);
-					} else {
+					/*} else {
 						fallPlatforms.get(fallPlatforms.size - 1)
 								.increaseLength(1);
-					}
+					}*/
 				} else if (!checkpointReached
 						&& BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)) // Punto
 																					// aparición

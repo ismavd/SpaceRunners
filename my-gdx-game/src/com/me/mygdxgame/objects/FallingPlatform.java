@@ -8,8 +8,12 @@ public class FallingPlatform extends Platform {
 		super.init();
 		time = 50;
 		active = false;
+		setLength(1);
 	}
 
+	@Override
+	public void increaseLength(int amount) {}
+	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
