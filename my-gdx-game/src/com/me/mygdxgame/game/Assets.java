@@ -37,6 +37,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetMovingPlatform movingPlatform;
 	public AssetForwardPlatform fwdPlatform;
 	public AssetFallingPlatform fallPlatform;
+	public AssetGeiser geiser;
 	
 	// Boxes
 	public AssetBox box;
@@ -116,6 +117,7 @@ public class Assets implements Disposable, AssetErrorListener
 		movingPlatform = new AssetMovingPlatform(atlas);
 		fwdPlatform = new AssetForwardPlatform(atlas);
 		fallPlatform = new AssetFallingPlatform(atlas);
+		geiser = new AssetGeiser(atlas);
 		box = new AssetBox(atlas);
 		laser = new AssetLaser(atlas);
 		goldCoin = new AssetGoldCoin(atlas);
@@ -277,6 +279,16 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetFallingPlatform(TextureAtlas atlas)
 		{
 			platform = atlas.findRegion("platform");
+		}
+	}
+	
+	public class AssetGeiser
+	{
+		public final AtlasRegion geiser;
+
+		public AssetGeiser(TextureAtlas atlas)
+		{
+			geiser = atlas.findRegion("geiser");
 		}
 	}
 	

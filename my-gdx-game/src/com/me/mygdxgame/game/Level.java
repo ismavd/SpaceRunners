@@ -12,6 +12,7 @@ import com.me.mygdxgame.objects.Enemy;
 import com.me.mygdxgame.objects.EnemyForward;
 import com.me.mygdxgame.objects.FallingPlatform;
 import com.me.mygdxgame.objects.ForwardPlatform;
+import com.me.mygdxgame.objects.Geiser;
 import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.Laser;
 import com.me.mygdxgame.objects.Mountains;
@@ -36,6 +37,7 @@ public class Level {
 		MOVING_PLATFORM(64, 64, 4), // dark yellow
 		FORWARD_PLATFORM(255, 0, 128), // pink
 		FALLING_PLATFORM(64, 128, 128), // blue
+		GEISER(128, 128, 64), // dark beige
 		PLAYER_SPAWNPOINT(255, 255, 255), // white
 		ITEM_FEATHER(255, 0, 255), // purple
 		ITEM_GOLD_COIN(255, 255, 0), // yellow
@@ -68,6 +70,7 @@ public class Level {
 	public Array<MovingPlatform> movingPlatforms;
 	public Array<ForwardPlatform> fwdPlatforms;
 	public Array<FallingPlatform> fallPlatforms;
+	public Array<Geiser> geisers;
 
 	// Elementos decorativos
 	public Clouds clouds;
@@ -114,6 +117,7 @@ public class Level {
 		movingPlatforms = new Array<MovingPlatform>();
 		fallPlatforms = new Array<FallingPlatform>();
 		fwdPlatforms = new Array<ForwardPlatform>();
+		geisers = new Array<Geiser>();
 		goldcoins = new Array<GoldCoin>();
 		feathers = new Array<Feather>();
 		carrots = new Array<Carrot>();
@@ -205,16 +209,18 @@ public class Level {
 																				// móvil
 																				// horizontal
 				{
-					///if (lastPixel != currentPixel) {
-						obj = new FallingPlatform();
-						offsetHeight = -1.5f;
-						obj.position.set(pixelX, baseHeight * obj.dimension.y
-								+ offsetHeight);
-						fallPlatforms.add((FallingPlatform) obj);
-					/*} else {
-						fallPlatforms.get(fallPlatforms.size - 1)
-								.increaseLength(1);
-					}*/
+					obj = new FallingPlatform();
+					offsetHeight = -1.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y
+							+ offsetHeight);
+					fallPlatforms.add((FallingPlatform) obj);
+				} else if (BLOCK_TYPE.GEISER.sameColor(currentPixel)) // Elemento que impulsa al jugador hacia arriba
+				{
+					obj = new Geiser();
+					offsetHeight = -1.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y
+							+ offsetHeight);
+					geisers.add((Geiser) obj);
 				} else if (!checkpointReached
 						&& BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)) // Punto
 																					// aparición
@@ -365,6 +371,11 @@ public class Level {
 		for (FallingPlatform platform : fallPlatforms) {
 			platform.render(batch);
 		}
+		
+		// Colocamos los géisers
+		for (Geiser geiser : geisers) {
+			geiser.render(batch);
+		}
 
 		// Renderizamos las monedas.
 		for (GoldCoin goldCoin : goldcoins) {
@@ -458,10 +469,15 @@ public class Level {
 		for (ForwardPlatform platform : fwdPlatforms) {
 			platform.update(deltaTime);
 		}
-		
+
 		for (FallingPlatform platform : fallPlatforms) {
 			platform.update(deltaTime);
 		}
+		
+		for (Geiser geiser : geisers) {
+			geiser.update(deltaTime);
+		}
+
 
 		for (GoldCoin goldCoin : goldcoins) {
 			goldCoin.update(deltaTime);

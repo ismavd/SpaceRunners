@@ -12,6 +12,7 @@ import com.me.mygdxgame.objects.EnemyForward;
 import com.me.mygdxgame.objects.FallingPlatform;
 import com.me.mygdxgame.objects.Feather;
 import com.me.mygdxgame.objects.ForwardPlatform;
+import com.me.mygdxgame.objects.Geiser;
 import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.MovingPlatform;
@@ -197,7 +198,7 @@ public class WorldController extends InputAdapter implements Disposable {
 			initLevel();
 		}
 		// Pause menu
-		else if (keycode == Keys.MENU || keycode == Keys.ESCAPE) {
+		else if (keycode == Keys.MENU || keycode == Keys.BACK || keycode == Keys.ESCAPE) {
 			if (!paused) {
 				game.getScreen().pause();
 				moveCamera(-1f,0);
@@ -513,6 +514,13 @@ public class WorldController extends InputAdapter implements Disposable {
 			break;
 		}
 	}
+	
+	private void onCollisionBunnyHeadWithGeiser(Geiser geiser) {
+		if (!geiser.active)
+			geiser.active = true;
+		else
+			level.bunnyHead.velocity.y = 10;
+	}
 
 	private void onCollisionBunnyWithGoldCoin(GoldCoin goldcoin) {
 		goldcoin.collected = true;
@@ -743,6 +751,27 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 				((FallingPlatform)platform).active = true;
 				onCollisionBunnyHeadWithPlatform(platform);
+				// IMPORTANT: must do all collisions for valid
+				// edge testing on rocks.
+			}
+			
+			for (Geiser geiser : level.geisers) {
+				r2.set(geiser.position.x, geiser.position.y,
+						geiser.bounds.width, geiser.bounds.height);
+				Rectangle r1Bottom = new Rectangle();
+				// Rectangle r2Top = new Rectangle();
+				r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
+				// r2Top.set(r2.x,r2.y,r2.width,0.01f);
+
+				if (!r1Bottom.overlaps(r2) && !geiser.active) {
+					// if (!r1.overlaps(r2))
+					continue;
+				}
+				//((Geiser)geiser).active = true;
+				if (!geiser.active && (isJumpPressed(0) || isJumpPressed(1))) {
+					geiser.time = 50;
+				}
+				onCollisionBunnyHeadWithGeiser(geiser);
 				// IMPORTANT: must do all collisions for valid
 				// edge testing on rocks.
 			}
