@@ -25,6 +25,7 @@ public class Assets implements Disposable, AssetErrorListener
 	private AssetManager assetManager;
 	public AssetBunny bunny;
 	public AssetBunnyPower bunnyPower;
+	public AssetLife life;
 	
 	//Enemies
 	public AssetEnemy enemy;
@@ -38,6 +39,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetForwardPlatform fwdPlatform;
 	public AssetFallingPlatform fallPlatform;
 	public AssetGeiser geiser;
+	public AssetWall wall;
 	
 	// Boxes
 	public AssetBox box;
@@ -109,6 +111,7 @@ public class Assets implements Disposable, AssetErrorListener
 		fonts = new AssetFonts();
 		bunny = new AssetBunny(atlas);
 		bunnyPower = new AssetBunnyPower(atlas);
+		life = new AssetLife(atlas);
 		enemy = new AssetEnemy(atlas);
 		enemyFwd = new AssetEnemyForward(atlas);
 		giant = new AssetGiant(atlas);
@@ -118,6 +121,7 @@ public class Assets implements Disposable, AssetErrorListener
 		fwdPlatform = new AssetForwardPlatform(atlas);
 		fallPlatform = new AssetFallingPlatform(atlas);
 		geiser = new AssetGeiser(atlas);
+		wall = new AssetWall(atlas);
 		box = new AssetBox(atlas);
 		laser = new AssetLaser(atlas);
 		goldCoin = new AssetGoldCoin(atlas);
@@ -197,6 +201,16 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetBunnyPower(TextureAtlas atlas) 
 		{
 			head = atlas.findRegion("bunny_power");
+		}
+	}
+	
+	public class AssetLife
+	{
+		public final AtlasRegion life;
+
+		public AssetLife(TextureAtlas atlas) 
+		{
+			life = atlas.findRegion("life");
 		}
 	}
 	
@@ -289,6 +303,16 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetGeiser(TextureAtlas atlas)
 		{
 			geiser = atlas.findRegion("geiser");
+		}
+	}
+	
+	public class AssetWall
+	{
+		public final AtlasRegion wall;
+
+		public AssetWall(TextureAtlas atlas)
+		{
+			wall = atlas.findRegion("wall");
 		}
 	}
 	
@@ -400,6 +424,11 @@ public class Assets implements Disposable, AssetErrorListener
 		public final AtlasRegion home;
 		public final AtlasRegion sound;
 		public final AtlasRegion slash;
+		public final AtlasRegion playDown;
+		public final AtlasRegion restartDown;
+		public final AtlasRegion selectLevelDown;
+		public final AtlasRegion homeDown;
+		public final AtlasRegion soundDown;
 		
 		public AssetPause(TextureAtlas atlas)
 		{
@@ -417,6 +446,16 @@ public class Assets implements Disposable, AssetErrorListener
 			home.flip(false, true);
 			sound = atlas.findRegion("boton-sonido");
 			sound.flip(false, true);
+			playDown = atlas.findRegion("boton-jugar-dn");
+			playDown.flip(false, true);
+			restartDown = atlas.findRegion("boton-restart-dn");
+			restartDown.flip(false, true);
+			selectLevelDown = atlas.findRegion("boton-seleccion-nivel-dn");
+			selectLevelDown.flip(false, true);
+			homeDown = atlas.findRegion("boton-menu-principal-dn");
+			homeDown.flip(false, true);
+			soundDown = atlas.findRegion("boton-sonido-dn");
+			soundDown.flip(false, true);
 			slash = atlas.findRegion("silencio");
 		}
 	}

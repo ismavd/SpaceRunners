@@ -125,7 +125,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				onPlayClicked(1,0);
+				onPlayClicked(1,0,301);
 			}
 		});
 		
@@ -137,7 +137,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor) 
 			{
-				onPlayClicked(2,0);
+				onPlayClicked(2,0,301);
 			}
 		});
 		
@@ -149,7 +149,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor) 
 			{
-				onPlayClicked(3,0);
+				onPlayClicked(3,0,301);
 			}
 		});
 		
@@ -163,7 +163,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor) 
 			{
-				onPlayClicked(4,0);
+				onPlayClicked(4,0,301);
 			}
 		});
 		
@@ -175,7 +175,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				onPlayClicked(5,0);
+				onPlayClicked(5,0,301);
 			}
 		});
 		
@@ -187,7 +187,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				onPlayClicked(6,0);
+				onPlayClicked(6,0,301);
 			}
 		});
 		
@@ -199,9 +199,9 @@ public class LevelScreen extends AbstractGameScreen
 	}
 	
 	// Carga el nivel seleccionado al pulsar sobre el botón correspondiente.
-	private void onPlayClicked(int level, int score) 
+	private void onPlayClicked(int level, int score, int time) 
 	{
-		game.setScreen(new GameScreen(game,level,score));
+		game.setScreen(new GameScreen(game,level,score, time));
 	}
 	
 	

@@ -24,6 +24,7 @@ public class GameScreen extends AbstractGameScreen {
 	private boolean paused;
 	private int nivel;
 	private int score;
+	private int time;
 	
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
@@ -32,10 +33,11 @@ public class GameScreen extends AbstractGameScreen {
 		super(game);
 	}
 	
-	public GameScreen(Game game, int level, int score) {
+	public GameScreen(Game game, int level, int score, int time) {
 		super(game);
 		this.nivel = level;
 		this.score = score;
+		this.time = time;
 	}
 
 	@Override
@@ -73,7 +75,7 @@ public class GameScreen extends AbstractGameScreen {
 	@Override
 	public void show() {
 		GamePreferences.instance.load();
-		worldController = new WorldController(game,nivel,score);
+		worldController = new WorldController(game,nivel,score,time);
 		worldRenderer = new WorldRenderer(worldController);
 		Gdx.input.setCatchBackKey(true);
 	}

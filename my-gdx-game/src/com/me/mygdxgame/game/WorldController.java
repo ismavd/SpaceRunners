@@ -18,6 +18,7 @@ import com.me.mygdxgame.objects.GoldCoin;
 import com.me.mygdxgame.objects.MovingPlatform;
 import com.me.mygdxgame.objects.Platform;
 import com.me.mygdxgame.objects.Rock;
+import com.me.mygdxgame.objects.Wall;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -77,6 +78,8 @@ public class WorldController extends InputAdapter implements Disposable {
 	public int screws;
 	public int score;
 	public int lastScore;
+	public int time;
+	private int startTime;
 
 	public boolean checkpointReached;
 
@@ -99,11 +102,13 @@ public class WorldController extends InputAdapter implements Disposable {
 		init();
 	}
 
-	public WorldController(Game game, int level, int score) {
+	public WorldController(Game game, int level, int score, int time) {
 		this.game = game;
 		this.nivel = level;
 		this.score = score;
 		this.lastScore = score;
+		this.startTime = time * 60;
+		System.out.println(time);
 		init();
 	}
 
@@ -156,6 +161,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		level = new Level(getLevel(nivel), checkpointReached);
 		cameraHelper.setTarget(level.bunnyHead);
 		paused = false;
+		time = startTime;
 		// initPhysics();
 	}
 
@@ -198,14 +204,15 @@ public class WorldController extends InputAdapter implements Disposable {
 			initLevel();
 		}
 		// Pause menu
-		else if (keycode == Keys.MENU || keycode == Keys.BACK || keycode == Keys.ESCAPE) {
+		else if (keycode == Keys.MENU || keycode == Keys.BACK
+				|| keycode == Keys.ESCAPE) {
 			if (!paused) {
 				game.getScreen().pause();
-				moveCamera(-1f,0);
+				moveCamera(-1f, 0);
 				paused = true;
 			} else {
 				game.getScreen().resume();
-				moveCamera(1f,0);
+				moveCamera(1f, 0);
 				paused = false;
 			}
 		}
@@ -213,6 +220,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	public void update(float deltaTime) {
+		time--;
 		handleDebugInput(deltaTime);
 		if (isGameOver() || goalReached) {
 			timeLeftGameOverDelay -= deltaTime;
@@ -227,7 +235,7 @@ public class WorldController extends InputAdapter implements Disposable {
 					backToMenu();
 				}
 			}
-		} else if (enemyHitEffectOn) {
+		} else if (enemyHitEffectOn || time == 0) {
 			timeLeftGameOverDelay -= deltaTime;
 			level.bunnyHead.position.y -= 0.01f;
 			hitStopCounter--;
@@ -268,7 +276,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void nextLevel() {
-		game.setScreen(new GameScreen(game, nivel + 1, score));
+		game.setScreen(new GameScreen(game, nivel + 1, score, 301));
 	}
 
 	// En este método vamos a poner las acciones a realizar en el menú de pausa
@@ -279,7 +287,7 @@ public class WorldController extends InputAdapter implements Disposable {
 					&& cPlay.contains((float) Gdx.input.getX(),
 							(float) Gdx.input.getY())) {
 				game.getScreen().resume();
-				moveCamera(1.5f,0);
+				moveCamera(1.5f, 0);
 				paused = false;
 			}
 			// Reiniciar
@@ -287,7 +295,7 @@ public class WorldController extends InputAdapter implements Disposable {
 					&& cRestart.contains((float) Gdx.input.getX(),
 							(float) Gdx.input.getY())) {
 				game.getScreen().resume();
-				moveCamera(1.5f,0);
+				moveCamera(1.5f, 0);
 				paused = false;
 				initLevel();
 			}
@@ -458,9 +466,12 @@ public class WorldController extends InputAdapter implements Disposable {
 		case FALLING:
 		case JUMP_FALLING:
 			bunnyHead.position.y = platform.position.y + bunnyHead.origin.y;
-			if (!((Gdx.input.isTouched(0) && cJump.contains((float) Gdx.input.getX(0), (float) Gdx.input.getY(0)))
-					|| Gdx.input.isTouched(1) && cJump.contains((float) Gdx.input.getX(1), (float) Gdx.input.getY(1))
-					|| Gdx.input.isKeyPressed(Keys.SPACE))) {
+			if (!((Gdx.input.isTouched(0) && cJump.contains(
+					(float) Gdx.input.getX(0), (float) Gdx.input.getY(0)))
+					|| Gdx.input.isTouched(1)
+					&& cJump.contains((float) Gdx.input.getX(1),
+							(float) Gdx.input.getY(1)) || Gdx.input
+						.isKeyPressed(Keys.SPACE))) {
 				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			}
 			break;
@@ -469,7 +480,7 @@ public class WorldController extends InputAdapter implements Disposable {
 			break;
 		}
 	}
-	
+
 	private void onCollisionBunnyHeadWithForwardPlatform(Platform platform) {
 		BunnyHead bunnyHead = level.bunnyHead;
 		switch (bunnyHead.jumpState) {
@@ -486,27 +497,34 @@ public class WorldController extends InputAdapter implements Disposable {
 					&& cJump.contains((float) Gdx.input.getX(1),
 							(float) Gdx.input.getY(1)))
 					|| Gdx.input.isKeyPressed(Keys.SPACE)) {
-				((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
-			}
-			else {
+				((ForwardPlatform) platform).playerPosition = bunnyHead.position.x
+						- platform.position.x;
+			} else {
 				if (bunnyHead.jumpState == JUMP_STATE.GROUNDED)
-					((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
+					((ForwardPlatform) platform).playerPosition = bunnyHead.position.x
+							- platform.position.x;
 				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			}
-			
+
 			if (isLeftPressed(0) || isLeftPressed(1)) {
-				((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
-				bunnyHead.velocity.x = - level.bunnyHead.terminalVelocity.x - platform.velocity.x;
+				((ForwardPlatform) platform).playerPosition = bunnyHead.position.x
+						- platform.position.x;
+				bunnyHead.velocity.x = -level.bunnyHead.terminalVelocity.x
+						- platform.velocity.x;
 			} else if (isRightPressed(0) || isRightPressed(1)) {
-				((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
-				bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x + platform.velocity.x;
+				((ForwardPlatform) platform).playerPosition = bunnyHead.position.x
+						- platform.position.x;
+				bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x
+						+ platform.velocity.x;
 			} else {
-				//((ForwardPlatform)platform).playerPosition = bunnyHead.position.x - platform.position.x;
-				//bunnyHead.position.x = platform.position.x + ((ForwardPlatform)platform).playerPosition;
+				// ((ForwardPlatform)platform).playerPosition =
+				// bunnyHead.position.x - platform.position.x;
+				// bunnyHead.position.x = platform.position.x +
+				// ((ForwardPlatform)platform).playerPosition;
 				bunnyHead.dustOn = false;
 				bunnyHead.viewDirectionOn = false;
 				bunnyHead.velocity.x = platform.velocity.x;
-				//System.out.println(platform.bounds.x);
+				// System.out.println(platform.bounds.x);
 			}
 			break;
 		case JUMP_RISING:
@@ -514,12 +532,53 @@ public class WorldController extends InputAdapter implements Disposable {
 			break;
 		}
 	}
-	
+
 	private void onCollisionBunnyHeadWithGeiser(Geiser geiser) {
 		if (!geiser.active)
 			geiser.active = true;
 		else
 			level.bunnyHead.velocity.y = 10;
+	}
+
+	private void onCollisionBunnyHeadWithWall(Wall wall) {
+		BunnyHead bunnyHead = level.bunnyHead;
+		float heightDifference = Math.abs(bunnyHead.position.y
+				- (wall.position.y + wall.bounds.height));
+
+		if (heightDifference > 0.25f) {
+			boolean hitLeftEdge = bunnyHead.position.x > (wall.position.x + wall.bounds.width / 2.0f);
+			if (hitLeftEdge) {
+				bunnyHead.position.x = wall.position.x + wall.bounds.width;
+			} else {
+				bunnyHead.position.x = wall.position.x - bunnyHead.bounds.width;
+			}
+			return;
+		}
+
+		switch (bunnyHead.jumpState) {
+		case GROUNDED:
+			bunnyHead.jumpState = JUMP_STATE.JUMP_RISING;
+			break;
+		case FALLING:
+		case JUMP_FALLING:
+			bunnyHead.position.y = wall.position.y + bunnyHead.bounds.height
+					+ bunnyHead.origin.y;
+			if ((Gdx.input.isTouched(0)
+					&& cJump.contains((float) Gdx.input.getX(0),
+							(float) Gdx.input.getY(0)) || Gdx.input
+					.isTouched(1)
+					&& cJump.contains((float) Gdx.input.getX(1),
+							(float) Gdx.input.getY(1)))
+					|| !Gdx.input.isKeyPressed(Keys.SPACE)) {
+				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
+			}
+			break;
+		case JUMP_RISING:
+			bunnyHead.position.y = wall.position.y + bunnyHead.bounds.height
+					+ bunnyHead.origin.y;
+			bunnyHead.jumpState = JUMP_STATE.JUMP_FALLING;
+			break;
+		}
 	}
 
 	private void onCollisionBunnyWithGoldCoin(GoldCoin goldcoin) {
@@ -589,13 +648,13 @@ public class WorldController extends InputAdapter implements Disposable {
 		case JUMP_FALLING:
 			bunnyHead.position.y = box.position.y + bunnyHead.bounds.height / 2
 					+ bunnyHead.origin.y;
-			/*(Gdx.input.isTouched(0)
-			&& cJump.contains((float) Gdx.input.getX(0),
-					(float) Gdx.input.getY(0)) || Gdx.input
-			.isTouched(1)
-			&& cJump.contains((float) Gdx.input.getX(1),
-					(float) Gdx.input.getY(1)))
-			|| !Gdx.input.isKeyPressed(Keys.SPACE)*/
+			/*
+			 * (Gdx.input.isTouched(0) && cJump.contains((float)
+			 * Gdx.input.getX(0), (float) Gdx.input.getY(0)) || Gdx.input
+			 * .isTouched(1) && cJump.contains((float) Gdx.input.getX(1),
+			 * (float) Gdx.input.getY(1))) ||
+			 * !Gdx.input.isKeyPressed(Keys.SPACE)
+			 */
 			if (isJumpPressed(0) || isJumpPressed(1)) {
 				bunnyHead.jumpState = JUMP_STATE.GROUNDED;
 			}
@@ -654,15 +713,14 @@ public class WorldController extends InputAdapter implements Disposable {
 			level.bunnyHead.shooting = false;
 			enemy.alive = false;
 			enemy.dying = true;
-		}		
+		}
 	}
 
 	private void onCollisionLaserWithGiant(Giant giant) {
-		/*level.bunnyHead.shooting = false;
-		if (giant.hp <= 0)
-			score += giant.getScore();
-		else
-			giant.hp--;*/
+		/*
+		 * level.bunnyHead.shooting = false; if (giant.hp <= 0) score +=
+		 * giant.getScore(); else giant.hp--;
+		 */
 	}
 
 	private void testCollisions() {
@@ -718,7 +776,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				// IMPORTANT: must do all collisions for valid
 				// edge testing on rocks.
 			}
-			
+
 			for (ForwardPlatform platform : level.fwdPlatforms) {
 				r2.set(platform.position.x, platform.position.y,
 						platform.bounds.width, platform.bounds.height);
@@ -736,7 +794,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				// IMPORTANT: must do all collisions for valid
 				// edge testing on rocks.
 			}
-			
+
 			for (FallingPlatform platform : level.fallPlatforms) {
 				r2.set(platform.position.x, platform.position.y,
 						platform.bounds.width, platform.bounds.height);
@@ -749,12 +807,12 @@ public class WorldController extends InputAdapter implements Disposable {
 					// if (!r1.overlaps(r2))
 					continue;
 				}
-				((FallingPlatform)platform).active = true;
+				((FallingPlatform) platform).active = true;
 				onCollisionBunnyHeadWithPlatform(platform);
 				// IMPORTANT: must do all collisions for valid
 				// edge testing on rocks.
 			}
-			
+
 			for (Geiser geiser : level.geisers) {
 				r2.set(geiser.position.x, geiser.position.y,
 						geiser.bounds.width, geiser.bounds.height);
@@ -767,11 +825,24 @@ public class WorldController extends InputAdapter implements Disposable {
 					// if (!r1.overlaps(r2))
 					continue;
 				}
-				//((Geiser)geiser).active = true;
+				// ((Geiser)geiser).active = true;
 				if (!geiser.active && (isJumpPressed(0) || isJumpPressed(1))) {
 					geiser.time = 50;
 				}
 				onCollisionBunnyHeadWithGeiser(geiser);
+				// IMPORTANT: must do all collisions for valid
+				// edge testing on rocks.
+			}
+
+			// Test collision: Bunny Head <-> Walls
+			for (Wall wall : level.walls) {
+				r2.set(wall.position.x, wall.position.y, wall.bounds.width,
+						wall.bounds.height);
+				if (!r1.overlaps(r2)) {
+					continue;
+				}
+
+				onCollisionBunnyHeadWithWall(wall);
 				// IMPORTANT: must do all collisions for valid
 				// edge testing on rocks.
 			}
@@ -949,14 +1020,31 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void handleInputGame(float deltaTime) {
+		int j;
 		if (cameraHelper.hasTarget(level.bunnyHead)) {
+			if (isLeftPressed(0) || isLeftPressed(1) /* && !isRightPressed(1) */) {
+				// System.out.println("Left "+i);
+				level.bunnyHead.velocity.x = -level.bunnyHead.terminalVelocity.x;
+				/*
+				 * if (isRightPressed(0) || isRightPressed(1))
+				 * level.bunnyHead.velocity.x =
+				 * level.bunnyHead.terminalVelocity.x;
+				 */
+			} else if (isRightPressed(0) || isRightPressed(1)) {
+				level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
+				/*
+				 * if (isLeftPressed(0) || isLeftPressed(1))
+				 * level.bunnyHead.velocity.x =
+				 * -level.bunnyHead.terminalVelocity.x;
+				 */
+			}
+			// }
+			/*
+			 * else leftPressed = false;
+			 */
 			for (int i = 0; i < 2; i++) {
+				j = i == 0 ? 1 : 0;
 				// Controlamos si el usuario pulsa alguno de los controles.
-				if (isLeftPressed(i) && !isRightPressed(i)) {
-					level.bunnyHead.velocity.x = -level.bunnyHead.terminalVelocity.x;
-				} else if (isRightPressed(i) && !isLeftPressed(i)) {
-					level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
-				}
 
 				// Si pulsa el botón de salto.
 				if (isJumpPressed(i)) {

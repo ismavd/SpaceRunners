@@ -19,6 +19,7 @@ import com.me.mygdxgame.objects.Mountains;
 import com.me.mygdxgame.objects.MovingPlatform;
 import com.me.mygdxgame.objects.Platform;
 import com.me.mygdxgame.objects.Rock;
+import com.me.mygdxgame.objects.Wall;
 import com.me.mygdxgame.objects.WaterOverlay;
 import com.me.mygdxgame.objects.BunnyHead;
 import com.me.mygdxgame.objects.GoldCoin;
@@ -38,6 +39,7 @@ public class Level {
 		FORWARD_PLATFORM(255, 0, 128), // pink
 		FALLING_PLATFORM(64, 128, 128), // blue
 		GEISER(128, 128, 64), // dark beige
+		WALL(64, 0, 0), // dark red
 		PLAYER_SPAWNPOINT(255, 255, 255), // white
 		ITEM_FEATHER(255, 0, 255), // purple
 		ITEM_GOLD_COIN(255, 255, 0), // yellow
@@ -71,6 +73,7 @@ public class Level {
 	public Array<ForwardPlatform> fwdPlatforms;
 	public Array<FallingPlatform> fallPlatforms;
 	public Array<Geiser> geisers;
+	public Array<Wall> walls;
 
 	// Elementos decorativos
 	public Clouds clouds;
@@ -118,6 +121,8 @@ public class Level {
 		fallPlatforms = new Array<FallingPlatform>();
 		fwdPlatforms = new Array<ForwardPlatform>();
 		geisers = new Array<Geiser>();
+		walls = new Array<Wall>();
+
 		goldcoins = new Array<GoldCoin>();
 		feathers = new Array<Feather>();
 		carrots = new Array<Carrot>();
@@ -129,9 +134,40 @@ public class Level {
 		// Carga un mapa de pixeles a partir de la imagen del nivel.
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
 
+		// Escaneamos los pixeles en vertical de arriba-izquierda a
+		// abajo-derecha.
+
+		int lastPixel = -1;
+		for (int pixelX = 0; pixelX < pixmap.getWidth(); pixelX++) {
+			for (int pixelY = 0; pixelY < pixmap.getHeight(); pixelY++) {
+				AbstractGameObject obj = null;
+				float offsetHeight = 0;
+
+				// height grows from bottom to top
+				float baseHeight = pixmap.getHeight() - pixelY;
+
+				// get color of current pixel as 32-bit RGBA value
+				int currentPixel = pixmap.getPixel(pixelX, pixelY);
+				if (BLOCK_TYPE.WALL.sameColor(currentPixel)) // Pared
+				{
+					if (lastPixel != currentPixel) {
+						obj = new Wall();
+						float heightIncreaseFactor = 0.25f;
+						offsetHeight = -2.5f;
+						obj.position.set(pixelX, baseHeight * obj.dimension.y
+								* heightIncreaseFactor + offsetHeight);
+						walls.add((Wall) obj);
+					} else {
+						walls.get(walls.size - 1).increaseLength(1);
+					}
+				}
+				lastPixel = currentPixel;
+			}
+		}
+
 		// Escaneamos los pixeles de la imagen de arriba-izquierda a
 		// abajo-derecha.
-		int lastPixel = -1;
+		lastPixel = -1;
 		for (int pixelY = 0; pixelY < pixmap.getHeight(); pixelY++) {
 			for (int pixelX = 0; pixelX < pixmap.getWidth(); pixelX++) {
 				AbstractGameObject obj = null;
@@ -214,13 +250,21 @@ public class Level {
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					fallPlatforms.add((FallingPlatform) obj);
-				} else if (BLOCK_TYPE.GEISER.sameColor(currentPixel)) // Elemento que impulsa al jugador hacia arriba
+				} else if (BLOCK_TYPE.GEISER.sameColor(currentPixel)) // Elemento
+																		// que
+																		// impulsa
+																		// al
+																		// jugador
+																		// hacia
+																		// arriba
 				{
 					obj = new Geiser();
 					offsetHeight = -1.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					geisers.add((Geiser) obj);
+
+				} else if (BLOCK_TYPE.WALL.sameColor(currentPixel)) {
 				} else if (!checkpointReached
 						&& BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)) // Punto
 																					// aparición
@@ -371,10 +415,15 @@ public class Level {
 		for (FallingPlatform platform : fallPlatforms) {
 			platform.render(batch);
 		}
-		
+
 		// Colocamos los géisers
 		for (Geiser geiser : geisers) {
 			geiser.render(batch);
+		}
+
+		// Colocamos los géisers
+		for (Wall wall : walls) {
+			wall.render(batch);
 		}
 
 		// Renderizamos las monedas.
@@ -473,11 +522,14 @@ public class Level {
 		for (FallingPlatform platform : fallPlatforms) {
 			platform.update(deltaTime);
 		}
-		
+
 		for (Geiser geiser : geisers) {
 			geiser.update(deltaTime);
 		}
 
+		for (Wall wall : walls) {
+			wall.update(deltaTime);
+		}
 
 		for (GoldCoin goldCoin : goldcoins) {
 			goldCoin.update(deltaTime);

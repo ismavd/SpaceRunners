@@ -162,11 +162,11 @@ public class MenuScreen extends AbstractGameScreen {
 		// + Moon
 		imgMoon = new Image(skinCanyonBunny, "moon");
 		layer.addActor(imgMoon);
-		imgMoon.setPosition(30, 10);
+		imgMoon.setPosition(130, 10);
 		// + Astronaut
 		imgAstronaut = new Image(skinCanyonBunny, "astronaut");
 		layer.addActor(imgAstronaut);
-		imgAstronaut.setPosition(80, 50);
+		imgAstronaut.setPosition(180, 50);
 		imgAstronaut.setOrigin(imgAstronaut.getWidth(), imgAstronaut.getHeight());
 		//imgAstronaut.rotate(22.5f);
 		imgAstronaut.addAction(Actions.forever(Actions.sequence(
@@ -209,11 +209,11 @@ public class MenuScreen extends AbstractGameScreen {
 
 	private Table buildControlsLayer() {
 		Table layer = new Table();
-		layer.right().bottom();
-
+		layer.defaults().expand().right().padRight(40.0f);
 		// Botón Jugar
 		btnMenuPlay = new Button(skinCanyonBunny, "play");
 		layer.add(btnMenuPlay);
+		layer.padTop(100.0f);
 
 		btnMenuPlay.addListener(new ChangeListener() {
 			@Override
@@ -227,6 +227,7 @@ public class MenuScreen extends AbstractGameScreen {
 		// Botón de Opciones
 		btnMenuOptions = new Button(skinCanyonBunny, "options");
 		layer.add(btnMenuOptions);
+		layer.padTop(100.0f);
 
 		btnMenuOptions.addListener(new ChangeListener() {
 			@Override
@@ -240,6 +241,7 @@ public class MenuScreen extends AbstractGameScreen {
 		// Botón de Salir
 		btnMenuExit = new Button(skinCanyonBunny, "exit");
 		layer.add(btnMenuExit);
+		layer.padTop(100.0f);
 
 		btnMenuExit.addListener(new ChangeListener() {
 			@Override

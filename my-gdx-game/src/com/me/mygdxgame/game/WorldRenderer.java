@@ -94,16 +94,34 @@ public class WorldRenderer implements Disposable
 			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
 		} else {
 			
-			x = cameraGUI.viewportWidth - 190;
+			/*x = cameraGUI.viewportWidth - 190;
 			y = 40;
 			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
-			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);*/
 			
-			// Cuando decidamos incluir puntuación habrá que poner este código
-			/*x = cameraGUI.viewportWidth - 200;
+			// Cuando decidamos incluir puntuación o tiempo habrá que poner este código
+			x = cameraGUI.viewportWidth - 200;
 			y = 110;
 			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
-			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);*/
+			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+		}
+	}
+	
+	private void renderGuiTime(SpriteBatch batch) 
+	{
+		float x;
+		float y;
+		String time = Integer.toString(worldController.time/60);
+		if (!worldController.isPaused()) {
+			x = cameraGUI.viewportWidth - 600;
+			y = -15;
+			Assets.instance.fonts.defaultBig.draw(batch, "TIEMPO:", x + 75, y + 37);
+			Assets.instance.fonts.defaultBig.draw(batch, "" + time, x + 220, y + 37);
+		} else {
+			x = cameraGUI.viewportWidth - 160;
+			y = 70;
+			Assets.instance.fonts.defaultBig.draw(batch, "TIEMPO:", x, y);
+			Assets.instance.fonts.defaultBig.draw(batch, "" + time, x, y + 37);
 		}
 	}
 	
@@ -135,7 +153,7 @@ public class WorldRenderer implements Disposable
 				batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
 			}
 			
-			batch.draw(Assets.instance.bunny.head, x + i * 50, y, 50, 50, 120, 100, 0.35f, -0.35f, 0);
+			batch.draw(Assets.instance.life.life, x + i * 50, y, 50, 50, 120, 100, 0.35f, -0.35f, 0);
 			batch.setColor(1, 1, 1, 1);
 		}
 	}
@@ -176,8 +194,9 @@ public class WorldRenderer implements Disposable
 		// draw collected gold coins icon + text
 		// (anchored to top left edge)
 		renderGuiScrews(batch);
-		// draw total score (anchored to top center)
-		renderGuiScore(batch);
+		// draw time (anchored to top center)
+		renderGuiTime(batch);
+		//renderGuiScore(batch);
 		// draw collected feather icon (anchored to top left edge)
 		renderGuiFeatherPowerup(batch);
 		// draw extra lives icon + text (anchored to top right edge)
@@ -245,7 +264,10 @@ public class WorldRenderer implements Disposable
 		{
 			batch.draw(Assets.instance.pause.pause, x, y, 0, 0, 280, -480, 1f, -1f, 0);
 			batch.draw(Assets.instance.pause.title, x + 50, y, 0, 10, 150, -40, 1f, -1f, 0);
-			batch.draw(Assets.instance.pause.play, x, y, 90, 90, 800, -800, 0.1f, -0.1f, 0);
+			if (worldController.cPlay.contains((float) Gdx.input.getX(), (float) Gdx.input.getY()))	
+				batch.draw(Assets.instance.pause.playDown, x, y, 90, 90, 800, -800, 0.1f, -0.1f, 0);
+			else
+				batch.draw(Assets.instance.pause.play, x, y, 90, 90, 800, -800, 0.1f, -0.1f, 0);
 			batch.draw(Assets.instance.pause.restart, x, y, 90, 180, 800, -800, 0.1f, -0.1f, 0);
 			batch.draw(Assets.instance.pause.selectLevel, x, y, 90, 270, 800, -800, 0.1f, -0.1f, 0);
 			batch.draw(Assets.instance.pause.home, x, y, 20, 360, 800, -800, 0.1f, -0.1f, 0);

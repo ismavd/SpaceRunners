@@ -40,9 +40,9 @@ public class Box extends AbstractGameObject {
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		if (falling) {
-			velocity.y = -100;
+			position.y = position.y - 0.05f;
 		} else {
-			velocity.y = 0;
+			position.y = position.y;
 		}
 	}
 }
