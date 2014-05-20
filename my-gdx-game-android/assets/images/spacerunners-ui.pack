@@ -10,53 +10,102 @@ background
   orig: 800, 480
   offset: 0, 0
   index: -1
+bunny
+  rotate: false
+  xy: 2, 3
+  size: 269, 468
+  orig: 269, 468
+  offset: 0, 0
+  index: -1
 coins
   rotate: false
-  xy: 511, 154
+  xy: 273, 154
   size: 510, 357
   orig: 510, 357
   offset: 0, 0
   index: -1
 exit
   rotate: false
-  xy: 853, 2
+  xy: 273, 2
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
+exit-dn
+  rotate: false
+  xy: 804, 908
+  size: 200, 85
+  orig: 200, 85
+  offset: 0, 0
+  index: -1
+exit-up
+  rotate: false
+  xy: 804, 821
+  size: 200, 85
+  orig: 200, 85
+  offset: 0, 0
+  index: -1
 level-01
   rotate: false
-  xy: 804, 843
+  xy: 425, 2
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-02
   rotate: false
-  xy: 804, 691
+  xy: 577, 2
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-03
   rotate: false
-  xy: 804, 539
+  xy: 729, 2
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
-logo
+level-04
   rotate: false
-  xy: 511, 33
-  size: 340, 119
-  orig: 340, 119
+  xy: 785, 321
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
-moon
+level-05
   rotate: false
-  xy: 2, 4
-  size: 507, 507
-  orig: 507, 507
+  xy: 785, 169
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+options-dn
+  rotate: false
+  xy: 804, 734
+  size: 200, 85
+  orig: 200, 85
+  offset: 0, 0
+  index: -1
+options-up
+  rotate: false
+  xy: 804, 647
+  size: 200, 85
+  orig: 200, 85
+  offset: 0, 0
+  index: -1
+play-dn
+  rotate: false
+  xy: 804, 560
+  size: 200, 85
+  orig: 200, 85
+  offset: 0, 0
+  index: -1
+play-up
+  rotate: false
+  xy: 804, 473
+  size: 200, 85
+  orig: 200, 85
   offset: 0, 0
   index: -1
 
@@ -66,71 +115,36 @@ filter: Nearest,Nearest
 repeat: none
 astronaut
   rotate: false
-  xy: 273, 601
-  size: 343, 325
-  orig: 343, 325
-  offset: 0, 0
-  index: -1
-bunny
-  rotate: false
-  xy: 2, 458
-  size: 269, 468
-  orig: 269, 468
+  xy: 404, 202
+  size: 300, 284
+  orig: 300, 284
   offset: 0, 0
   index: -1
 info
   rotate: false
-  xy: 273, 517
+  xy: 2, 2
   size: 329, 82
   orig: 329, 82
   offset: 0, 0
   index: -1
-level-04
-  rotate: false
-  xy: 2, 306
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-05
-  rotate: false
-  xy: 618, 776
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
 level-06
   rotate: false
-  xy: 2, 154
+  xy: 706, 336
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
-options-dn
+logo
   rotate: false
-  xy: 618, 624
-  size: 150, 150
-  orig: 150, 150
+  xy: 404, 81
+  size: 340, 119
+  orig: 340, 119
   offset: 0, 0
   index: -1
-options-up
+moon
   rotate: false
-  xy: 770, 776
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-play-dn
-  rotate: false
-  xy: 2, 2
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-play-up
-  rotate: false
-  xy: 770, 624
-  size: 150, 150
-  orig: 150, 150
+  xy: 2, 86
+  size: 400, 400
+  orig: 400, 400
   offset: 0, 0
   index: -1
