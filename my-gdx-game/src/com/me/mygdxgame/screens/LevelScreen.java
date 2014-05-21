@@ -4,9 +4,11 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -57,7 +59,7 @@ public class LevelScreen extends AbstractGameScreen
 	/*-----------------------------------------MÉTODOS----------------------------------------------*/
 	
 	// Constructor
-	public LevelScreen(Game game) 
+	public LevelScreen(DirectedGame game) 
 	{
 		super(game);
 		cargarNiveles();
@@ -78,7 +80,7 @@ public class LevelScreen extends AbstractGameScreen
 	
 	private void rebuildStage() 
 	{
-		skinCanyonBunny = new Skin(Gdx.files.internal(Constants.SKIN_CANYONBUNNY_UI), new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
+		skinCanyonBunny = new Skin(Gdx.files.internal(Constants.SKIN_SPACERUNNERS_UI), new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
 		skinLibgdx = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI), new TextureAtlas(Constants.TEXTURE_ATLAS_LIBGDX_UI));
 
 		// Generamos las diferentes capas de los menús.
@@ -125,7 +127,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				onPlayClicked(1,0,301);
+				onPlayClicked(1,20,0,301);
 			}
 		});
 		
@@ -137,7 +139,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor) 
 			{
-				onPlayClicked(2,0,301);
+				onPlayClicked(2,20,0,301);
 			}
 		});
 		
@@ -149,7 +151,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor) 
 			{
-				onPlayClicked(3,0,301);
+				onPlayClicked(3,20,0,301);
 			}
 		});
 		
@@ -163,7 +165,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor) 
 			{
-				onPlayClicked(4,0,301);
+				onPlayClicked(4,20,0,301);
 			}
 		});
 		
@@ -175,7 +177,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				onPlayClicked(5,0,301);
+				onPlayClicked(5,20,0,301);
 			}
 		});
 		
@@ -187,7 +189,7 @@ public class LevelScreen extends AbstractGameScreen
 		{
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				onPlayClicked(6,0,301);
+				onPlayClicked(6,20,0,-1);
 			}
 		});
 		
@@ -199,9 +201,11 @@ public class LevelScreen extends AbstractGameScreen
 	}
 	
 	// Carga el nivel seleccionado al pulsar sobre el botón correspondiente.
-	private void onPlayClicked(int level, int score, int time) 
+	private void onPlayClicked(int level, int pieces, int score, int time) 
 	{
-		game.setScreen(new GameScreen(game,level,score, time));
+		ScreenTransition transition = ScreenTransitionSlice.init(2,
+				ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
+		game.setScreen(new GameScreen(game, level, pieces, score, time), transition);
 	}
 	
 	
@@ -209,7 +213,6 @@ public class LevelScreen extends AbstractGameScreen
 	public void show() 
 	{
 		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
 		rebuildStage();
 	}
 
@@ -243,8 +246,7 @@ public class LevelScreen extends AbstractGameScreen
 				debugRebuildStage = DEBUG_REBUILD_INTERVAL;
 				rebuildStage();
 			}
-		}
-		
+		}	
 		stage.act(deltaTime);
 		stage.draw();
 		Table.drawDebug(stage);
@@ -255,5 +257,10 @@ public class LevelScreen extends AbstractGameScreen
 	{
 		// Establecemos de nuevo los elementos del menú al nuevo tamaño de ventana.
 		stage.setViewport(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT, false);
+	}
+	
+	@Override
+	public InputProcessor getInputProcessor() {
+		return stage;
 	}
 }

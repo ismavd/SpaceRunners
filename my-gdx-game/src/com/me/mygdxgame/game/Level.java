@@ -12,7 +12,7 @@ import com.me.mygdxgame.objects.Enemy;
 import com.me.mygdxgame.objects.EnemyForward;
 import com.me.mygdxgame.objects.FallingPlatform;
 import com.me.mygdxgame.objects.ForwardPlatform;
-import com.me.mygdxgame.objects.Geiser;
+import com.me.mygdxgame.objects.BouncingPlatform;
 import com.me.mygdxgame.objects.Giant;
 import com.me.mygdxgame.objects.Laser;
 import com.me.mygdxgame.objects.Mountains;
@@ -20,11 +20,11 @@ import com.me.mygdxgame.objects.MovingPlatform;
 import com.me.mygdxgame.objects.Platform;
 import com.me.mygdxgame.objects.Rock;
 import com.me.mygdxgame.objects.Wall;
-import com.me.mygdxgame.objects.WaterOverlay;
-import com.me.mygdxgame.objects.BunnyHead;
-import com.me.mygdxgame.objects.GoldCoin;
-import com.me.mygdxgame.objects.Feather;
-import com.me.mygdxgame.objects.Carrot;
+import com.me.mygdxgame.objects.PoisonOverlay;
+import com.me.mygdxgame.objects.Astronaut;
+import com.me.mygdxgame.objects.Piece;
+import com.me.mygdxgame.objects.FlyPower;
+import com.me.mygdxgame.objects.ExtraLife;
 import com.me.mygdxgame.objects.Goal;
 import com.me.mygdxgame.utils.AudioManager;
 
@@ -38,13 +38,13 @@ public class Level {
 		MOVING_PLATFORM(64, 64, 4), // dark yellow
 		FORWARD_PLATFORM(255, 0, 128), // pink
 		FALLING_PLATFORM(64, 128, 128), // blue
-		GEISER(128, 128, 64), // dark beige
+		BOUNCING_PLATFORM(128, 128, 64), // dark beige
 		WALL(64, 0, 0), // dark red
 		PLAYER_SPAWNPOINT(255, 255, 255), // white
-		ITEM_FEATHER(255, 0, 255), // purple
-		ITEM_GOLD_COIN(255, 255, 0), // yellow
+		ITEM_POWERBAR(255, 0, 255), // purple
+		ITEM_PIECE(255, 255, 0), // yellow
 		GOAL(255, 0, 0), // red
-		ITEM_CARROT(0, 0, 255), // blue
+		ITEM_EXTRALIFE(0, 0, 255), // blue
 		CHECKPOINT(255, 69, 0), // orange
 		ENEMY(63, 72, 204), // indigo
 		ENEMY_FORWARD(163, 73, 164), // purple
@@ -72,24 +72,24 @@ public class Level {
 	public Array<MovingPlatform> movingPlatforms;
 	public Array<ForwardPlatform> fwdPlatforms;
 	public Array<FallingPlatform> fallPlatforms;
-	public Array<Geiser> geisers;
+	public Array<BouncingPlatform> bouncingPlatforms;
 	public Array<Wall> walls;
 
 	// Elementos decorativos
 	public Clouds clouds;
 	public Mountains mountains;
-	public WaterOverlay waterOverlay;
+	public PoisonOverlay poisonOverlay;
 
 	// Personajes del juego.
-	public BunnyHead bunnyHead;
+	public Astronaut astronaut;
 	public Array<Enemy> enemies;
 	public Array<EnemyForward> enemiesFwd;
 	public Giant giant;
 
 	// Elementos
-	public Array<GoldCoin> goldcoins;
-	public Array<Feather> feathers;
-	public Array<Carrot> carrots;
+	public Array<Piece> pieces;
+	public Array<FlyPower> flyPowers;
+	public Array<ExtraLife> extraLifes;
 	public Array<Checkpoint> checkpoint;
 	public Array<Box> boxes;
 
@@ -107,7 +107,7 @@ public class Level {
 
 	private void init(String filename, boolean checkpointReached) {
 		// Personaje del jugador.
-		bunnyHead = null;
+		astronaut = null;
 
 		// Enemigos
 		enemies = new Array<Enemy>();
@@ -120,12 +120,12 @@ public class Level {
 		movingPlatforms = new Array<MovingPlatform>();
 		fallPlatforms = new Array<FallingPlatform>();
 		fwdPlatforms = new Array<ForwardPlatform>();
-		geisers = new Array<Geiser>();
+		bouncingPlatforms = new Array<BouncingPlatform>();
 		walls = new Array<Wall>();
 
-		goldcoins = new Array<GoldCoin>();
-		feathers = new Array<Feather>();
-		carrots = new Array<Carrot>();
+		pieces = new Array<Piece>();
+		flyPowers = new Array<FlyPower>();
+		extraLifes = new Array<ExtraLife>();
 		checkpoint = new Array<Checkpoint>();
 		boxes = new Array<Box>();
 
@@ -250,7 +250,7 @@ public class Level {
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					fallPlatforms.add((FallingPlatform) obj);
-				} else if (BLOCK_TYPE.GEISER.sameColor(currentPixel)) // Elemento
+				} else if (BLOCK_TYPE.BOUNCING_PLATFORM.sameColor(currentPixel)) // Elemento
 																		// que
 																		// impulsa
 																		// al
@@ -258,11 +258,11 @@ public class Level {
 																		// hacia
 																		// arriba
 				{
-					obj = new Geiser();
+					obj = new BouncingPlatform();
 					offsetHeight = -1.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
-					geisers.add((Geiser) obj);
+					bouncingPlatforms.add((BouncingPlatform) obj);
 
 				} else if (BLOCK_TYPE.WALL.sameColor(currentPixel)) {
 				} else if (!checkpointReached
@@ -271,37 +271,37 @@ public class Level {
 																					// del
 																					// jugador
 				{
-					obj = new BunnyHead();
+					obj = new Astronaut();
 					offsetHeight = -3.0f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
-					bunnyHead = (BunnyHead) obj;
-				} else if (BLOCK_TYPE.ITEM_FEATHER.sameColor(currentPixel)) // Pluma
+					astronaut = (Astronaut) obj;
+				} else if (BLOCK_TYPE.ITEM_POWERBAR.sameColor(currentPixel)) // Pluma
 																			// (Barra
 																			// energética)
 				{
-					obj = new Feather();
+					obj = new FlyPower();
 					offsetHeight = -1.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
-					feathers.add((Feather) obj);
-				} else if (BLOCK_TYPE.ITEM_GOLD_COIN.sameColor(currentPixel)) // Moneda
+					flyPowers.add((FlyPower) obj);
+				} else if (BLOCK_TYPE.ITEM_PIECE.sameColor(currentPixel)) // Moneda
 																				// de
 																				// oro
 																				// (Tuerca)
 				{
-					obj = new GoldCoin();
+					obj = new Piece();
 					offsetHeight = -1.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
-					goldcoins.add((GoldCoin) obj);
-				} else if (BLOCK_TYPE.ITEM_CARROT.sameColor(currentPixel)) // Zanahoria
+					pieces.add((Piece) obj);
+				} else if (BLOCK_TYPE.ITEM_EXTRALIFE.sameColor(currentPixel)) // Zanahoria
 				{
-					obj = new Carrot();
+					obj = new ExtraLife();
 					offsetHeight = -1.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
-					carrots.add((Carrot) obj);
+					extraLifes.add((ExtraLife) obj);
 				} else if (BLOCK_TYPE.CHECKPOINT.sameColor(currentPixel)) // Checkpoint
 				{
 					obj = new Checkpoint();
@@ -311,11 +311,11 @@ public class Level {
 					checkpoint.add((Checkpoint) obj);
 
 					if (checkpointReached) {
-						obj = new BunnyHead();
+						obj = new Astronaut();
 						offsetHeight = -3.0f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
 								+ offsetHeight);
-						bunnyHead = (BunnyHead) obj;
+						astronaut = (Astronaut) obj;
 					}
 				} else if (BLOCK_TYPE.BOX.sameColor(currentPixel)) // Caja
 																	// metálica
@@ -377,8 +377,8 @@ public class Level {
 		clouds.position.set(0, 2);
 		mountains = new Mountains(pixmap.getWidth());
 		mountains.position.set(-1, -1);
-		waterOverlay = new WaterOverlay(pixmap.getWidth());
-		waterOverlay.position.set(0, -3.75f);
+		poisonOverlay = new PoisonOverlay(pixmap.getWidth());
+		poisonOverlay.position.set(0, -3.75f);
 
 		// Liberamos la memoria utilizada por el mapa de pixeles.
 		pixmap.dispose();
@@ -417,8 +417,8 @@ public class Level {
 		}
 
 		// Colocamos los géisers
-		for (Geiser geiser : geisers) {
-			geiser.render(batch);
+		for (BouncingPlatform bouncingPlatform : bouncingPlatforms) {
+			bouncingPlatform.render(batch);
 		}
 
 		// Colocamos los géisers
@@ -427,18 +427,18 @@ public class Level {
 		}
 
 		// Renderizamos las monedas.
-		for (GoldCoin goldCoin : goldcoins) {
-			goldCoin.render(batch);
+		for (Piece piece : pieces) {
+			piece.render(batch);
 		}
 
 		// Colocamos las plumas.
-		for (Feather feather : feathers) {
-			feather.render(batch);
+		for (FlyPower flyPower : flyPowers) {
+			flyPower.render(batch);
 		}
 
 		// Renderizamos las zanahorias.
-		for (Carrot carrot : carrots) {
-			carrot.render(batch);
+		for (ExtraLife extraLife : extraLifes) {
+			extraLife.render(batch);
 		}
 
 		// Colocamos los enemigos.
@@ -473,35 +473,35 @@ public class Level {
 		for (Box box : boxes) {
 			box.render(batch);
 		}
-		if (bunnyHead.shooting) {
-			Laser l = new Laser(bunnyHead.viewDirection);
+		if (astronaut.shooting) {
+			Laser l = new Laser(astronaut.viewDirection);
 			if (laser == null) {
-				if (bunnyHead.viewDirection == bunnyHead.viewDirection.RIGHT)
-					l.position.set(bunnyHead.position.x
-							+ bunnyHead.bounds.width, bunnyHead.position.y
-							+ bunnyHead.bounds.height / 2);
+				if (astronaut.viewDirection == astronaut.viewDirection.RIGHT)
+					l.position.set(astronaut.position.x
+							+ astronaut.bounds.width, astronaut.position.y
+							+ astronaut.bounds.height / 2);
 				else
-					l.position.set(bunnyHead.position.x
-							- bunnyHead.bounds.width, bunnyHead.position.y
-							+ bunnyHead.bounds.height / 2);
+					l.position.set(astronaut.position.x
+							- astronaut.bounds.width, astronaut.position.y
+							+ astronaut.bounds.height / 2);
 				laser = l;
 			}
 			if (laser.duracion < laser.maxDuracion)
 				laser.render(batch);
 			else {
-				bunnyHead.shooting = false;
+				astronaut.shooting = false;
 				laser = null;
 			}
 		} else
 			laser = null;
 
-		bunnyHead.render(batch); // Renderizar el personaje.
-		waterOverlay.render(batch); // Dibujar la capa de agua.
+		astronaut.render(batch); // Renderizar el personaje.
+		poisonOverlay.render(batch); // Dibujar la capa de agua.
 		clouds.render(batch); // Dibujar las nubes.
 	}
 
 	public void update(float deltaTime) {
-		bunnyHead.update(deltaTime);
+		astronaut.update(deltaTime);
 
 		for (Rock rock : rocks) {
 			rock.update(deltaTime);
@@ -523,24 +523,24 @@ public class Level {
 			platform.update(deltaTime);
 		}
 
-		for (Geiser geiser : geisers) {
-			geiser.update(deltaTime);
+		for (BouncingPlatform bouncingPlatform : bouncingPlatforms) {
+			bouncingPlatform.update(deltaTime);
 		}
 
 		for (Wall wall : walls) {
 			wall.update(deltaTime);
 		}
 
-		for (GoldCoin goldCoin : goldcoins) {
-			goldCoin.update(deltaTime);
+		for (Piece piece : pieces) {
+			piece.update(deltaTime);
 		}
 
-		for (Feather feather : feathers) {
-			feather.update(deltaTime);
+		for (FlyPower flyPower : flyPowers) {
+			flyPower.update(deltaTime);
 		}
 
-		for (Carrot carrot : carrots) {
-			carrot.update(deltaTime);
+		for (ExtraLife extraLife : extraLifes) {
+			extraLife.update(deltaTime);
 		}
 
 		for (Checkpoint cp : checkpoint) {
@@ -555,7 +555,7 @@ public class Level {
 			if (enemy.alive && enemy != null)
 				enemy.update(deltaTime);
 			if (enemy.dying) {
-				bunnyHead.shooting = false;
+				astronaut.shooting = false;
 				enemy.dying = false;
 			}
 		}
@@ -564,12 +564,12 @@ public class Level {
 			if (enemy.alive && enemy != null)
 				enemy.update(deltaTime);
 			if (enemy.dying) {
-				bunnyHead.shooting = false;
+				astronaut.shooting = false;
 				enemy.dying = false;
 			}
 		}
 
-		if (bunnyHead.shooting && laser != null) {
+		if (astronaut.shooting && laser != null) {
 			laser.update(deltaTime);
 		}
 

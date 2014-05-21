@@ -4,18 +4,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.game.Assets;
 
-public class WaterOverlay extends AbstractGameObject {
+public class PoisonOverlay extends AbstractGameObject {
 	private TextureRegion regWaterOverlay;
 	private float length;
 
-	public WaterOverlay(float length) {
+	public PoisonOverlay(float length) {
 		this.length = length;
 		init();
 	}
 
 	private void init() {
 		dimension.set(length * 10, 3);
-		regWaterOverlay = Assets.instance.levelDecoration.waterOverlay;
+		regWaterOverlay = Assets.instance.levelDecoration.poisonOverlay;
 		origin.x = -dimension.x / 2;
 	}
 

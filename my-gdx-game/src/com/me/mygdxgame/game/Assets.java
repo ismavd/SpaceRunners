@@ -23,8 +23,8 @@ public class Assets implements Disposable, AssetErrorListener
 	public static final String TAG = Assets.class.getName();
 	public static final Assets instance = new Assets();
 	private AssetManager assetManager;
-	public AssetBunny bunny;
-	public AssetBunnyPower bunnyPower;
+	public AssetAstronaut astronaut;
+	public AssetAstronautPower astronautPower;
 	public AssetLife life;
 	
 	//Enemies
@@ -38,7 +38,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetMovingPlatform movingPlatform;
 	public AssetForwardPlatform fwdPlatform;
 	public AssetFallingPlatform fallPlatform;
-	public AssetGeiser geiser;
+	public AssetBouncingPlatform bncPlatform;
 	public AssetWall wall;
 	
 	// Boxes
@@ -48,10 +48,11 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetLaser laser;
 	
 	//Items
-	public AssetGoldCoin goldCoin;
-	public AssetFeather feather;
+	public AssetPiece piece;
+	public AssetFlyPower flyPower;
 	public AssetCheckpoint checkpoint;
 	public AssetCarrot carrot;
+	public AssetGoal goal;
 	
 	public AssetLevelDecoration levelDecoration;
 	public AssetFonts fonts;
@@ -109,8 +110,8 @@ public class Assets implements Disposable, AssetErrorListener
 		
 		// create game resource objects
 		fonts = new AssetFonts();
-		bunny = new AssetBunny(atlas);
-		bunnyPower = new AssetBunnyPower(atlas);
+		astronaut = new AssetAstronaut(atlas);
+		astronautPower = new AssetAstronautPower(atlas);
 		life = new AssetLife(atlas);
 		enemy = new AssetEnemy(atlas);
 		enemyFwd = new AssetEnemyForward(atlas);
@@ -120,15 +121,17 @@ public class Assets implements Disposable, AssetErrorListener
 		movingPlatform = new AssetMovingPlatform(atlas);
 		fwdPlatform = new AssetForwardPlatform(atlas);
 		fallPlatform = new AssetFallingPlatform(atlas);
-		geiser = new AssetGeiser(atlas);
+		bncPlatform = new AssetBouncingPlatform(atlas);
 		wall = new AssetWall(atlas);
 		box = new AssetBox(atlas);
 		laser = new AssetLaser(atlas);
-		goldCoin = new AssetGoldCoin(atlas);
-		feather = new AssetFeather(atlas);
+		piece = new AssetPiece(atlas);
+		flyPower = new AssetFlyPower(atlas);
 		checkpoint = new AssetCheckpoint(atlas);
 		// Carrot
 		carrot = new AssetCarrot(atlas);
+		// Goal
+		goal = new AssetGoal(atlas);
 		// Buttons
 		leftButton = new AssetLeftButton(atlas);
 		rightButton = new AssetRightButton(atlas);
@@ -162,45 +165,47 @@ public class Assets implements Disposable, AssetErrorListener
 	 * (Exception) throwable); }
 	 */
 
-	public class AssetBunny 
+	public class AssetAstronaut 
 	{
-		public final AtlasRegion head;
-		public final Animation animNormal;
+		public final AtlasRegion astronaut;
+		//public final Animation animNormal;
+		public final Animation animMoving;
 		public final Animation animCopterTransform;
 		public final Animation animCopterTransformBack;
 		public final Animation animCopterRotate;
 
-		public AssetBunny(TextureAtlas atlas) 
+		public AssetAstronaut(TextureAtlas atlas) 
 		{
-			head = atlas.findRegion("bunny_head");
+			astronaut = atlas.findRegion("anim_astronaut_normal");
 			Array<AtlasRegion> regions = null;
-			AtlasRegion region = null;
-			// Animation: Bunny Normal
-			regions = atlas.findRegions("anim_bunny_normal");
-			animNormal = new Animation(1.0f / 10.0f, regions,
+			//AtlasRegion region = astronaut;
+			
+			// Animation: astronaut Normal
+			regions = atlas.findRegions("anim_astronaut_normal");
+			animMoving = new Animation(1.0f / 10.0f, regions,
 			Animation.LOOP_PINGPONG);
-			// Animation: Bunny Copter - knot ears
-			regions = atlas.findRegions("anim_bunny_copter");
+			// Animation: astronaut Copter - knot ears
+			regions = atlas.findRegions("anim_astronaut_copter");
 			animCopterTransform = new Animation(1.0f / 10.0f, regions);
-			// Animation: Bunny Copter - unknot ears
-			regions = atlas.findRegions("anim_bunny_copter");
+			// Animation: astronaut Copter - unknot ears
+			regions = atlas.findRegions("anim_astronaut_copter");
 			animCopterTransformBack = new Animation(1.0f / 10.0f, regions,
 			Animation.REVERSED);
-			// Animation: Bunny Copter - rotate ears
+			// Animation: astronaut Copter - rotate ears
 			regions = new Array<AtlasRegion>();
-			regions.add(atlas.findRegion("anim_bunny_copter", 4));
-			regions.add(atlas.findRegion("anim_bunny_copter", 5));
+			regions.add(atlas.findRegion("anim_astronaut_copter", 4));
+			regions.add(atlas.findRegion("anim_astronaut_copter", 5));
 			animCopterRotate = new Animation(1.0f / 15.0f, regions);
 		}
 	}
 
-	public class AssetBunnyPower
+	public class AssetAstronautPower
 	{
-		public final AtlasRegion head;
+		public final AtlasRegion astronaut;
 
-		public AssetBunnyPower(TextureAtlas atlas) 
+		public AssetAstronautPower(TextureAtlas atlas) 
 		{
-			head = atlas.findRegion("bunny_power");
+			astronaut = atlas.findRegion("astronaut_power");
 		}
 	}
 	
@@ -296,13 +301,13 @@ public class Assets implements Disposable, AssetErrorListener
 		}
 	}
 	
-	public class AssetGeiser
+	public class AssetBouncingPlatform
 	{
-		public final AtlasRegion geiser;
+		public final AtlasRegion bncPlatform;
 
-		public AssetGeiser(TextureAtlas atlas)
+		public AssetBouncingPlatform(TextureAtlas atlas)
 		{
-			geiser = atlas.findRegion("geiser");
+			bncPlatform = atlas.findRegion("platform");
 		}
 	}
 	
@@ -336,30 +341,40 @@ public class Assets implements Disposable, AssetErrorListener
 		}
 	}
 
-	public class AssetGoldCoin 
+	public class AssetPiece 
 	{
-		public final AtlasRegion goldCoin;
-		public final Animation animGoldCoin;
+		public final AtlasRegion pieceIcon;
+		public final AtlasRegion piece1;
+		public final AtlasRegion piece2;
+		public final AtlasRegion piece3;
+		public final AtlasRegion piece4;
+		public final AtlasRegion piece5;
+		//public final Animation animPiece;
 
-		public AssetGoldCoin(TextureAtlas atlas) 
+		public AssetPiece(TextureAtlas atlas) 
 		{
-			goldCoin = atlas.findRegion("item_gold_coin");		
+			pieceIcon = atlas.findRegion("piece-icon");
+			piece1 = atlas.findRegion("piece1");		
+			piece2 = atlas.findRegion("piece2");
+			piece3 = atlas.findRegion("piece3");
+			piece4 = atlas.findRegion("piece4");
+			piece5 = atlas.findRegion("piece5");
 			// Animation: Gold Coin
-			Array<AtlasRegion> regions = atlas.findRegions("anim_gold_coin");
+			/*Array<AtlasRegion> regions = atlas.findRegions("anim_gold_coin");
 			AtlasRegion region = regions.first();
 			for (int i = 0; i < 10; i++)
 				regions.insert(0, region);
-			animGoldCoin = new Animation(1.0f / 20.0f, regions, Animation.LOOP_PINGPONG);
+			animPiece = new Animation(1.0f / 20.0f, regions, Animation.LOOP_PINGPONG);*/
 		}
 	}
 
-	public class AssetFeather 
+	public class AssetFlyPower 
 	{
-		public final AtlasRegion feather;
+		public final AtlasRegion bar;
 
-		public AssetFeather(TextureAtlas atlas)
+		public AssetFlyPower(TextureAtlas atlas)
 		{
-			feather = atlas.findRegion("PowerUp");
+			bar = atlas.findRegion("PowerUp");
 		}
 	}
 
@@ -381,6 +396,17 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetCarrot(TextureAtlas atlas)
 		{
 			carrot = atlas.findRegion("carrot");
+		}
+	}
+	
+	// Goal
+	public class AssetGoal
+	{
+		public final AtlasRegion goal;
+
+		public AssetGoal(TextureAtlas atlas)
+		{
+			goal = atlas.findRegion("goal");
 		}
 	}
 
@@ -468,8 +494,8 @@ public class Assets implements Disposable, AssetErrorListener
 		public final AtlasRegion cloud;
 		public final AtlasRegion mountainLeft;
 		public final AtlasRegion mountainRight;
-		public final AtlasRegion waterOverlay;
-		public final AtlasRegion goal;
+		public final AtlasRegion poisonOverlay;
+		//public final AtlasRegion goal;
 
 		public AssetLevelDecoration(TextureAtlas atlas) 
 		{
@@ -479,8 +505,8 @@ public class Assets implements Disposable, AssetErrorListener
 			cloud = atlas.findRegion("nube-de-polvo");
 			mountainLeft = atlas.findRegion("mountain_left");
 			mountainRight = atlas.findRegion("mountain_right");
-			waterOverlay = atlas.findRegion("water_overlay");
-			goal = atlas.findRegion("goal");
+			poisonOverlay = atlas.findRegion("water_overlay");
+			//goal = atlas.findRegion("goal");
 		}
 	}
 
@@ -516,18 +542,18 @@ public class Assets implements Disposable, AssetErrorListener
 	public class AssetSounds
 	{
 		public final Sound jump;
-		public final Sound jumpWithFeather;
+		public final Sound jumpWithFlyPower;
 		public final Sound pickupCoin;
-		public final Sound pickupFeather;
+		public final Sound pickupFlyPower;
 		public final Sound liveLost;
 
 		public AssetSounds(AssetManager am) 
 		{
 			jump = am.get("sounds/jump.wav", Sound.class);
-			jumpWithFeather = am.get("sounds/jump_with_feather.wav",
+			jumpWithFlyPower = am.get("sounds/jump_with_feather.wav",
 					Sound.class);
 			pickupCoin = am.get("sounds/pickup_coin.wav", Sound.class);
-			pickupFeather = am.get("sounds/pickup_feather.wav", Sound.class);
+			pickupFlyPower = am.get("sounds/pickup_feather.wav", Sound.class);
 			liveLost = am.get("sounds/live_lost.wav", Sound.class);
 		}
 	}

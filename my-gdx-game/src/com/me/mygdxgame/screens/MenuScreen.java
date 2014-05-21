@@ -28,6 +28,7 @@ import com.me.mygdxgame.utils.Constants;
 import com.me.mygdxgame.utils.GamePreferences;
 import com.me.mygdxgame.utils.CharacterSkin;
 import com.me.mygdxgame.utils.AudioManager;
+import com.badlogic.gdx.InputProcessor;
 
 public class MenuScreen extends AbstractGameScreen {
 
@@ -69,7 +70,7 @@ public class MenuScreen extends AbstractGameScreen {
 	private Button btnMenuExit;
 
 	// Constructor
-	public MenuScreen(Game game) {
+	public MenuScreen(DirectedGame game) {
 		super(game);
 	}
 
@@ -117,7 +118,7 @@ public class MenuScreen extends AbstractGameScreen {
 
 	private void rebuildStage() {
 		skinCanyonBunny = new Skin(
-				Gdx.files.internal(Constants.SKIN_CANYONBUNNY_UI),
+				Gdx.files.internal(Constants.SKIN_SPACERUNNERS_UI),
 				new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
 		skinLibgdx = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI),
 				new TextureAtlas(Constants.TEXTURE_ATLAS_LIBGDX_UI));
@@ -167,8 +168,9 @@ public class MenuScreen extends AbstractGameScreen {
 		imgAstronaut = new Image(skinCanyonBunny, "astronaut");
 		layer.addActor(imgAstronaut);
 		imgAstronaut.setPosition(180, 50);
-		imgAstronaut.setOrigin(imgAstronaut.getWidth(), imgAstronaut.getHeight());
-		//imgAstronaut.rotate(22.5f);
+		imgAstronaut.setOrigin(imgAstronaut.getWidth(),
+				imgAstronaut.getHeight());
+		// imgAstronaut.rotate(22.5f);
 		imgAstronaut.addAction(Actions.forever(Actions.sequence(
 				rotateBy(22.5f, 2, Interpolation.linear),
 				rotateBy(-22.5f, 2, Interpolation.linear),
@@ -360,7 +362,7 @@ public class MenuScreen extends AbstractGameScreen {
 		tbl.add(selCharSkin).width(120).padRight(20);
 
 		// + Skin preview image
-		imgCharSkin = new Image(Assets.instance.bunny.head);
+		imgCharSkin = new Image(Assets.instance.astronaut.astronaut);
 		tbl.add(imgCharSkin).width(50).height(50);
 
 		return tbl;
@@ -461,7 +463,6 @@ public class MenuScreen extends AbstractGameScreen {
 	@Override
 	public void show() {
 		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
 		rebuildStage();
 		AudioManager.instance.play(Assets.instance.music.song01);
 	}
@@ -478,4 +479,8 @@ public class MenuScreen extends AbstractGameScreen {
 		super.pause();
 	}
 
+	@Override
+	public InputProcessor getInputProcessor() {
+		return stage;
+	}
 }

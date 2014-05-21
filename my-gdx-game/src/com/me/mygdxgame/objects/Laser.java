@@ -8,13 +8,13 @@ public class Laser extends AbstractGameObject {
 	private TextureRegion regLaser;
 	public int duracion;
 	public int maxDuracion = 25;
-	public BunnyHead.VIEW_DIRECTION direction;
+	public Astronaut.VIEW_DIRECTION direction;
 
-	public Laser(BunnyHead.VIEW_DIRECTION direction) {
+	public Laser(Astronaut.VIEW_DIRECTION direction) {
 		init(direction);
 	}
 
-	private void init(BunnyHead.VIEW_DIRECTION direction) {
+	private void init(Astronaut.VIEW_DIRECTION direction) {
 		dimension.set(1f, 0.125f);
 		regLaser = Assets.instance.laser.laser;
 		terminalVelocity.set(5.0f, 3.0f);
@@ -40,7 +40,7 @@ public class Laser extends AbstractGameObject {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		if (direction == BunnyHead.VIEW_DIRECTION.RIGHT)
+		if (direction == Astronaut.VIEW_DIRECTION.RIGHT)
 			velocity.x = terminalVelocity.x;
 		else
 			velocity.x = -terminalVelocity.x;

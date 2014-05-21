@@ -4,17 +4,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.game.Assets;
 
-public class Carrot extends AbstractGameObject {
+public class ExtraLife extends AbstractGameObject {
 	private TextureRegion regCarrot;
 	public boolean collected;
 	
-	public Carrot() {
+	public ExtraLife() {
 		init();
 	}
 	
 	private void init() {
 		dimension.set(0.5f, 0.5f);
-		regCarrot = Assets.instance.bunny.head;
+		regCarrot = Assets.instance.astronaut.astronaut;
 		// Set bounding box for collision detection
 		bounds.set(0, 0, dimension.x, dimension.y);
 		collected = false;

@@ -12,8 +12,8 @@ import com.me.mygdxgame.utils.CharacterSkin;
 import com.badlogic.gdx.math.MathUtils;
 import com.me.mygdxgame.utils.AudioManager;
 
-public class BunnyHead extends AbstractGameObject {
-	public static final String TAG = BunnyHead.class.getName();
+public class Astronaut extends AbstractGameObject {
+	public static final String TAG = Astronaut.class.getName();
 	private final float JUMP_TIME_MAX = 0.3f;
 	private final float JUMP_TIME_MIN = 0.1f;
 	private final float JUMP_TIME_OFFSET_FLYING = JUMP_TIME_MAX - 0.018f;
@@ -23,10 +23,10 @@ public class BunnyHead extends AbstractGameObject {
 	}
 
 	public enum JUMP_STATE {
-		GROUNDED, FALLING, JUMP_RISING, JUMP_FALLING
+		GROUNDED, FALLING, JUMP_RISING, JUMP_FALLING, WALL_JUMPING
 	}
 
-	private TextureRegion regHead;
+	private TextureRegion regastronaut;
 	private TextureRegion regPower;
 	public VIEW_DIRECTION viewDirection;
 	public float timeJumping;
@@ -35,31 +35,34 @@ public class BunnyHead extends AbstractGameObject {
 	public boolean dustOn;
 	public boolean viewDirectionOn;
 	public float timeLeftFeatherPowerup;
-	
+
 	public boolean shooting;
+	public boolean wallJumping;
 
 	public ParticleEffect dustParticles = new ParticleEffect();
 
-	private Animation animNormal;
+	// private Animation animNormal;
+	private Animation animMoving;
 	private Animation animCopterTransform;
 	private Animation animCopterTransformBack;
 	private Animation animCopterRotate;
 
-	public BunnyHead() {
+	public Astronaut() {
 		init();
 	}
 
 	public void init() {
 		dimension.set(1, 1);
-		// regHead = Assets.instance.bunny.head;
+		// regastronaut = Assets.instance.astronaut.astronaut;
+		// animNormal = Assets.instance.astronaut.animNormal;
+		animMoving = Assets.instance.astronaut.animMoving;
+		animCopterTransform = Assets.instance.astronaut.animCopterTransform;
+		animCopterTransformBack = Assets.instance.astronaut.animCopterTransformBack;
+		animCopterRotate = Assets.instance.astronaut.animCopterRotate;
+		// setAnimation(animMoving);
+		setAnimation(null);
 
-		animNormal = Assets.instance.bunny.animNormal;
-		animCopterTransform = Assets.instance.bunny.animCopterTransform;
-		animCopterTransformBack = Assets.instance.bunny.animCopterTransformBack;
-		animCopterRotate = Assets.instance.bunny.animCopterRotate;
-		setAnimation(animNormal);
-
-		regPower = Assets.instance.bunnyPower.head;
+		regPower = Assets.instance.astronautPower.astronaut;
 		// Center image on game object
 		origin.set(dimension.x / 2, dimension.y / 2);
 		// Bounding box for collision detection
@@ -78,7 +81,8 @@ public class BunnyHead extends AbstractGameObject {
 		timeLeftFeatherPowerup = 0;
 
 		shooting = false;
-		
+		wallJumping = false;
+
 		// Particles
 		dustParticles.load(Gdx.files.internal("particles/dust.pfx"),
 				Gdx.files.internal("particles"));
@@ -101,11 +105,15 @@ public class BunnyHead extends AbstractGameObject {
 				jumpState = JUMP_STATE.JUMP_FALLING;
 			else if (jumpKeyPressed && hasFeatherPowerup) {
 				AudioManager.instance.play(
-						Assets.instance.sounds.jumpWithFeather, 1,
+						Assets.instance.sounds.jumpWithFlyPower, 1,
 						MathUtils.random(1.0f, 1.1f));
 				timeJumping = JUMP_TIME_OFFSET_FLYING;
 			}
 			break;
+		/*
+		 * case WALL_JUMPING: if (!jumpKeyPressed) jumpState =
+		 * JUMP_STATE.JUMP_FALLING; break;
+		 */
 		case FALLING:// Falling down
 		case JUMP_FALLING: // Falling down after jump
 			break;
@@ -132,7 +140,10 @@ public class BunnyHead extends AbstractGameObject {
 		if (velocity.x != 0 && viewDirectionOn) {
 			viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT
 					: VIEW_DIRECTION.RIGHT;
-		}
+			if (animation == null)
+				setAnimation(animMoving);
+		} else
+			setAnimation(null);
 		if (!viewDirectionOn)
 			viewDirectionOn = true;
 		if (timeLeftFeatherPowerup > 0) {
@@ -154,7 +165,7 @@ public class BunnyHead extends AbstractGameObject {
 		dustParticles.update(deltaTime);
 		// Change animation state according to feather power-up
 		if (hasFeatherPowerup) {
-			if (animation == animNormal) {
+			if (animation == animMoving) {
 				setAnimation(animCopterTransform);
 			} else if (animation == animCopterTransform) {
 				if (animation.isAnimationFinished(stateTime))
@@ -166,7 +177,22 @@ public class BunnyHead extends AbstractGameObject {
 					setAnimation(animCopterTransformBack);
 			} else if (animation == animCopterTransformBack) {
 				if (animation.isAnimationFinished(stateTime))
-					setAnimation(animNormal);
+					setAnimation(animMoving);
+			}
+		}
+		if (wallJumping) {
+			// Add delta times to track jump time
+			timeJumping += deltaTime;
+			// Jump to minimal height if jump key was pressed too short
+			if (timeJumping > 0 && timeJumping <= 0.8) {
+				// Still jumping
+				velocity.x = -terminalVelocity.x;
+				velocity.y = terminalVelocity.y;
+			} else {
+				velocity.x = 0;
+				velocity.y = 0;
+				wallJumping = false;
+				jumpState = JUMP_STATE.JUMP_FALLING;
 			}
 		}
 	}
@@ -191,6 +217,12 @@ public class BunnyHead extends AbstractGameObject {
 				velocity.y = terminalVelocity.y;
 			}
 			break;
+		/*
+		 * case WALL_JUMPING: // Keep track of jump time timeJumping +=
+		 * deltaTime; // Jump time left? if (timeJumping <= JUMP_TIME_MAX) { //
+		 * Still jumping System.out.println("Wall jump"); velocity.x =
+		 * terminalVelocity.x; velocity.y = terminalVelocity.y; } break;
+		 */
 		case FALLING:
 			break;
 		case JUMP_FALLING:
@@ -223,24 +255,27 @@ public class BunnyHead extends AbstractGameObject {
 
 		float dimCorrectionX = 0;
 		float dimCorrectionY = 0;
-		if (animation != animNormal) {
-			dimCorrectionX = 0.05f;
-			dimCorrectionY = 0.2f;
-		}
+		/*
+		 * if (animation != animMoving) { dimCorrectionX = 0.05f; dimCorrectionY
+		 * = 0.2f; }
+		 */
 
 		// Set special color when game object has a feather power-up
 		if (hasFeatherPowerup)
 			batch.setColor(1.0f, 0.8f, 0.0f, 1.0f);
-		reg = regHead;
+		reg = regastronaut;
 
 		// Código para cambiar de imagen al obtener una pluma (la imagen debe
-		// llamarse bunny_power.png)
+		// llamarse astronaut_power.png)
 		/*
-		 * if (hasFeatherPowerup) reg = regPower; else reg = regHead;
+		 * if (hasFeatherPowerup) reg = regPower; else reg = regastronaut;
 		 */
 
 		// Draw image
-		reg = animation.getKeyFrame(stateTime, true);
+		if (animation != null)
+			reg = animation.getKeyFrame(stateTime, true);
+		else
+			reg = Assets.instance.astronaut.astronaut;
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x,
 				origin.y, dimension.x + dimCorrectionX, dimension.y
 						+ dimCorrectionY, scale.x, scale.y, rotation,

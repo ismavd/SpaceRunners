@@ -1,10 +1,10 @@
 package com.me.mygdxgame.objects;
 
-public class Geiser extends Platform {
+public class BouncingPlatform extends Platform {
 	public boolean active;
 	public int time;
 	
-	public Geiser() {
+	public BouncingPlatform() {
 		super();
 		active = false;
 		time = 30;

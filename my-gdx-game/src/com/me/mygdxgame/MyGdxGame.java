@@ -9,10 +9,14 @@ import com.me.mygdxgame.game.Assets;
 import com.me.mygdxgame.game.WorldController;
 import com.me.mygdxgame.game.WorldRenderer;
 import com.me.mygdxgame.screens.MenuScreen;
+import com.me.mygdxgame.screens.DirectedGame;
 import com.me.mygdxgame.utils.AudioManager;
 import com.me.mygdxgame.utils.GamePreferences;
+import com.badlogic.gdx.math.Interpolation;
+import com.me.mygdxgame.screens.ScreenTransition;
+import com.me.mygdxgame.screens.ScreenTransitionSlice;
 
-public class MyGdxGame extends Game
+public class MyGdxGame extends DirectedGame
 {
 	//private OrthographicCamera camera;
 	//private SpriteBatch batch;
@@ -45,6 +49,7 @@ public class MyGdxGame extends Game
 		//AudioManager.instance.play(Assets.instance.music.song01);
 		// Start game at menu screen
 		setScreen(new MenuScreen(this));
+		
 		
 		// Initialize controller and renderer
 		//worldController = new WorldController();

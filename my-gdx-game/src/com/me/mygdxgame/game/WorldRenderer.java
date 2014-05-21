@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.me.mygdxgame.objects.AbstractGameObject;
-import com.me.mygdxgame.objects.BunnyHead;
+import com.me.mygdxgame.objects.Astronaut;
 import com.me.mygdxgame.objects.Enemy;
 import com.me.mygdxgame.objects.Laser;
 import com.me.mygdxgame.utils.Constants;
@@ -90,8 +90,9 @@ public class WorldRenderer implements Disposable
 		float x = -15;
 		float y = -15;
 		if (!worldController.isPaused()) {
-			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
-			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+			batch.draw(Assets.instance.piece.pieceIcon, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+			Assets.instance.fonts.defaultBig.draw(batch, worldController.pieces+"", x + 75, y + 37);
+			Assets.instance.fonts.defaultBig.draw(batch, "Consigue "+worldController.piecesNeeded+" piezas", x + 150, y + 37);
 		} else {
 			
 			/*x = cameraGUI.viewportWidth - 190;
@@ -102,8 +103,8 @@ public class WorldRenderer implements Disposable
 			// Cuando decidamos incluir puntuación o tiempo habrá que poner este código
 			x = cameraGUI.viewportWidth - 200;
 			y = 110;
-			batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
-			Assets.instance.fonts.defaultBig.draw(batch, "" + worldController.screws, x + 75, y + 37);
+			batch.draw(Assets.instance.piece.pieceIcon, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+			Assets.instance.fonts.defaultBig.draw(batch, worldController.pieces+"/"+worldController.piecesNeeded, x + 75, y + 37);
 		}
 	}
 	
@@ -113,15 +114,24 @@ public class WorldRenderer implements Disposable
 		float y;
 		String time = Integer.toString(worldController.time/60);
 		if (!worldController.isPaused()) {
-			x = cameraGUI.viewportWidth - 600;
+			x = cameraGUI.viewportWidth - 450;//600
 			y = -15;
-			Assets.instance.fonts.defaultBig.draw(batch, "TIEMPO:", x + 75, y + 37);
-			Assets.instance.fonts.defaultBig.draw(batch, "" + time, x + 220, y + 37);
+			if (worldController.time >= 0)  {
+				Assets.instance.fonts.defaultBig.draw(batch, "TIEMPO:", x + 75, y + 37);
+				Assets.instance.fonts.defaultBig.draw(batch, "" + time, x + 220, y + 37);
+			} else {
+				Assets.instance.fonts.defaultBig.draw(batch, "¡HUYE! ¡RÁPIDO!", x + 75, y + 37);
+			}
 		} else {
 			x = cameraGUI.viewportWidth - 160;
 			y = 70;
-			Assets.instance.fonts.defaultBig.draw(batch, "TIEMPO:", x, y);
-			Assets.instance.fonts.defaultBig.draw(batch, "" + time, x, y + 37);
+			if (worldController.time >= 0)  {
+				Assets.instance.fonts.defaultBig.draw(batch, "TIEMPO:", x, y);
+				Assets.instance.fonts.defaultBig.draw(batch, "" + time, x, y + 37);
+			} else {
+				Assets.instance.fonts.defaultBig.draw(batch, "¡HUYE!", x, y);
+				Assets.instance.fonts.defaultBig.draw(batch, "¡RÁPIDO!", x, y + 37);
+			}
 		}
 	}
 	
@@ -207,7 +217,7 @@ public class WorldRenderer implements Disposable
 		{
 			renderGuiLeftButton(batch);
 			renderGuiRightButton(batch);
-			renderGuiShootButton(batch);
+			//renderGuiShootButton(batch);
 			renderGuiJumpButton(batch);
 		}
 		// draw FPS text (anchored to bottom right edge)
@@ -249,7 +259,7 @@ public class WorldRenderer implements Disposable
 		{
 			BitmapFont fontGoal = Assets.instance.fonts.defaultBig;
 			fontGoal.setColor(1, 0.75f, 0.25f, 1);
-			fontGoal.drawMultiLine(batch, "LEVEL COMPLETED!", x, y - 150, 0, BitmapFont.HAlignment.CENTER);
+			fontGoal.drawMultiLine(batch, "¡NIVEL COMPLETADO!", x, y - 150, 0, BitmapFont.HAlignment.CENTER);
 			fontGoal.setColor(1, 1, 1, 1);
 		}
 	}
@@ -282,7 +292,7 @@ public class WorldRenderer implements Disposable
 	{
 		float x = -15;
 		float y = 30;
-		float timeLeftFeatherPowerup = worldController.level.bunnyHead.timeLeftFeatherPowerup;
+		float timeLeftFeatherPowerup = worldController.level.astronaut.timeLeftFeatherPowerup;
 		if (timeLeftFeatherPowerup > 0) 
 		{
 			// Start icon fade in/out if the left power-up time
@@ -296,7 +306,7 @@ public class WorldRenderer implements Disposable
 				}
 			}
 			
-			batch.draw(Assets.instance.feather.feather, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+			batch.draw(Assets.instance.flyPower.bar, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
 			batch.setColor(1, 1, 1, 1);
 			Assets.instance.fonts.defaultSmall.draw(batch, "" + (int) timeLeftFeatherPowerup, x + 60, y + 57);
 		}

@@ -1,14 +1,15 @@
 package com.me.mygdxgame.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 
 public class AbstractGameScreen implements Screen
 {
-	protected Game game;
+	protected DirectedGame game;
 	
-	public AbstractGameScreen (Game game) 
+	public AbstractGameScreen (DirectedGame game)
 	{
 		this.game = game;
 	}
@@ -62,5 +63,9 @@ public class AbstractGameScreen implements Screen
 		//Assets.instance.dispose();
 	}
 
-	
+	public InputProcessor getInputProcessor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

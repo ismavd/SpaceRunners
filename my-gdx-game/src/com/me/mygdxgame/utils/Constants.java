@@ -50,6 +50,6 @@ public class Constants {
 	public static final String TEXTURE_ATLAS_LIBGDX_UI = "images/uiskin.atlas";
 	// Location of description file for skins
 	public static final String SKIN_LIBGDX_UI = "images/uiskin.json";
-	public static final String SKIN_CANYONBUNNY_UI = "images/canyonbunny-ui.json";
+	public static final String SKIN_SPACERUNNERS_UI = "images/spacerunners-ui.json";
 	public static final String SKIN_BUTTONS = "images/inputbuttons.json";
 }

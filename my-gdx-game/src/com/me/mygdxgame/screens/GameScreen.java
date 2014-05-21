@@ -16,6 +16,7 @@ import com.me.mygdxgame.game.WorldController;
 import com.me.mygdxgame.game.WorldRenderer;
 import com.me.mygdxgame.utils.Constants;
 import com.me.mygdxgame.utils.GamePreferences;
+import com.badlogic.gdx.InputProcessor;
 
 public class GameScreen extends AbstractGameScreen {
 	private static final String TAG = GameScreen.class.getName();
@@ -24,18 +25,20 @@ public class GameScreen extends AbstractGameScreen {
 	private boolean paused;
 	private int nivel;
 	private int score;
+	private int piecesNeeded;
 	private int time;
-	
+
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
 
-	public GameScreen(Game game) {
+	public GameScreen(DirectedGame game) {
 		super(game);
 	}
-	
-	public GameScreen(Game game, int level, int score, int time) {
+
+	public GameScreen(DirectedGame game, int level, int piecesNeeded, int score, int time) {
 		super(game);
 		this.nivel = level;
+		this.piecesNeeded = piecesNeeded;
 		this.score = score;
 		this.time = time;
 	}
@@ -52,19 +55,19 @@ public class GameScreen extends AbstractGameScreen {
 		}
 
 		// Sets the clear screen color to: Cornflower Blue
-		/*Gdx.gl.glClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xed / 255.0f,
-				0xff / 255.0f);*/
-		
+		/*
+		 * Gdx.gl.glClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xed / 255.0f, 0xff
+		 * / 255.0f);
+		 */
+
 		Gdx.gl.glClearColor(0x9 / 255.0f, 0x23 / 255.0f, 0x47 / 255.0f,
 				0xff / 255.0f);
 
-		
-		
 		// Clears the screen
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		// Render game world to screen
 		worldRenderer.render();
-		//rebuildStage();
+		// rebuildStage();
 	}
 
 	@Override
@@ -75,7 +78,7 @@ public class GameScreen extends AbstractGameScreen {
 	@Override
 	public void show() {
 		GamePreferences.instance.load();
-		worldController = new WorldController(game,nivel,score,time);
+		worldController = new WorldController(game, nivel, piecesNeeded, score, time);
 		worldRenderer = new WorldRenderer(worldController);
 		Gdx.input.setCatchBackKey(true);
 	}
@@ -98,5 +101,10 @@ public class GameScreen extends AbstractGameScreen {
 		super.resume();
 		// Only called on Android!
 		paused = false;
+	}
+
+	@Override
+	public InputProcessor getInputProcessor() {
+		return worldController;
 	}
 }
