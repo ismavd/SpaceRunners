@@ -10,35 +10,35 @@ PowerUp
   orig: 46, 40
   offset: 0, 0
   index: -1
-anim_bunny_copter
+anim_astronaut_copter
   rotate: false
   xy: 2, 43
   size: 125, 112
   orig: 125, 112
   offset: 0, 0
   index: 1
-anim_bunny_copter
+anim_astronaut_copter
   rotate: false
   xy: 129, 43
   size: 125, 112
   orig: 125, 112
   offset: 0, 0
   index: 2
-anim_bunny_copter
+anim_astronaut_copter
   rotate: false
   xy: 256, 43
   size: 125, 112
   orig: 125, 112
   offset: 0, 0
   index: 3
-anim_bunny_copter
+anim_astronaut_copter
   rotate: false
   xy: 383, 43
   size: 125, 112
   orig: 125, 112
   offset: 0, 0
   index: 4
-anim_bunny_copter
+anim_astronaut_copter
   rotate: false
   xy: 510, 43
   size: 125, 112
@@ -176,100 +176,149 @@ spacerunners2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-anim_bunny_normal
+anim_astronaut_normal
   rotate: false
-  xy: 872, 385
+  xy: 178, 189
   size: 130, 85
   orig: 130, 85
   offset: 0, 0
   index: 1
-anim_bunny_normal
+anim_astronaut_normal
   rotate: false
-  xy: 872, 298
+  xy: 178, 102
   size: 130, 85
   orig: 130, 85
   offset: 0, 0
   index: 2
-anim_bunny_normal
+anim_astronaut_normal
   rotate: false
-  xy: 872, 211
+  xy: 178, 15
   size: 130, 85
   orig: 130, 85
   offset: 0, 0
   index: 3
 anim_gold_coin
   rotate: false
-  xy: 189, 22
+  xy: 441, 664
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: 6
+astronaut
+  rotate: false
+  xy: 178, 276
+  size: 122, 82
+  orig: 122, 82
+  offset: 0, 0
+  index: -1
 boton_atras
   rotate: false
-  xy: 2, 170
+  xy: 2, 360
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 boton_jump
   rotate: false
-  xy: 304, 170
+  xy: 441, 722
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
-bunny_head
-  rotate: false
-  xy: 872, 127
-  size: 122, 82
-  orig: 122, 82
-  offset: 0, 0
-  index: -1
 checkpoint
   rotate: false
-  xy: 2, 2
+  xy: 304, 494
   size: 185, 166
   orig: 185, 166
   offset: 0, 0
   index: -1
 cloud01
   rotate: false
-  xy: 389, 90
+  xy: 304, 324
   size: 178, 78
   orig: 178, 78
   offset: 0, 0
   index: -1
 cloud02
   rotate: false
-  xy: 189, 80
+  xy: 304, 404
   size: 198, 88
   orig: 198, 88
   offset: 0, 0
   index: -1
 giant
   rotate: false
-  xy: 606, 184
+  xy: 743, 736
   size: 176, 286
   orig: 176, 286
   offset: 0, 0
   index: -1
-item_gold_coin
+life
   rotate: false
-  xy: 247, 22
+  xy: 2, 662
+  size: 437, 360
+  orig: 437, 360
+  offset: 0, 0
+  index: -1
+piece2
+  rotate: false
+  xy: 2, 662
+  size: 437, 360
+  orig: 437, 360
+  offset: 0, 0
+  index: -1
+piece-icon
+  rotate: false
+  xy: 955, 966
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: -1
+piece1
+  rotate: false
+  xy: 955, 966
+  size: 56, 56
+  orig: 56, 56
+  offset: 0, 0
+  index: -1
+piece3
+  rotate: false
+  xy: 499, 665
+  size: 55, 55
+  orig: 55, 55
+  offset: 0, 0
+  index: -1
+piece4
+  rotate: false
+  xy: 955, 909
+  size: 55, 55
+  orig: 55, 55
+  offset: 0, 0
+  index: -1
+piece5
+  rotate: false
+  xy: 556, 665
+  size: 55, 55
+  orig: 55, 55
+  offset: 0, 0
+  index: -1
 rock_middle
   rotate: false
-  xy: 784, 114
+  xy: 2, 2
+  size: 86, 356
+  orig: 86, 356
+  offset: 0, 0
+  index: -1
+wall
+  rotate: false
+  xy: 90, 2
   size: 86, 356
   orig: 86, 356
   offset: 0, 0
   index: -1
 water_overlay
   rotate: false
-  xy: 569, 8
+  xy: 921, 862
   size: 32, 160
   orig: 32, 160
   offset: 0, 0
