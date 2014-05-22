@@ -5,9 +5,9 @@ filter: Nearest,Nearest
 repeat: none
 PowerUp
   rotate: false
-  xy: 862, 226
-  size: 46, 40
-  orig: 46, 40
+  xy: 862, 213
+  size: 23, 20
+  orig: 23, 20
   offset: 0, 0
   index: -1
 anim_astronaut_copter
@@ -75,7 +75,7 @@ anim_gold_coin
   index: 4
 anim_gold_coin
   rotate: false
-  xy: 753, 2
+  xy: 753, 13
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
@@ -110,14 +110,14 @@ cloud03
   index: -1
 enemy
   rotate: false
-  xy: 38, 10
+  xy: 898, 235
   size: 34, 31
   orig: 34, 31
   offset: 0, 0
   index: -1
 enemy-forward
   rotate: false
-  xy: 2, 10
+  xy: 862, 235
   size: 34, 31
   orig: 34, 31
   offset: 0, 0
@@ -131,7 +131,7 @@ goal
   index: -1
 laser
   rotate: false
-  xy: 74, 36
+  xy: 2, 36
   size: 125, 5
   orig: 125, 5
   offset: 0, 0
@@ -159,9 +159,9 @@ nube-de-polvo
   index: -1
 platform
   rotate: false
-  xy: 753, 60
-  size: 79, 9
-  orig: 79, 9
+  xy: 962, 2
+  size: 40, 5
+  orig: 40, 5
   offset: 0, 0
   index: -1
 rock_edge
