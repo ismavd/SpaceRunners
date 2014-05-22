@@ -6,6 +6,7 @@ import com.me.mygdxgame.game.Assets;
 
 public class Goal extends AbstractGameObject {
 	private TextureRegion regGoal;
+	private boolean finish;
 
 	public Goal() {
 		init();
@@ -16,7 +17,8 @@ public class Goal extends AbstractGameObject {
 		regGoal = Assets.instance.goal.goal;
 		// Set bounding box for collision detection
 		bounds.set(1, Float.MIN_VALUE, 10, Float.MAX_VALUE);
-		origin.set(dimension.x / 2.0f, 0.0f);
+		origin.set(dimension.x / 2.0f, -1.0f);
+		finish = false;
 	}
 
 	public void render(SpriteBatch batch) {
@@ -27,4 +29,15 @@ public class Goal extends AbstractGameObject {
 				scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
 				reg.getRegionWidth(), reg.getRegionHeight(), false, false);
 	}
+	
+	@Override
+	public void update(float deltaTime) {
+		super.update(deltaTime);
+		if (finish) {
+			velocity.x = -terminalVelocity.x;
+		} else {
+			velocity.x = 0;
+		}
+	}
+	
 }

@@ -716,7 +716,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void onCollisionAstronautWithGoal() {
-		if (pieces >= piecesNeeded)
+		//if (pieces >= piecesNeeded)
 			goalReached = true;
 
 		if (Constants.niveles.get(nivel + 1) == null) {
@@ -1044,7 +1044,16 @@ public class WorldController extends InputAdapter implements Disposable {
 				r2.x += level.goal.position.x;
 				r2.y += level.goal.position.y;
 
-				if (r1.overlaps(r2)) {
+				int x1 = new Float(r1.x).intValue();
+				int x2 = new Float(r2.x).intValue();
+				
+				int y1 = new Float(r1.y).intValue();
+				int y2 = new Float(r2.y).intValue();
+				
+				System.out.println("x1:" + x1 + " x2: " + x2 + " y1: " + y1 + " y2:" + y2);
+				
+				//if (r1.overlaps(r2)) {
+				if ((x1==x2 || x1==x2-1) && (y1==y2 || y1==y2+1)) {
 					onCollisionAstronautWithGoal();
 				}
 			}

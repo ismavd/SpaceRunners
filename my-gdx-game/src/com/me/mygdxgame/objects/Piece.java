@@ -16,7 +16,7 @@ public class Piece extends AbstractGameObject {
 	}
 
 	private void init() {
-		dimension.set(0.5f, 0.5f);
+		dimension.set(1f, 1f);
 		//regGoldCoin = Assets.instance.goldCoin.goldCoin;
 		//setAnimation(Assets.instance.piece.animPiece);
 		//stateTime = MathUtils.random(0.0f, 1.0f);

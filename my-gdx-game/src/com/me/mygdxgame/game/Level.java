@@ -152,8 +152,8 @@ public class Level {
 				{
 					if (lastPixel != currentPixel) {
 						obj = new Wall();
-						float heightIncreaseFactor = 0.25f;
-						offsetHeight = -2.5f;
+						float heightIncreaseFactor = 0.7f;
+						offsetHeight = -3.5f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
 								* heightIncreaseFactor + offsetHeight);
 						walls.add((Wall) obj);
@@ -191,8 +191,8 @@ public class Level {
 				{
 					if (lastPixel != currentPixel) {
 						obj = new Rock();
-						float heightIncreaseFactor = 0.25f;
-						offsetHeight = -2.5f;
+						float heightIncreaseFactor = 0.7f;
+						offsetHeight = 0.0f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
 								* heightIncreaseFactor + offsetHeight);
 						rocks.add((Rock) obj);
@@ -204,7 +204,7 @@ public class Level {
 				{
 					if (lastPixel != currentPixel) {
 						obj = new Platform();
-						offsetHeight = -1.5f;
+						offsetHeight = 2.0f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
 								+ offsetHeight);
 						platforms.add((Platform) obj);
@@ -217,7 +217,7 @@ public class Level {
 				{
 					if (lastPixel != currentPixel) {
 						obj = new MovingPlatform();
-						offsetHeight = -1.5f;
+						offsetHeight = 2.0f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
 								+ offsetHeight);
 						movingPlatforms.add((MovingPlatform) obj);
@@ -232,7 +232,7 @@ public class Level {
 				{
 					if (lastPixel != currentPixel) {
 						obj = new ForwardPlatform();
-						offsetHeight = -1.5f;
+						offsetHeight = 2.0f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
 								+ offsetHeight);
 						fwdPlatforms.add((ForwardPlatform) obj);
@@ -246,7 +246,7 @@ public class Level {
 																				// horizontal
 				{
 					obj = new FallingPlatform();
-					offsetHeight = -1.5f;
+					offsetHeight = 2.0f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					fallPlatforms.add((FallingPlatform) obj);
@@ -259,7 +259,7 @@ public class Level {
 																		// arriba
 				{
 					obj = new BouncingPlatform();
-					offsetHeight = -1.5f;
+					offsetHeight = 2.0f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					bouncingPlatforms.add((BouncingPlatform) obj);
@@ -272,7 +272,7 @@ public class Level {
 																					// jugador
 				{
 					obj = new Astronaut();
-					offsetHeight = -3.0f;
+					offsetHeight = 1.0f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					astronaut = (Astronaut) obj;
@@ -281,7 +281,7 @@ public class Level {
 																			// energética)
 				{
 					obj = new FlyPower();
-					offsetHeight = -1.5f;
+					offsetHeight = 1.3f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					flyPowers.add((FlyPower) obj);
@@ -291,28 +291,28 @@ public class Level {
 																				// (Tuerca)
 				{
 					obj = new Piece();
-					offsetHeight = -1.5f;
+					offsetHeight = 1.0f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					pieces.add((Piece) obj);
 				} else if (BLOCK_TYPE.ITEM_EXTRALIFE.sameColor(currentPixel)) // Zanahoria
 				{
 					obj = new ExtraLife();
-					offsetHeight = -1.5f;
+					offsetHeight = 1.0f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					extraLifes.add((ExtraLife) obj);
 				} else if (BLOCK_TYPE.CHECKPOINT.sameColor(currentPixel)) // Checkpoint
 				{
 					obj = new Checkpoint();
-					offsetHeight = -1.5f;
+					offsetHeight = 0.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					checkpoint.add((Checkpoint) obj);
 
 					if (checkpointReached) {
 						obj = new Astronaut();
-						offsetHeight = -3.0f;
+						offsetHeight = 0f;
 						obj.position.set(pixelX, baseHeight * obj.dimension.y
 								+ offsetHeight);
 						astronaut = (Astronaut) obj;
@@ -321,14 +321,14 @@ public class Level {
 																	// metálica
 				{
 					obj = new Box();
-					offsetHeight = -1.5f;
+					offsetHeight = 1.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					boxes.add((Box) obj);
 				} else if (BLOCK_TYPE.ENEMY.sameColor(currentPixel)) // Enemigo
 				{
 					obj = new Enemy();
-					offsetHeight = -1.5f;
+					offsetHeight = 2.2f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					((Enemy) obj).initMove(obj.position.y);
@@ -337,7 +337,7 @@ public class Level {
 																				// 2
 				{
 					obj = new EnemyForward();
-					offsetHeight = -1.5f;
+					offsetHeight = 1.1f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					enemiesFwd.add((EnemyForward) obj);
@@ -352,7 +352,7 @@ public class Level {
 																	// meta
 				{
 					obj = new Goal();
-					offsetHeight = -7.0f;
+					offsetHeight = 0f;
 					obj.position.set(pixelX, baseHeight + offsetHeight);
 					goal = (Goal) obj;
 				} else // Color de pixel u objeto desconocido
@@ -378,7 +378,7 @@ public class Level {
 		mountains = new Mountains(pixmap.getWidth());
 		mountains.position.set(-1, -1);
 		poisonOverlay = new PoisonOverlay(pixmap.getWidth());
-		poisonOverlay.position.set(0, -3.75f);
+		poisonOverlay.position.set(0, -3.5f);
 
 		// Liberamos la memoria utilizada por el mapa de pixeles.
 		pixmap.dispose();

@@ -13,7 +13,7 @@ public class ExtraLife extends AbstractGameObject {
 	}
 	
 	private void init() {
-		dimension.set(0.5f, 0.5f);
+		dimension.set(1f, 1f);
 		regCarrot = Assets.instance.astronaut.astronaut;
 		// Set bounding box for collision detection
 		bounds.set(0, 0, dimension.x, dimension.y);
