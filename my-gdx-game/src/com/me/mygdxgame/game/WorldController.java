@@ -294,9 +294,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		ScreenTransition transition = ScreenTransitionSlice.init(2,
 				ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
 		if (nivel != 5)
-			game.setScreen(new GameScreen(game, nivel + 1, 30, score, 301), transition);
+			game.setScreen(new GameScreen(game, nivel + 1, 20, score, 301), transition);
 		else
-			game.setScreen(new GameScreen(game, nivel + 1, 30, score, -1), transition);
+			game.setScreen(new GameScreen(game, nivel + 1, 20, score, -1), transition);
 	}
 
 	// En este método vamos a poner las acciones a realizar en el menú de pausa
