@@ -75,7 +75,7 @@ anim_gold_coin
   index: 4
 anim_gold_coin
   rotate: false
-  xy: 753, 13
+  xy: 753, 2
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
@@ -159,9 +159,9 @@ nube-de-polvo
   index: -1
 platform
   rotate: false
-  xy: 962, 2
-  size: 40, 5
-  orig: 40, 5
+  xy: 753, 60
+  size: 79, 9
+  orig: 79, 9
   offset: 0, 0
   index: -1
 rock_edge
