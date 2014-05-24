@@ -43,28 +43,28 @@ spacerunners-pause2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-boton-anterior-dn
+boton-jugar-dn
   rotate: false
   xy: 2, 504
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
   index: -1
-boton-jugar-dn
+boton-menu-principal-dn
   rotate: false
   xy: 2, 2
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
   index: -1
-boton-menu-principal-dn
+boton-pausa-dn
   rotate: false
   xy: 504, 504
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
   index: -1
-boton-pausa-dn
+boton-restart-dn
   rotate: false
   xy: 504, 2
   size: 500, 500
@@ -78,28 +78,28 @@ filter: Nearest,Nearest
 repeat: none
 boton -pausa
   rotate: false
-  xy: 504, 506
+  xy: 2, 2
   size: 498, 498
   orig: 498, 498
   offset: 0, 0
   index: -1
 boton-jugar
   rotate: false
-  xy: 504, 6
+  xy: 504, 504
   size: 498, 498
   orig: 498, 498
   offset: 0, 0
   index: -1
-boton-restart-dn
+boton-restart
   rotate: false
-  xy: 2, 504
-  size: 500, 500
-  orig: 500, 500
+  xy: 502, 2
+  size: 498, 498
+  orig: 498, 498
   offset: 0, 0
   index: -1
 boton-seleccion-nivel-dn
   rotate: false
-  xy: 2, 2
+  xy: 2, 502
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
@@ -109,13 +109,6 @@ spacerunners-pause4.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-boton-restart
-  rotate: false
-  xy: 2, 502
-  size: 498, 498
-  orig: 498, 498
-  offset: 0, 0
-  index: -1
 boton-seleccion-nivel
   rotate: false
   xy: 2, 2
@@ -125,7 +118,7 @@ boton-seleccion-nivel
   index: -1
 boton-sonido
   rotate: false
-  xy: 502, 502
+  xy: 502, 2
   size: 498, 498
   orig: 498, 498
   offset: 0, 0
