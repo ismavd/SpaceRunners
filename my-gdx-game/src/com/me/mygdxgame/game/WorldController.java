@@ -285,6 +285,8 @@ public class WorldController extends InputAdapter implements Disposable {
 			hitStopCounter = 10;
 		}
 		level.mountains.updateScrollPosition(cameraHelper.getPosition());
+		if (level.giant != null)
+			level.giant.position.y = level.astronaut.position.y;
 	}
 
 	private void nextLevel() {
@@ -714,9 +716,9 @@ public class WorldController extends InputAdapter implements Disposable {
 	private void onCollisionAstronautWithEnemy() {
 		enemyHit = true;
 	}
-
+	
 	private void onCollisionAstronautWithGoal() {
-		//if (pieces >= piecesNeeded)
+		if (nivel == 1 || pieces >= piecesNeeded)
 			goalReached = true;
 
 		if (Constants.niveles.get(nivel + 1) == null) {
@@ -1050,7 +1052,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				int y1 = new Float(r1.y).intValue();
 				int y2 = new Float(r2.y).intValue();
 				
-				System.out.println("x1:" + x1 + " x2: " + x2 + " y1: " + y1 + " y2:" + y2);
+				//System.out.println("x1:" + x1 + " x2: " + x2 + " y1: " + y1 + " y2:" + y2);
 				
 				//if (r1.overlaps(r2)) {
 				if ((x1==x2 || x1==x2-1) && (y1==y2 || y1==y2+1)) {
@@ -1107,7 +1109,8 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	// Devuelve True si el personaje está en el agua y False en caso contrario.
 	public boolean isPlayerInWater() {
-		return level.astronaut.position.y < -5;
+		//return level.astronaut.position.y < -5;
+		return level.astronaut.position.y < -1;
 	}
 
 	public boolean isLeftPressed(int pointer) {
@@ -1163,6 +1166,10 @@ public class WorldController extends InputAdapter implements Disposable {
 	// Devuelve True si el juego está en pausa y False en caso contrario.
 	public boolean isPaused() {
 		return paused;
+	}
+	
+	public int getNivel() {
+		return nivel;
 	}
 
 	/*

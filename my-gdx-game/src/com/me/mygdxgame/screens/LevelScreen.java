@@ -46,6 +46,7 @@ public class LevelScreen extends AbstractGameScreen
 	private Button btnNivel4;
 	private Button btnNivel5;
 	private Button btnNivel6;
+	private Button btnExit;
 	
 	// debug
 	private final float DEBUG_REBUILD_INTERVAL = 5.0f;
@@ -85,8 +86,9 @@ public class LevelScreen extends AbstractGameScreen
 
 		// Generamos las diferentes capas de los menús.
 		Table layerBackground = buildBackgroundLayer(); //Capa con el fondo de pantalla.
-		Table layerObjects = buildObjectsLayer(); //Capa con 
-		
+		Table layerObjects = buildObjectsLayer(); //Capa con los botones de nivel
+		//Table layerExit = buildExitLayer(); //Capa con el botón de salida
+		//layerExit.setSize(1, 1);
 		// assemble stage for menu screen
 		stage.clear(); //Limpiamos 
 		
@@ -98,6 +100,8 @@ public class LevelScreen extends AbstractGameScreen
 		//Añadimos las capas a la pila.
 		stack.add(layerBackground);
 		stack.add(layerObjects);
+		//stack.add(layerExit);
+		//layerExit.setSize(1,1);
 	}
 
 	//Devuelve un elemento Table (capa) que contiene el fondo del menú principal.
@@ -200,6 +204,23 @@ public class LevelScreen extends AbstractGameScreen
 		return layer;
 	}
 	
+	private Table buildExitLayer()
+	{
+		Table layer = new Table();
+		layer.padLeft(-300.0f);
+		layer.padBottom(0.0f);
+		btnExit = new Button(skinCanyonBunny, "back");
+		layer.add(btnExit);
+		btnExit.addListener(new ChangeListener() 
+		{
+			public void changed(ChangeEvent event, Actor actor)
+			{
+				onExitClicked();
+			}
+		});
+		return layer;
+	}
+	
 	// Carga el nivel seleccionado al pulsar sobre el botón correspondiente.
 	private void onPlayClicked(int level, int pieces, int score, int time) 
 	{
@@ -208,6 +229,11 @@ public class LevelScreen extends AbstractGameScreen
 		game.setScreen(new GameScreen(game, level, pieces, score, time), transition);
 	}
 	
+	// Para salir de la pantalla
+	private void onExitClicked() 
+	{
+		game.setScreen(new MenuScreen(game));
+	}
 	
 	@Override
 	public void show() 

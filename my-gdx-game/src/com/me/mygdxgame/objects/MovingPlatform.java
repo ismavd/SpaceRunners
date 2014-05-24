@@ -1,5 +1,7 @@
 package com.me.mygdxgame.objects;
 
+import java.util.Random;
+
 public class MovingPlatform extends Platform {
 	
 	private float maxHeight;
@@ -16,7 +18,8 @@ public class MovingPlatform extends Platform {
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		if (goingUp) {
-			velocity.y = terminalVelocity.y;
+			float randomY = new Random().nextFloat();
+			velocity.y = randomY;
 			if (position.y >= maxHeight)
 				goingUp = false;
 		} else {

@@ -36,7 +36,7 @@ public class Level {
 		ROCK(0, 255, 0), // green
 		PLATFORM(128, 128, 128), // grey
 		MOVING_PLATFORM(64, 64, 4), // dark yellow
-		FORWARD_PLATFORM(255, 0, 128), // pink
+		FORWARD_PLATFORM(112, 146, 190), // blue
 		FALLING_PLATFORM(64, 128, 128), // blue
 		BOUNCING_PLATFORM(128, 128, 64), // dark beige
 		WALL(64, 0, 0), // dark red
@@ -204,8 +204,8 @@ public class Level {
 				{
 					if (lastPixel != currentPixel) {
 						obj = new Platform();
-						offsetHeight = 2.0f;
-						obj.position.set(pixelX, baseHeight * obj.dimension.y
+						offsetHeight = 1.0f;
+						obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 								+ offsetHeight);
 						platforms.add((Platform) obj);
 					} else {
@@ -217,8 +217,8 @@ public class Level {
 				{
 					if (lastPixel != currentPixel) {
 						obj = new MovingPlatform();
-						offsetHeight = 2.0f;
-						obj.position.set(pixelX, baseHeight * obj.dimension.y
+						offsetHeight = 1.0f;
+						obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 								+ offsetHeight);
 						movingPlatforms.add((MovingPlatform) obj);
 						((MovingPlatform) obj).initMove(obj.position.y);
@@ -232,8 +232,8 @@ public class Level {
 				{
 					if (lastPixel != currentPixel) {
 						obj = new ForwardPlatform();
-						offsetHeight = 2.0f;
-						obj.position.set(pixelX, baseHeight * obj.dimension.y
+						offsetHeight = 1.0f;
+						obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 								+ offsetHeight);
 						fwdPlatforms.add((ForwardPlatform) obj);
 						((ForwardPlatform) obj).initMove(obj.position.x);
@@ -246,8 +246,8 @@ public class Level {
 																				// horizontal
 				{
 					obj = new FallingPlatform();
-					offsetHeight = 2.0f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y
+					offsetHeight = 1.0f;
+					obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 							+ offsetHeight);
 					fallPlatforms.add((FallingPlatform) obj);
 				} else if (BLOCK_TYPE.BOUNCING_PLATFORM.sameColor(currentPixel)) // Elemento
@@ -259,8 +259,8 @@ public class Level {
 																		// arriba
 				{
 					obj = new BouncingPlatform();
-					offsetHeight = 2.0f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y
+					offsetHeight = 1.0f;
+					obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 							+ offsetHeight);
 					bouncingPlatforms.add((BouncingPlatform) obj);
 
@@ -281,8 +281,8 @@ public class Level {
 																			// energética)
 				{
 					obj = new FlyPower();
-					offsetHeight = 1.3f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y
+					offsetHeight = 1.0f;
+					obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 							+ offsetHeight);
 					flyPowers.add((FlyPower) obj);
 				} else if (BLOCK_TYPE.ITEM_PIECE.sameColor(currentPixel)) // Moneda
@@ -292,14 +292,14 @@ public class Level {
 				{
 					obj = new Piece();
 					offsetHeight = 1.0f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y
+					obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 							+ offsetHeight);
 					pieces.add((Piece) obj);
 				} else if (BLOCK_TYPE.ITEM_EXTRALIFE.sameColor(currentPixel)) // Zanahoria
 				{
 					obj = new ExtraLife();
 					offsetHeight = 1.0f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y
+					obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 							+ offsetHeight);
 					extraLifes.add((ExtraLife) obj);
 				} else if (BLOCK_TYPE.CHECKPOINT.sameColor(currentPixel)) // Checkpoint
@@ -328,8 +328,8 @@ public class Level {
 				} else if (BLOCK_TYPE.ENEMY.sameColor(currentPixel)) // Enemigo
 				{
 					obj = new Enemy();
-					offsetHeight = 2.2f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y
+					offsetHeight = 1f;
+					obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 							+ offsetHeight);
 					((Enemy) obj).initMove(obj.position.y);
 					enemies.add((Enemy) obj);
@@ -337,14 +337,14 @@ public class Level {
 																				// 2
 				{
 					obj = new EnemyForward();
-					offsetHeight = 1.1f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y
+					offsetHeight = 1f;
+					obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 							+ offsetHeight);
 					enemiesFwd.add((EnemyForward) obj);
 				} else if (BLOCK_TYPE.GIANT.sameColor(currentPixel)) // Gigante
 				{
 					obj = new Giant();
-					offsetHeight = -9f;
+					offsetHeight = -12.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y
 							+ offsetHeight);
 					giant = (Giant) obj;
@@ -376,9 +376,11 @@ public class Level {
 		clouds = new Clouds(pixmap.getWidth());
 		clouds.position.set(0, 2);
 		mountains = new Mountains(pixmap.getWidth());
-		mountains.position.set(-1, -1);
+		//mountains.position.set(-1, -1);
+		mountains.position.set(-1, 2);
 		poisonOverlay = new PoisonOverlay(pixmap.getWidth());
-		poisonOverlay.position.set(0, -3.5f);
+		//poisonOverlay.position.set(0, -3.5f);
+		poisonOverlay.position.set(0, -1);
 
 		// Liberamos la memoria utilizada por el mapa de pixeles.
 		pixmap.dispose();

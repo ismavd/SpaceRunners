@@ -36,10 +36,12 @@ public class Giant extends AbstractGameObject {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		if (moving)
+		if (moving) {
 			velocity.x = terminalVelocity.x;
-		else
+		}
+		else {
 			velocity.x = 0;
+		}
 	}
 	
 	public void StopMoving() {

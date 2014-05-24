@@ -33,7 +33,7 @@ import com.badlogic.gdx.InputProcessor;
 public class MenuScreen extends AbstractGameScreen {
 
 	private Stage stage;
-	private Skin skinCanyonBunny;
+	private Skin skinSpaceRunners;
 
 	// Botones e imágenes del menú principal.
 	private Image imgBackground;
@@ -117,7 +117,7 @@ public class MenuScreen extends AbstractGameScreen {
 	}
 
 	private void rebuildStage() {
-		skinCanyonBunny = new Skin(
+		skinSpaceRunners = new Skin(
 				Gdx.files.internal(Constants.SKIN_SPACERUNNERS_UI),
 				new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
 		skinLibgdx = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI),
@@ -145,7 +145,7 @@ public class MenuScreen extends AbstractGameScreen {
 	private Table buildBackgroundLayer() {
 		Table layer = new Table();
 		// + Background
-		imgBackground = new Image(skinCanyonBunny, "background");
+		imgBackground = new Image(skinSpaceRunners, "background");
 		layer.add(imgBackground);
 		return layer;
 	}
@@ -154,18 +154,18 @@ public class MenuScreen extends AbstractGameScreen {
 
 		// + Coins
 		/*
-		 * imgCoins = new Image(skinCanyonBunny, "coins");
+		 * imgCoins = new Image(skinSpaceRunners, "coins");
 		 * layer.addActor(imgCoins); imgCoins.setPosition(135, 80); // + Bunny
-		 * imgBunny = new Image(skinCanyonBunny, "bunny");
+		 * imgBunny = new Image(skinSpaceRunners, "bunny");
 		 * layer.addActor(imgBunny); imgBunny.setPosition(355, 40);
 		 */
 		Table layer = new Table();
 		// + Moon
-		imgMoon = new Image(skinCanyonBunny, "moon");
+		imgMoon = new Image(skinSpaceRunners, "moon");
 		layer.addActor(imgMoon);
 		imgMoon.setPosition(130, 10);
 		// + Astronaut
-		imgAstronaut = new Image(skinCanyonBunny, "astronaut");
+		imgAstronaut = new Image(skinSpaceRunners, "astronaut");
 		layer.addActor(imgAstronaut);
 		imgAstronaut.setPosition(180, 50);
 		imgAstronaut.setOrigin(imgAstronaut.getWidth(),
@@ -196,10 +196,10 @@ public class MenuScreen extends AbstractGameScreen {
 
 		// + Game Logo
 		/*
-		 * imgLogo = new Image(skinCanyonBunny, "logo"); layer.add(imgLogo);
+		 * imgLogo = new Image(skinSpaceRunners, "logo"); layer.add(imgLogo);
 		 * layer.row().expandY();
 		 * 
-		 * // + Info Logos imgInfo = new Image(skinCanyonBunny, "info");
+		 * // + Info Logos imgInfo = new Image(skinSpaceRunners, "info");
 		 * layer.add(imgInfo).bottom();
 		 */
 
@@ -213,7 +213,7 @@ public class MenuScreen extends AbstractGameScreen {
 		Table layer = new Table();
 		layer.defaults().expand().right().padRight(40.0f);
 		// Botón Jugar
-		btnMenuPlay = new Button(skinCanyonBunny, "play");
+		btnMenuPlay = new Button(skinSpaceRunners, "play");
 		layer.add(btnMenuPlay);
 		layer.padTop(100.0f);
 
@@ -227,7 +227,7 @@ public class MenuScreen extends AbstractGameScreen {
 		layer.row(); // Pasamos a otra fila.
 
 		// Botón de Opciones
-		btnMenuOptions = new Button(skinCanyonBunny, "options");
+		btnMenuOptions = new Button(skinSpaceRunners, "options");
 		layer.add(btnMenuOptions);
 		layer.padTop(100.0f);
 
@@ -241,7 +241,7 @@ public class MenuScreen extends AbstractGameScreen {
 		layer.row(); // Pasamos a otra fila.
 
 		// Botón de Salir
-		btnMenuExit = new Button(skinCanyonBunny, "exit");
+		btnMenuExit = new Button(skinSpaceRunners, "exit");
 		layer.add(btnMenuExit);
 		layer.padTop(100.0f);
 
@@ -470,7 +470,7 @@ public class MenuScreen extends AbstractGameScreen {
 	@Override
 	public void hide() {
 		stage.dispose();
-		skinCanyonBunny.dispose();
+		skinSpaceRunners.dispose();
 		skinLibgdx.dispose();
 	}
 
