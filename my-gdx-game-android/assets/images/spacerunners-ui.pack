@@ -3,58 +3,149 @@ spacerunners-ui.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+astronaut
+  rotate: false
+  xy: 404, 157
+  size: 300, 284
+  orig: 300, 284
+  offset: 0, 0
+  index: -1
 background
   rotate: false
-  xy: 2, 504
+  xy: 2, 530
   size: 800, 480
   orig: 800, 480
   offset: 0, 0
   index: -1
 boton-anterior-dn
   rotate: false
-  xy: 2, 2
-  size: 500, 500
-  orig: 500, 500
+  xy: 956, 758
+  size: 50, 50
+  orig: 50, 50
   offset: 0, 0
   index: -1
 boton-anterior-up
   rotate: false
-  xy: 504, 2
-  size: 500, 500
-  orig: 500, 500
+  xy: 956, 706
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+boton-pag-sig-locked-dn
+  rotate: false
+  xy: 956, 911
+  size: 50, 99
+  orig: 50, 99
+  offset: 0, 0
+  index: -1
+boton-pag-sig-locked-up
+  rotate: false
+  xy: 956, 810
+  size: 50, 99
+  orig: 50, 99
   offset: 0, 0
   index: -1
 exit-dn
   rotate: false
-  xy: 804, 899
+  xy: 2, 443
   size: 200, 85
   orig: 200, 85
   offset: 0, 0
   index: -1
 exit-up
   rotate: false
-  xy: 804, 812
+  xy: 204, 443
   size: 200, 85
   orig: 200, 85
   offset: 0, 0
   index: -1
+level-01-dn
+  rotate: false
+  xy: 804, 860
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-01-up
+  rotate: false
+  xy: 804, 708
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-02-dn
+  rotate: false
+  xy: 804, 556
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-02-up
+  rotate: false
+  xy: 804, 404
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-03-dn
+  rotate: false
+  xy: 404, 5
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-03-up
+  rotate: false
+  xy: 556, 5
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-04-dn
+  rotate: false
+  xy: 706, 252
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-04-up
+  rotate: false
+  xy: 858, 252
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-05-dn
+  rotate: false
+  xy: 708, 13
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+level-05-up
+  rotate: false
+  xy: 860, 13
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+moon
+  rotate: false
+  xy: 2, 2
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
 options-dn
   rotate: false
-  xy: 804, 725
+  xy: 406, 443
   size: 200, 85
   orig: 200, 85
   offset: 0, 0
   index: -1
 options-up
   rotate: false
-  xy: 804, 638
-  size: 200, 85
-  orig: 200, 85
-  offset: 0, 0
-  index: -1
-play-dn
-  rotate: false
-  xy: 804, 551
+  xy: 706, 165
   size: 200, 85
   orig: 200, 85
   offset: 0, 0
@@ -64,107 +155,30 @@ spacerunners-ui2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-astronaut
-  rotate: false
-  xy: 2, 306
-  size: 300, 284
-  orig: 300, 284
-  offset: 0, 0
-  index: -1
-level-01-dn
-  rotate: false
-  xy: 404, 842
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-01-up
-  rotate: false
-  xy: 2, 154
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-02-dn
-  rotate: false
-  xy: 404, 690
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-02-up
-  rotate: false
-  xy: 556, 842
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-03-dn
-  rotate: false
-  xy: 2, 2
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-03-up
-  rotate: false
-  xy: 556, 690
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-04-dn
-  rotate: false
-  xy: 708, 842
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-04-up
-  rotate: false
-  xy: 708, 690
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-05-dn
-  rotate: false
-  xy: 860, 842
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-level-05-up
-  rotate: false
-  xy: 860, 690
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
 level-06-dn
   rotate: false
-  xy: 154, 154
+  xy: 2, 89
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-06-up
   rotate: false
-  xy: 154, 2
+  xy: 154, 89
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
-moon
+play-dn
   rotate: false
-  xy: 2, 592
-  size: 400, 400
-  orig: 400, 400
+  xy: 2, 2
+  size: 200, 85
+  orig: 200, 85
   offset: 0, 0
   index: -1
 play-up
   rotate: false
-  xy: 404, 603
+  xy: 306, 154
   size: 200, 85
   orig: 200, 85
   offset: 0, 0

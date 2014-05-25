@@ -8,7 +8,9 @@ level-02: {down: level-02-dn, up: level-02-up},
 level-03: {down: level-03-dn, up: level-03-up},
 level-04: {down: level-04-dn, up: level-04-up},
 level-05: {down: level-05-dn, up: level-05-up},
-level-06: {down: level-06-dn, up: level-06-up}
+level-06: {down: level-06-dn, up: level-06-up},
+back: {down: boton-anterior-dn, up: boton-anterior-up},
+next: {down: boton-pag-sig-locked-dn, up: boton-pag-sig-locked-up}
 },
 com.badlogic.gdx.scenes.scene2d.ui.Image: {
 background: { drawable: background },

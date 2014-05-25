@@ -122,7 +122,42 @@ enemy-forward
   orig: 34, 31
   offset: 0, 0
   index: -1
-goal
+goal1
+  rotate: false
+  xy: 638, 71
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+goal6
+  rotate: false
+  xy: 638, 71
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+goal3
+  rotate: false
+  xy: 638, 71
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+goal2
+  rotate: false
+  xy: 638, 71
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+goal5
+  rotate: false
+  xy: 638, 71
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+goal4
   rotate: false
   xy: 638, 71
   size: 200, 195
