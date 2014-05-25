@@ -402,11 +402,21 @@ public class Assets implements Disposable, AssetErrorListener
 	// Goal
 	public class AssetGoal
 	{
-		public final AtlasRegion goal;
+		public final AtlasRegion goal1;
+		public final AtlasRegion goal2;
+		public final AtlasRegion goal3;
+		public final AtlasRegion goal4;
+		public final AtlasRegion goal5;
+		public final AtlasRegion goal6;
 
 		public AssetGoal(TextureAtlas atlas)
 		{
-			goal = atlas.findRegion("goal");
+			goal1 = atlas.findRegion("goal1");
+			goal2 = atlas.findRegion("goal2");
+			goal3 = atlas.findRegion("goal3");
+			goal4 = atlas.findRegion("goal4");
+			goal5 = atlas.findRegion("goal5");
+			goal6 = atlas.findRegion("goal6");
 		}
 	}
 

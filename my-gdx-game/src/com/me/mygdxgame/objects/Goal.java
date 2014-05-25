@@ -8,13 +8,31 @@ public class Goal extends AbstractGameObject {
 	private TextureRegion regGoal;
 	private boolean finish;
 
-	public Goal() {
-		init();
+	public Goal(int level) {
+		init(level);
 	}
 
-	private void init() {
+	private void init(int level) {
 		dimension.set(3.0f, 3.0f);
-		regGoal = Assets.instance.goal.goal;
+		switch (level) { // Asignamos un diseño de meta distinto según el nivel
+		case 1:
+			regGoal = Assets.instance.goal.goal1;
+			break;
+		case 2:
+			regGoal = Assets.instance.goal.goal2;
+			break;
+		case 3:
+			regGoal = Assets.instance.goal.goal3;
+			break;
+		case 4:
+			regGoal = Assets.instance.goal.goal4;
+			break;
+		case 5:
+			regGoal = Assets.instance.goal.goal5;
+			break;
+		default:
+			regGoal = Assets.instance.goal.goal6;
+		}
 		// Set bounding box for collision detection
 		bounds.set(1, Float.MIN_VALUE, 10, Float.MAX_VALUE);
 		origin.set(dimension.x / 2.0f, -1.0f);
@@ -29,7 +47,7 @@ public class Goal extends AbstractGameObject {
 				scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
 				reg.getRegionWidth(), reg.getRegionHeight(), false, false);
 	}
-	
+
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
@@ -39,5 +57,5 @@ public class Goal extends AbstractGameObject {
 			velocity.x = 0;
 		}
 	}
-	
+
 }

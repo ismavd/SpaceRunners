@@ -31,14 +31,13 @@ import com.me.mygdxgame.utils.Constants;
 import com.me.mygdxgame.utils.GamePreferences;
 import com.me.mygdxgame.utils.CharacterSkin;
 
-public class LevelScreen extends AbstractGameScreen
-{
+public class LevelScreen extends AbstractGameScreen {
 
 	private Stage stage;
 	private Skin skinCanyonBunny;
-	
+
 	private Image imgBackground;
-	
+
 	// Menú de selección de nivel.
 	private Button btnNivel1;
 	private Button btnNivel2;
@@ -47,28 +46,27 @@ public class LevelScreen extends AbstractGameScreen
 	private Button btnNivel5;
 	private Button btnNivel6;
 	private Button btnExit;
-	
+	private Button btnNext;
+
 	// debug
 	private final float DEBUG_REBUILD_INTERVAL = 5.0f;
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
-	
+
 	private static final String TAG = MenuScreen.class.getName();
 
 	private Skin skinLibgdx;
 
 	/*-----------------------------------------MÉTODOS----------------------------------------------*/
-	
+
 	// Constructor
-	public LevelScreen(DirectedGame game) 
-	{
+	public LevelScreen(DirectedGame game) {
 		super(game);
 		cargarNiveles();
 	}
-	
-	// 
-	private void cargarNiveles() 
-	{
+
+	//
+	private void cargarNiveles() {
 		Constants.niveles = new HashMap<Integer, String>();
 		Constants.niveles.put(1, Constants.LEVEL_01);
 		Constants.niveles.put(2, Constants.LEVEL_02);
@@ -77,214 +75,210 @@ public class LevelScreen extends AbstractGameScreen
 		Constants.niveles.put(5, Constants.LEVEL_05);
 		Constants.niveles.put(6, Constants.LEVEL_06);
 	}
-	
-	
-	private void rebuildStage() 
-	{
-		skinCanyonBunny = new Skin(Gdx.files.internal(Constants.SKIN_SPACERUNNERS_UI), new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
-		skinLibgdx = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI), new TextureAtlas(Constants.TEXTURE_ATLAS_LIBGDX_UI));
+
+	private void rebuildStage() {
+		skinCanyonBunny = new Skin(
+				Gdx.files.internal(Constants.SKIN_SPACERUNNERS_UI),
+				new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
+		skinLibgdx = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI),
+				new TextureAtlas(Constants.TEXTURE_ATLAS_LIBGDX_UI));
 
 		// Generamos las diferentes capas de los menús.
-		Table layerBackground = buildBackgroundLayer(); //Capa con el fondo de pantalla.
-		Table layerObjects = buildObjectsLayer(); //Capa con los botones de nivel
-		//Table layerExit = buildExitLayer(); //Capa con el botón de salida
-		//layerExit.setSize(1, 1);
+		Table layerBackground = buildBackgroundLayer(); // Capa con el fondo de
+														// pantalla.
+		Table layerObjects = buildObjectsLayer(); // Capa con los botones de
+													// nivel
+		Table layerExit = buildExitLayer(); // Capa con el botón de salida
+		Table layerNextWorld = buildNextWorldLayer(); // Capa con el botón de
+														// cambio de mundo
+		// layerExit.setSize(1, 1);
 		// assemble stage for menu screen
-		stage.clear(); //Limpiamos 
-		
-		//Creamos una nueva pila donde incluiremos las capas con las diferentes imágenes.
-		Stack stack = new Stack();  
-		stage.addActor(stack); //Añadimos la pila.
-		stack.setSize(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT); //Adaptamos el tamaño de la pila a la ventana de juego.
-		
-		//Añadimos las capas a la pila.
+		stage.clear(); // Limpiamos
+
+		// Creamos una nueva pila donde incluiremos las capas con las diferentes
+		// imágenes.
+		Stack stack = new Stack();
+		stage.addActor(stack); // Añadimos la pila.
+		stack.setSize(Constants.VIEWPORT_GUI_WIDTH,
+				Constants.VIEWPORT_GUI_HEIGHT); // Adaptamos el tamaño de la
+												// pila a la ventana de juego.
+
+		// Añadimos las capas a la pila.
 		stack.add(layerBackground);
 		stack.add(layerObjects);
-		//stack.add(layerExit);
-		//layerExit.setSize(1,1);
+		stack.add(layerExit);
+		stack.add(layerNextWorld);
+		// layerExit.setSize(1,1);
 	}
 
-	//Devuelve un elemento Table (capa) que contiene el fondo del menú principal.
-	private Table buildBackgroundLayer() 
-	{
+	// Devuelve un elemento Table (capa) que contiene el fondo del menú
+	// principal.
+	private Table buildBackgroundLayer() {
 		Table layer = new Table();
-		imgBackground = new Image(skinCanyonBunny, "background"); //Buscamos la imágen de fondo.
-		layer.add(imgBackground); //La añadimos a la capa.
-		
+		imgBackground = new Image(skinCanyonBunny, "background"); // Buscamos la
+																	// imágen de
+																	// fondo.
+		layer.add(imgBackground); // La añadimos a la capa.
+
 		return layer;
 	}
 
-	
-	private Table buildObjectsLayer() 
-	{
+	private Table buildObjectsLayer() {
 		Table layer = new Table();
 
-		// Distribuimos las columnas que se añadan para que las de los extremos se junten.
-		layer.defaults().expand(); //Expandimos las celdas de la tabla para distribuirlas de igual forma por la pantalla.
+		// Distribuimos las columnas que se añadan para que las de los extremos
+		// se junten.
+		layer.defaults().expand(); // Expandimos las celdas de la tabla para
+									// distribuirlas de igual forma por la
+									// pantalla.
 		layer.columnDefaults(0).padLeft(100.0f);
 		layer.columnDefaults(2).padRight(100.0f);
-		
+
 		btnNivel1 = new Button(skinCanyonBunny, "level-01");
-		layer.add(btnNivel1); //Añadimos el primer botón
-		
-		btnNivel1.addListener(new ChangeListener() 
-		{
-			public void changed(ChangeEvent event, Actor actor)
-			{
-				onPlayClicked(1,20,0,301);
+		layer.add(btnNivel1); // Añadimos el primer botón
+
+		btnNivel1.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(1, 20, 0, 151);
 			}
 		});
-		
-		//Botón 2
+
+		// Botón 2
 		btnNivel2 = new Button(skinCanyonBunny, "level-02");
 		layer.add(btnNivel2);
-		
-		btnNivel2.addListener(new ChangeListener() 
-		{
-			public void changed(ChangeEvent event, Actor actor) 
-			{
-				onPlayClicked(2,20,0,301);
+
+		btnNivel2.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(2, 20, 0, 151);
 			}
 		});
-		
-		//Botón 3
+
+		// Botón 3
 		btnNivel3 = new Button(skinCanyonBunny, "level-03");
 		layer.add(btnNivel3);
-		
-		btnNivel3.addListener(new ChangeListener()
-		{
-			public void changed(ChangeEvent event, Actor actor) 
-			{
-				onPlayClicked(3,20,0,301);
+
+		btnNivel3.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(3, 20, 0, 151);
 			}
 		});
-		
-		layer.row(); //Coloca los siguientes elementos de la capa en otra fila.
-		
-		//Botón 4
+
+		layer.row(); // Coloca los siguientes elementos de la capa en otra fila.
+
+		// Botón 4
 		btnNivel4 = new Button(skinCanyonBunny, "level-04");
 		layer.add(btnNivel4);
 
-		btnNivel4.addListener(new ChangeListener() 
-		{
-			public void changed(ChangeEvent event, Actor actor) 
-			{
-				onPlayClicked(4,20,0,301);
+		btnNivel4.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(4, 20, 0, 151);
 			}
 		});
-		
-		//Botón 5
+
+		// Botón 5
 		btnNivel5 = new Button(skinCanyonBunny, "level-05");
 		layer.add(btnNivel5);
 
-		btnNivel5.addListener(new ChangeListener() 
-		{
-			public void changed(ChangeEvent event, Actor actor)
-			{
-				onPlayClicked(5,20,0,301);
+		btnNivel5.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(5, 20, 0, 151);
 			}
 		});
-		
-		//Botón 6
+
+		// Botón 6
 		btnNivel6 = new Button(skinCanyonBunny, "level-06");
 		layer.add(btnNivel6);
 
-		btnNivel6.addListener(new ChangeListener() 
-		{
-			public void changed(ChangeEvent event, Actor actor)
-			{
-				onPlayClicked(6,20,0,-1);
+		btnNivel6.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				onPlayClicked(6, 20, 0, -1);
 			}
 		});
-		
-		if (debugEnabled)
-		{
+
+		if (debugEnabled) {
 			layer.debug();
 		}
 		return layer;
 	}
-	
-	private Table buildExitLayer()
-	{
+
+	private Table buildExitLayer() {
 		Table layer = new Table();
-		layer.padLeft(-300.0f);
-		layer.padBottom(0.0f);
+		layer.padLeft(-700.0f);
+		layer.padBottom(-300.0f);
 		btnExit = new Button(skinCanyonBunny, "back");
 		layer.add(btnExit);
-		btnExit.addListener(new ChangeListener() 
-		{
-			public void changed(ChangeEvent event, Actor actor)
-			{
+		btnExit.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
 				onExitClicked();
 			}
 		});
 		return layer;
 	}
-	
+
+	private Table buildNextWorldLayer() {
+		Table layer = new Table();
+		layer.padLeft(700.0f);
+		btnNext = new Button(skinCanyonBunny, "next");
+		layer.add(btnNext);
+		return layer;
+	}
+
 	// Carga el nivel seleccionado al pulsar sobre el botón correspondiente.
-	private void onPlayClicked(int level, int pieces, int score, int time) 
-	{
+	private void onPlayClicked(int level, int pieces, int score, int time) {
 		ScreenTransition transition = ScreenTransitionSlice.init(2,
 				ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
-		game.setScreen(new GameScreen(game, level, pieces, score, time), transition);
+		game.setScreen(new GameScreen(game, level, pieces, score, time),
+				transition);
 	}
-	
+
 	// Para salir de la pantalla
-	private void onExitClicked() 
-	{
+	private void onExitClicked() {
 		game.setScreen(new MenuScreen(game));
 	}
-	
+
 	@Override
-	public void show() 
-	{
+	public void show() {
 		stage = new Stage();
 		rebuildStage();
 	}
 
-	
 	@Override
-	public void hide() 
-	{
+	public void hide() {
 		stage.dispose();
 		skinCanyonBunny.dispose();
 		skinLibgdx.dispose();
 	}
 
-	
 	@Override
-	public void pause() 
-	{
+	public void pause() {
 		super.pause();
 	}
-	
-	//Renderiza la pantalla del menú principal.
-	public void render(float deltaTime) 
-	{
+
+	// Renderiza la pantalla del menú principal.
+	public void render(float deltaTime) {
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		if (debugEnabled) 
-		{
+		if (debugEnabled) {
 			debugRebuildStage -= deltaTime;
-			if (debugRebuildStage <= 0) 
-			{
+			if (debugRebuildStage <= 0) {
 				debugRebuildStage = DEBUG_REBUILD_INTERVAL;
 				rebuildStage();
 			}
-		}	
+		}
 		stage.act(deltaTime);
 		stage.draw();
 		Table.drawDebug(stage);
 	}
-	
+
 	@Override
-	public void resize(int width, int height) 
-	{
-		// Establecemos de nuevo los elementos del menú al nuevo tamaño de ventana.
-		stage.setViewport(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT, false);
+	public void resize(int width, int height) {
+		// Establecemos de nuevo los elementos del menú al nuevo tamaño de
+		// ventana.
+		stage.setViewport(Constants.VIEWPORT_GUI_WIDTH,
+				Constants.VIEWPORT_GUI_HEIGHT, false);
 	}
-	
+
 	@Override
 	public InputProcessor getInputProcessor() {
 		return stage;

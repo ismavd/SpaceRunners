@@ -58,7 +58,7 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	private DirectedGame game;
 
-	// Rectangles for collision detection
+	// Rectángulos de detección de colisiones entre objetos
 	private Rectangle r1 = new Rectangle();
 	private Rectangle r2 = new Rectangle();
 	private Rectangle r3 = new Rectangle();
@@ -141,8 +141,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				* Gdx.graphics.getHeight(),
 				(float) 0.058594 * Gdx.graphics.getWidth());
 
-		// Dimensiones de la pantalla en versión Desktop: Width = 1280; Height =
-		// 720
+		// Dimensiones de la pantalla en versión Desktop: Width = 1280; Height = 720
 		// Botones del menú de pausa
 		cPlay.set((float) 0.1515625 * Gdx.graphics.getWidth(),
 				(float) 0.2833333333333333 * Gdx.graphics.getHeight(),
@@ -166,7 +165,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		score = lastScore;
 		goalReached = false;
 		enemyHit = false;
-		level = new Level(getLevel(nivel), checkpointReached);
+		level = new Level(getLevel(nivel), checkpointReached, nivel);
 		cameraHelper.setTarget(level.astronaut);
 		paused = false;
 		time = startTime;
@@ -294,7 +293,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		ScreenTransition transition = ScreenTransitionSlice.init(2,
 				ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
 		if (nivel != 5)
-			game.setScreen(new GameScreen(game, nivel + 1, 20, score, 301), transition);
+			game.setScreen(new GameScreen(game, nivel + 1, 20, score, 151), transition);
 		else
 			game.setScreen(new GameScreen(game, nivel + 1, 20, score, -1), transition);
 	}
@@ -552,7 +551,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 	}
 
-	private void onCollisionAstronautWithGeiser(BouncingPlatform bouncingPlatform) {
+	private void onCollisionAstronautWithBouncingPlatform(BouncingPlatform bouncingPlatform) {
 		if (!bouncingPlatform.active)
 			bouncingPlatform.active = true;
 		else
@@ -628,7 +627,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		Gdx.app.log(TAG, "Feather collected");
 	}
 
-	private void onCollisionAstronautWithCarrot(ExtraLife extraLife) {
+	private void onCollisionAstronautWithExtraLife(ExtraLife extraLife) {
 		extraLife.collected = true;
 
 		if (lives == 3) {
@@ -645,6 +644,10 @@ public class WorldController extends InputAdapter implements Disposable {
 			piecesSave = pieces;
 		checkpoint.active = true;
 		checkpointReached = true;
+		if (time > 75) {
+			startTime = time;
+		} else
+			startTime = 75;
 		Gdx.app.log(TAG, "Checkpoint reached");
 	}
 
@@ -762,7 +765,7 @@ public class WorldController extends InputAdapter implements Disposable {
 			r1.set(level.astronaut.position.x, level.astronaut.position.y,
 					level.astronaut.bounds.width, level.astronaut.bounds.height);
 
-			// Test collision: Bunny Head <-> Rocks
+			// Test collision: Astronaut <-> Rocks
 			for (Rock rock : level.rocks) {
 				r2.set(rock.position.x, rock.position.y, rock.bounds.width,
 						rock.bounds.height);
@@ -859,16 +862,16 @@ public class WorldController extends InputAdapter implements Disposable {
 					// if (!r1.overlaps(r2))
 					continue;
 				}
-				// ((Geiser)geiser).active = true;
+				// ((BouncingPlatform)geiser).active = true;
 				if (!bouncingPlatform.active && (isJumpPressed(0) || isJumpPressed(1))) {
 					bouncingPlatform.time = 50;
 				}
-				onCollisionAstronautWithGeiser(bouncingPlatform);
+				onCollisionAstronautWithBouncingPlatform(bouncingPlatform);
 				// IMPORTANT: must do all collisions for valid
 				// edge testing on rocks.
 			}
 
-			// Test collision: Bunny Head <-> Walls
+			// Test collision: Astronaut <-> Walls
 			for (Wall wall : level.walls) {
 				r2.set(wall.position.x, wall.position.y, wall.bounds.width,
 						wall.bounds.height);
@@ -881,7 +884,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				// edge testing on rocks.
 			}
 
-			// Test collision: Bunny Head <-> Gold Coins
+			// Test collision: Astronaut <-> Gold Coins
 			for (Piece piece : level.pieces) {
 				if (piece.collected) {
 					continue;
@@ -897,7 +900,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Bunny Head <-> Feathers
+			// Test collision: Astronaut <-> Feathers
 			for (FlyPower flyPower : level.flyPowers) {
 				if (flyPower.collected) {
 					continue;
@@ -913,7 +916,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Bunny Head <-> Carrots
+			// Test collision: Astronaut <-> Carrots
 			for (ExtraLife extraLife : level.extraLifes) {
 				if (extraLife.collected) {
 					continue;
@@ -926,11 +929,11 @@ public class WorldController extends InputAdapter implements Disposable {
 					continue;
 				}
 
-				onCollisionAstronautWithCarrot(extraLife);
+				onCollisionAstronautWithExtraLife(extraLife);
 				break;
 			}
 
-			// Test collision: Bunny Head <-> Checkpoint
+			// Test collision: Astronaut <-> Checkpoint
 			for (Checkpoint checkpoint : level.checkpoint) {
 				if (checkpoint.active) {
 					continue;
@@ -947,7 +950,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Bunny Head || Rock <-> Box
+			// Test collision: Astronaut || Rock <-> Box
 			for (Box box : level.boxes) {
 				r2.set(box.position.x, box.position.y, box.bounds.width,
 						box.bounds.height);
@@ -977,7 +980,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 			}
 
-			// Test collision: Bunny Head <-> Enemy || Laser <-> Enemy
+			// Test collision: Astronaut <-> Enemy || Laser <-> Enemy
 			for (Enemy enemy : level.enemies) {
 				r2.set(enemy.position.x, enemy.position.y, enemy.bounds.width,
 						enemy.bounds.height);
@@ -997,7 +1000,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Bunny Head <-> Enemy Forward || Laser <-> Enemy
+			// Test collision: Astronaut <-> Enemy Forward || Laser <-> Enemy
 			// Forward
 			for (EnemyForward enemy : level.enemiesFwd) {
 				r2.set(enemy.position.x, enemy.position.y, enemy.bounds.width,
@@ -1013,6 +1016,8 @@ public class WorldController extends InputAdapter implements Disposable {
 				// izquierda
 				if (r2.x - r1.x < 4)
 					enemy.moving = true;
+				if (isGoalReached())
+					enemy.moving = false;
 				if (!r1.overlaps(r2)) {
 					continue;
 				}
@@ -1022,7 +1027,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Bunny Head <-> Giant
+			// Test collision: Astronaut <-> Giant
 			if (level.giant != null) {
 				r2.set(level.giant.position.x, level.giant.position.y,
 						level.giant.bounds.width, level.giant.bounds.height);
@@ -1040,7 +1045,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 			}
 
-			// Test collision: Bunny Head <-> Goal
+			// Test collision: Astronaut <-> Goal
 			if (!goalReached) {
 				r2.set(level.goal.bounds);
 				r2.x += level.goal.position.x;

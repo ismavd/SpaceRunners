@@ -98,14 +98,18 @@ public class Level {
 
 	// Elemento que constituye la meta del nivel.
 	public Goal goal;
+	
+	private int level; // Alacenar el nivel es necesario para renderizar una meta u otra.
 
 	// Constructor
-	public Level(String filename, boolean checkpointReached) {
-		init(filename, checkpointReached);
+	public Level(String filename, boolean checkpointReached, int level) {
+		init(filename, checkpointReached, level);
 		// AudioManager.instance.play(Assets.instance.music.song02);
 	}
 
-	private void init(String filename, boolean checkpointReached) {
+	private void init(String filename, boolean checkpointReached, int level) {
+		this.level = level;
+		
 		// Personaje del jugador.
 		astronaut = null;
 
@@ -351,7 +355,7 @@ public class Level {
 				} else if (BLOCK_TYPE.GOAL.sameColor(currentPixel)) // Punto de
 																	// meta
 				{
-					obj = new Goal();
+					obj = new Goal(level);
 					offsetHeight = 0f;
 					obj.position.set(pixelX, baseHeight + offsetHeight);
 					goal = (Goal) obj;
@@ -390,6 +394,7 @@ public class Level {
 	public void render(SpriteBatch batch) {
 
 		mountains.render(batch); // Colocamos las montañas en el nivel.
+		
 		goal.render(batch); // Dibujamos la meta.
 
 		// Generamos las rocas.
