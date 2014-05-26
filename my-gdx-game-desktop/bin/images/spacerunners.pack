@@ -5,168 +5,126 @@ filter: Nearest,Nearest
 repeat: none
 PowerUp
   rotate: false
-  xy: 862, 213
+  xy: 969, 266
   size: 23, 20
   orig: 23, 20
   offset: 0, 0
   index: -1
-anim_astronaut_copter
+anim_astronaut_normal
   rotate: false
-  xy: 2, 43
-  size: 125, 112
-  orig: 125, 112
+  xy: 624, 23
+  size: 130, 85
+  orig: 130, 85
   offset: 0, 0
   index: 1
-anim_astronaut_copter
+anim_astronaut_normal
   rotate: false
-  xy: 129, 43
-  size: 125, 112
-  orig: 125, 112
+  xy: 756, 23
+  size: 130, 85
+  orig: 130, 85
   offset: 0, 0
   index: 2
-anim_astronaut_copter
+anim_astronaut_normal
   rotate: false
-  xy: 256, 43
-  size: 125, 112
-  orig: 125, 112
+  xy: 888, 23
+  size: 130, 85
+  orig: 130, 85
   offset: 0, 0
   index: 3
-anim_astronaut_copter
-  rotate: false
-  xy: 383, 43
-  size: 125, 112
-  orig: 125, 112
-  offset: 0, 0
-  index: 4
-anim_astronaut_copter
-  rotate: false
-  xy: 510, 43
-  size: 125, 112
-  orig: 125, 112
-  offset: 0, 0
-  index: 5
 anim_gold_coin
   rotate: false
-  xy: 962, 67
+  xy: 2, 2
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: 1
 anim_gold_coin
   rotate: false
-  xy: 962, 9
+  xy: 60, 2
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: 2
 anim_gold_coin
   rotate: false
-  xy: 637, 13
+  xy: 118, 2
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: 3
 anim_gold_coin
   rotate: false
-  xy: 695, 13
+  xy: 566, 99
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: 4
 anim_gold_coin
   rotate: false
-  xy: 753, 2
+  xy: 566, 41
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: 5
-boton_adelante
+anim_gold_coin
   rotate: false
-  xy: 638, 268
-  size: 300, 300
-  orig: 300, 300
+  xy: 176, 9
+  size: 56, 56
+  orig: 56, 56
   offset: 0, 0
-  index: -1
-box
-  rotate: false
-  xy: 840, 3
-  size: 120, 120
-  orig: 120, 120
-  offset: 0, 0
-  index: -1
+  index: 6
 carrot
   rotate: false
-  xy: 840, 214
+  xy: 969, 354
   size: 20, 52
   orig: 20, 52
   offset: 0, 0
   index: -1
+checkpoint
+  rotate: false
+  xy: 638, 110
+  size: 329, 458
+  orig: 329, 458
+  offset: 0, 0
+  index: -1
+cloud01
+  rotate: false
+  xy: 386, 77
+  size: 178, 78
+  orig: 178, 78
+  offset: 0, 0
+  index: -1
+cloud02
+  rotate: false
+  xy: 2, 67
+  size: 198, 88
+  orig: 198, 88
+  offset: 0, 0
+  index: -1
 cloud03
   rotate: false
-  xy: 840, 125
+  xy: 202, 70
   size: 182, 85
   orig: 182, 85
   offset: 0, 0
   index: -1
 enemy
   rotate: false
-  xy: 898, 235
+  xy: 969, 288
   size: 34, 31
   orig: 34, 31
   offset: 0, 0
   index: -1
 enemy-forward
   rotate: false
-  xy: 862, 235
+  xy: 969, 321
   size: 34, 31
   orig: 34, 31
   offset: 0, 0
   index: -1
-goal1
-  rotate: false
-  xy: 638, 71
-  size: 200, 195
-  orig: 200, 195
-  offset: 0, 0
-  index: -1
-goal6
-  rotate: false
-  xy: 638, 71
-  size: 200, 195
-  orig: 200, 195
-  offset: 0, 0
-  index: -1
-goal3
-  rotate: false
-  xy: 638, 71
-  size: 200, 195
-  orig: 200, 195
-  offset: 0, 0
-  index: -1
-goal2
-  rotate: false
-  xy: 638, 71
-  size: 200, 195
-  orig: 200, 195
-  offset: 0, 0
-  index: -1
-goal5
-  rotate: false
-  xy: 638, 71
-  size: 200, 195
-  orig: 200, 195
-  offset: 0, 0
-  index: -1
-goal4
-  rotate: false
-  xy: 638, 71
-  size: 200, 195
-  orig: 200, 195
-  offset: 0, 0
-  index: -1
 laser
   rotate: false
-  xy: 2, 36
+  xy: 2, 60
   size: 125, 5
   orig: 125, 5
   offset: 0, 0
@@ -192,18 +150,53 @@ nube-de-polvo
   orig: 634, 411
   offset: 0, 0
   index: -1
+piece-icon
+  rotate: false
+  xy: 234, 12
+  size: 56, 56
+  orig: 56, 56
+  offset: 0, 0
+  index: -1
+piece1
+  rotate: false
+  xy: 234, 12
+  size: 56, 56
+  orig: 56, 56
+  offset: 0, 0
+  index: -1
+piece3
+  rotate: false
+  xy: 292, 13
+  size: 55, 55
+  orig: 55, 55
+  offset: 0, 0
+  index: -1
+piece4
+  rotate: false
+  xy: 349, 9
+  size: 55, 55
+  orig: 55, 55
+  offset: 0, 0
+  index: -1
+piece5
+  rotate: false
+  xy: 406, 9
+  size: 55, 55
+  orig: 55, 55
+  offset: 0, 0
+  index: -1
 platform
   rotate: false
-  xy: 753, 60
+  xy: 386, 66
   size: 79, 9
   orig: 79, 9
   offset: 0, 0
   index: -1
-rock_edge
+poison_overlay
   rotate: false
-  xy: 940, 212
-  size: 63, 356
-  orig: 63, 356
+  xy: 969, 408
+  size: 32, 160
+  orig: 32, 160
   offset: 0, 0
   index: -1
 
@@ -211,150 +204,174 @@ spacerunners2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-anim_astronaut_normal
+anim_astronaut_copter
   rotate: false
-  xy: 178, 189
-  size: 130, 85
-  orig: 130, 85
+  xy: 897, 70
+  size: 125, 112
+  orig: 125, 112
   offset: 0, 0
   index: 1
-anim_astronaut_normal
+anim_astronaut_copter
   rotate: false
-  xy: 178, 102
-  size: 130, 85
-  orig: 130, 85
+  xy: 538, 2
+  size: 125, 112
+  orig: 125, 112
   offset: 0, 0
   index: 2
-anim_astronaut_normal
+anim_astronaut_copter
   rotate: false
-  xy: 178, 15
-  size: 130, 85
-  orig: 130, 85
+  xy: 665, 2
+  size: 125, 112
+  orig: 125, 112
   offset: 0, 0
   index: 3
-anim_gold_coin
+boton_adelante
   rotate: false
-  xy: 441, 664
-  size: 56, 56
-  orig: 56, 56
-  offset: 0, 0
-  index: 6
-astronaut
-  rotate: false
-  xy: 178, 276
-  size: 122, 82
-  orig: 122, 82
+  xy: 598, 720
+  size: 300, 300
+  orig: 300, 300
   offset: 0, 0
   index: -1
 boton_atras
   rotate: false
-  xy: 2, 360
+  xy: 598, 418
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 boton_jump
   rotate: false
-  xy: 441, 722
+  xy: 595, 116
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
-checkpoint
+box
   rotate: false
-  xy: 304, 494
-  size: 185, 166
-  orig: 185, 166
+  xy: 897, 184
+  size: 120, 120
+  orig: 120, 120
   offset: 0, 0
   index: -1
-cloud01
+goal1
   rotate: false
-  xy: 304, 324
-  size: 178, 78
-  orig: 178, 78
+  xy: 2, 12
+  size: 534, 164
+  orig: 534, 164
   offset: 0, 0
   index: -1
-cloud02
+goal4
   rotate: false
-  xy: 304, 404
-  size: 198, 88
-  orig: 198, 88
+  xy: 2, 178
+  size: 591, 420
+  orig: 591, 420
   offset: 0, 0
   index: -1
-giant
+goal5
   rotate: false
-  xy: 743, 736
-  size: 176, 286
-  orig: 176, 286
-  offset: 0, 0
-  index: -1
-life
-  rotate: false
-  xy: 2, 662
-  size: 437, 360
-  orig: 437, 360
-  offset: 0, 0
-  index: -1
-piece2
-  rotate: false
-  xy: 2, 662
-  size: 437, 360
-  orig: 437, 360
-  offset: 0, 0
-  index: -1
-piece-icon
-  rotate: false
-  xy: 955, 966
-  size: 56, 56
-  orig: 56, 56
-  offset: 0, 0
-  index: -1
-piece1
-  rotate: false
-  xy: 955, 966
-  size: 56, 56
-  orig: 56, 56
-  offset: 0, 0
-  index: -1
-piece3
-  rotate: false
-  xy: 499, 665
-  size: 55, 55
-  orig: 55, 55
-  offset: 0, 0
-  index: -1
-piece4
-  rotate: false
-  xy: 955, 909
-  size: 55, 55
-  orig: 55, 55
-  offset: 0, 0
-  index: -1
-piece5
-  rotate: false
-  xy: 556, 665
-  size: 55, 55
-  orig: 55, 55
+  xy: 2, 600
+  size: 594, 420
+  orig: 594, 420
   offset: 0, 0
   index: -1
 rock_middle
   rotate: false
-  xy: 2, 2
+  xy: 900, 664
   size: 86, 356
   orig: 86, 356
   offset: 0, 0
   index: -1
 wall
   rotate: false
-  xy: 90, 2
+  xy: 900, 306
   size: 86, 356
   orig: 86, 356
   offset: 0, 0
   index: -1
-water_overlay
+
+spacerunners3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+anim_astronaut_copter
   rotate: false
-  xy: 921, 862
-  size: 32, 160
-  orig: 32, 160
+  xy: 785, 514
+  size: 125, 112
+  orig: 125, 112
+  offset: 0, 0
+  index: 4
+anim_astronaut_copter
+  rotate: false
+  xy: 785, 400
+  size: 125, 112
+  orig: 125, 112
+  offset: 0, 0
+  index: 5
+astronaut
+  rotate: false
+  xy: 785, 628
+  size: 122, 82
+  orig: 122, 82
+  offset: 0, 0
+  index: -1
+giant
+  rotate: false
+  xy: 607, 424
+  size: 176, 286
+  orig: 176, 286
+  offset: 0, 0
+  index: -1
+goal3
+  rotate: false
+  xy: 2, 600
+  size: 603, 412
+  orig: 603, 412
+  offset: 0, 0
+  index: -1
+goal6
+  rotate: false
+  xy: 2, 2
+  size: 485, 420
+  orig: 485, 420
+  offset: 0, 0
+  index: -1
+life
+  rotate: false
+  xy: 489, 38
+  size: 437, 360
+  orig: 437, 360
+  offset: 0, 0
+  index: -1
+piece2
+  rotate: false
+  xy: 489, 38
+  size: 437, 360
+  orig: 437, 360
+  offset: 0, 0
+  index: -1
+rock_edge
+  rotate: false
+  xy: 909, 656
+  size: 63, 356
+  orig: 63, 356
+  offset: 0, 0
+  index: -1
+shooting-star
+  rotate: false
+  xy: 607, 712
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+
+spacerunners4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+goal2
+  rotate: false
+  xy: 2, 2
+  size: 603, 244
+  orig: 603, 244
   offset: 0, 0
   index: -1
