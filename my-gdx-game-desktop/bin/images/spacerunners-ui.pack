@@ -3,151 +3,137 @@ spacerunners-ui.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+asteroids
+  rotate: false
+  xy: 2, 306
+  size: 816, 702
+  orig: 816, 702
+  offset: 0, 0
+  index: -1
 astronaut
   rotate: false
-  xy: 404, 157
+  xy: 2, 20
   size: 300, 284
   orig: 300, 284
   offset: 0, 0
   index: -1
-background
-  rotate: false
-  xy: 2, 530
-  size: 800, 480
-  orig: 800, 480
-  offset: 0, 0
-  index: -1
 boton-anterior-dn
   rotate: false
-  xy: 956, 758
+  xy: 972, 756
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 boton-anterior-up
   rotate: false
-  xy: 956, 706
+  xy: 972, 704
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 boton-pag-sig-locked-dn
   rotate: false
-  xy: 956, 911
+  xy: 972, 909
   size: 50, 99
   orig: 50, 99
   offset: 0, 0
   index: -1
 boton-pag-sig-locked-up
   rotate: false
-  xy: 956, 810
+  xy: 972, 808
   size: 50, 99
   orig: 50, 99
   offset: 0, 0
   index: -1
 exit-dn
   rotate: false
-  xy: 2, 443
-  size: 200, 85
-  orig: 200, 85
-  offset: 0, 0
-  index: -1
-exit-up
-  rotate: false
-  xy: 204, 443
+  xy: 760, 11
   size: 200, 85
   orig: 200, 85
   offset: 0, 0
   index: -1
 level-01-dn
   rotate: false
-  xy: 804, 860
+  xy: 820, 858
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-01-up
   rotate: false
-  xy: 804, 708
+  xy: 820, 706
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-02-dn
   rotate: false
-  xy: 804, 556
+  xy: 820, 554
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-02-up
   rotate: false
-  xy: 804, 404
+  xy: 820, 402
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-03-dn
   rotate: false
-  xy: 404, 5
+  xy: 820, 250
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-03-up
   rotate: false
-  xy: 556, 5
+  xy: 304, 154
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-04-dn
   rotate: false
-  xy: 706, 252
+  xy: 456, 154
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-04-up
   rotate: false
-  xy: 858, 252
+  xy: 608, 154
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-05-dn
   rotate: false
-  xy: 708, 13
+  xy: 760, 98
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 level-05-up
   rotate: false
-  xy: 860, 13
+  xy: 304, 2
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
-moon
+level-06-dn
   rotate: false
-  xy: 2, 2
-  size: 400, 400
-  orig: 400, 400
+  xy: 456, 2
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
-options-dn
+level-06-up
   rotate: false
-  xy: 406, 443
-  size: 200, 85
-  orig: 200, 85
-  offset: 0, 0
-  index: -1
-options-up
-  rotate: false
-  xy: 706, 165
-  size: 200, 85
-  orig: 200, 85
+  xy: 608, 2
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
 
@@ -155,31 +141,64 @@ spacerunners-ui2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-level-06-dn
+background
+  rotate: false
+  xy: 2, 491
+  size: 800, 480
+  orig: 800, 480
+  offset: 0, 0
+  index: -1
+exit-up
+  rotate: false
+  xy: 804, 886
+  size: 200, 85
+  orig: 200, 85
+  offset: 0, 0
+  index: -1
+moon
   rotate: false
   xy: 2, 89
-  size: 150, 150
-  orig: 150, 150
+  size: 400, 400
+  orig: 400, 400
   offset: 0, 0
   index: -1
-level-06-up
-  rotate: false
-  xy: 154, 89
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-play-dn
+options-dn
   rotate: false
   xy: 2, 2
   size: 200, 85
   orig: 200, 85
   offset: 0, 0
   index: -1
-play-up
+options-up
   rotate: false
-  xy: 306, 154
+  xy: 404, 404
   size: 200, 85
   orig: 200, 85
+  offset: 0, 0
+  index: -1
+play-dn
+  rotate: false
+  xy: 804, 799
+  size: 200, 85
+  orig: 200, 85
+  offset: 0, 0
+  index: -1
+play-up
+  rotate: false
+  xy: 404, 317
+  size: 200, 85
+  orig: 200, 85
+  offset: 0, 0
+  index: -1
+
+spacerunners-ui3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+shuttle
+  rotate: false
+  xy: 2, 2
+  size: 677, 563
+  orig: 677, 563
   offset: 0, 0
   index: -1
