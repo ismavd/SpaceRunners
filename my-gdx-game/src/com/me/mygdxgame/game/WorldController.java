@@ -721,7 +721,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 	
 	private void onCollisionAstronautWithGoal() {
-		if (nivel == 1 || pieces >= piecesNeeded)
+		if (pieces >= piecesNeeded)
 			goalReached = true;
 
 		if (Constants.niveles.get(nivel + 1) == null) {

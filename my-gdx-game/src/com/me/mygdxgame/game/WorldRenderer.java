@@ -89,10 +89,9 @@ public class WorldRenderer implements Disposable {
 					0.35f, -0.35f, 0);
 			Assets.instance.fonts.defaultBig.draw(batch, worldController.pieces
 					+ "", x + 75, y + 37);
-			if (worldController.getNivel() != 1)
-				Assets.instance.fonts.defaultBig.draw(batch, "Consigue "
-						+ worldController.piecesNeeded + " piezas", x + 150,
-						y + 37);
+			Assets.instance.fonts.defaultBig
+					.draw(batch, "Consigue " + worldController.piecesNeeded
+							+ " piezas", x + 150, y + 37);
 		} else {
 
 			/*
@@ -110,10 +109,12 @@ public class WorldRenderer implements Disposable {
 			batch.draw(Assets.instance.piece.pieceIcon, x, y, 50, 50, 100, 100,
 					0.35f, -0.35f, 0);
 			if (worldController.getNivel() != 1)
-				Assets.instance.fonts.defaultBig.draw(batch, worldController.pieces
-						+ "/" + worldController.piecesNeeded, x + 75, y + 37);
+				Assets.instance.fonts.defaultBig.draw(batch,
+						worldController.pieces + "/"
+								+ worldController.piecesNeeded, x + 75, y + 37);
 			else
-				Assets.instance.fonts.defaultBig.draw(batch, worldController.pieces+"", x + 75, y + 37);
+				Assets.instance.fonts.defaultBig.draw(batch,
+						worldController.pieces + "", x + 75, y + 37);
 		}
 	}
 

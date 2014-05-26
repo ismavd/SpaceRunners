@@ -356,9 +356,10 @@ public class Level {
 																	// meta
 				{
 					obj = new Goal(level);
-					offsetHeight = 0f;
-					obj.position.set(pixelX, baseHeight + offsetHeight);
+					//offsetHeight = -0.15f;
+					//obj.position.set(pixelX, baseHeight + offsetHeight);
 					goal = (Goal) obj;
+					goal.setPosition(pixelX, baseHeight);
 				} else // Color de pixel u objeto desconocido
 				{
 					int r = 0xff & (currentPixel >>> 24); // red color channel
@@ -391,6 +392,7 @@ public class Level {
 		Gdx.app.debug(TAG, "level '" + filename + "' loaded");
 	}
 
+	// Los objetos se renderizan por capas: los primeros en el método se renderizan antes
 	public void render(SpriteBatch batch) {
 
 		mountains.render(batch); // Colocamos las montañas en el nivel.
