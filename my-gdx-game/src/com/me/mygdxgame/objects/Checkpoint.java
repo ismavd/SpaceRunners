@@ -14,7 +14,7 @@ public class Checkpoint extends AbstractGameObject {
 	}
 	
 	private void init() {
-		dimension.set(1f, 1f);
+		dimension.set(1f, 1.25f);
 		regCheckpoint = Assets.instance.checkpoint.checkpoint;
 		// Set bounding box for collision detection
 		bounds.set(0, 0, dimension.x, dimension.y);

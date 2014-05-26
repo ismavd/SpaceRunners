@@ -310,7 +310,7 @@ public class Level {
 				{
 					obj = new Checkpoint();
 					offsetHeight = 0.5f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y
+					obj.position.set(pixelX, baseHeight /** obj.dimension.y*/
 							+ offsetHeight);
 					checkpoint.add((Checkpoint) obj);
 

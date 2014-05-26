@@ -41,7 +41,7 @@ public class Mountains extends AbstractGameObject {
 			reg = regMountainLeft;
 			batch.draw(reg.getTexture(), origin.x + xRel + position.x
 					* parallaxSpeedX, origin.y + yRel + position.y, origin.x,
-					origin.y, dimension.x, dimension.y, scale.x, scale.y,
+					origin.y, dimension.x + 0.01f, dimension.y, scale.x, scale.y,
 					rotation, reg.getRegionX(), reg.getRegionY(),
 					reg.getRegionWidth(), reg.getRegionHeight(), false, false);
 			xRel += dimension.x;
@@ -49,7 +49,7 @@ public class Mountains extends AbstractGameObject {
 			reg = regMountainRight;
 			batch.draw(reg.getTexture(), origin.x + xRel + position.x
 					* parallaxSpeedX, origin.y + yRel + position.y, origin.x,
-					origin.y, dimension.x, dimension.y, scale.x, scale.y,
+					origin.y, dimension.x + 0.01f, dimension.y, scale.x, scale.y,
 					rotation, reg.getRegionX(), reg.getRegionY(),
 					reg.getRegionWidth(), reg.getRegionHeight(), false, false);
 			xRel += dimension.x;
