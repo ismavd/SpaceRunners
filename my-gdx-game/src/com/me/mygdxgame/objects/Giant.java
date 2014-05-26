@@ -17,7 +17,6 @@ public class Giant extends AbstractGameObject {
 	private void init() {
 		dimension.set(3.5f,4f);
 		regGiant = Assets.instance.giant.giant;
-		// Set bounding box for collision detection
 		bounds.set(0, 0, dimension.x - 1, dimension.y);
 		terminalVelocity.set(2.3f, 3.0f);
 		moving = true;

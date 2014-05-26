@@ -1,5 +1,7 @@
 package com.me.mygdxgame.objects;
 
+// Clase que genera una pared sólida. No ha sido utilizada en el código.
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.game.Assets;
@@ -17,13 +19,11 @@ public class Wall extends AbstractGameObject {
 		dimension.set(1, 1.5f);
 		regWall = Assets.instance.wall.wall;
 		System.out.println(regWall);
-		// Start length of this rock
 		setLength(1);
 	}
 
 	public void setLength(int length) {
 		this.length = length;
-		// Update bounding box for collision detection
 		bounds.set(0, 0, dimension.x , dimension.y * length);
 	}
 

@@ -35,7 +35,6 @@ public class Goal extends AbstractGameObject {
 			dimension.set(3.0f, 3.0f);
 			regGoal = Assets.instance.goal.goal6;
 		}
-		// Set bounding box for collision detection
 		bounds.set(1, Float.MIN_VALUE, 10, Float.MAX_VALUE);
 		origin.set(dimension.x / 2.0f, -1.0f);
 		finish = false;
@@ -71,7 +70,6 @@ public class Goal extends AbstractGameObject {
 			position.set(xBase, yBase - 0.3f);
 			regGoal = Assets.instance.goal.goal6;
 		}
-		// Set bounding box for collision detection
 		bounds.set(1, Float.MIN_VALUE, 10, Float.MAX_VALUE);
 		origin.set(dimension.x / 2.0f, -1.0f);
 		finish = false;

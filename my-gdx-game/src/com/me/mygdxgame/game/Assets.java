@@ -27,12 +27,12 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetAstronautPower astronautPower;
 	public AssetLife life;
 	
-	//Enemies
+	// Enmigos
 	public AssetEnemy enemy;
 	public AssetEnemyForward enemyFwd;
 	public AssetGiant giant;
 	
-	//Platforms
+	// Plataformas
 	public AssetRock rock;
 	public AssetPlatform platform;
 	public AssetMovingPlatform movingPlatform;
@@ -41,36 +41,35 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetBouncingPlatform bncPlatform;
 	public AssetWall wall;
 	
-	// Boxes
+	// Cajas
 	public AssetBox box;
 	
 	// Laser
 	public AssetLaser laser;
 	
-	//Items
+	// Objetos
 	public AssetPiece piece;
 	public AssetFlyPower flyPower;
 	public AssetCheckpoint checkpoint;
-	public AssetCarrot carrot;
+	public AssetExtraLife ExtraLife;
 	public AssetGoal goal;
 	
 	public AssetLevelDecoration levelDecoration;
 	public AssetFonts fonts;
 	
-	// Input buttons
+	// Botones de control
 	public AssetLeftButton leftButton;
 	public AssetRightButton rightButton;
 	public AssetJumpButton jumpButton;
 	
-	// Pause menu
+	// Menú de pausa
 	public AssetPause pause;
-	//public Asset
 	
-	// Sound
+	// Sonido
 	public AssetSounds sounds;
 	public AssetMusic music;
 
-	// singleton: prevent instantiation from other classes
+	// Patrón Singleton
 	private Assets() 
 	{
 		
@@ -79,28 +78,28 @@ public class Assets implements Disposable, AssetErrorListener
 	public void init(AssetManager assetManager) 
 	{
 		this.assetManager = assetManager;
-		// set asset manager error handler
+		
 		assetManager.setErrorListener(this);
-		// load texture atlas
+		
 		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
 		assetManager.load(Constants.TEXTURE_ATLAS_PAUSE, TextureAtlas.class);
-		// load sounds
+		
 		assetManager.load("sounds/jump.wav", Sound.class);
 		assetManager.load("sounds/jump_with_feather.wav", Sound.class);
 		assetManager.load("sounds/pickup_coin.wav", Sound.class);
 		assetManager.load("sounds/pickup_feather.wav", Sound.class);
 		assetManager.load("sounds/live_lost.wav", Sound.class);
-		// load music
+		
 		assetManager.load("music/keith303_-_brand_new_highscore.mp3", Music.class);
-		//assetManager.load("music/song02.mp3", Music.class);
-		// start loading assets and wait until finished
+		
+		
 		assetManager.finishLoading();
 		Gdx.app.debug(TAG,
 				"# of assets loaded: " + assetManager.getAssetNames().size);
 		for (String a : assetManager.getAssetNames())
 			Gdx.app.debug(TAG, "asset: " + a);
 		TextureAtlas atlas = assetManager.get(Constants.TEXTURE_ATLAS_OBJECTS);
-		// enable texture filtering for pixel smoothing
+		
 		for (Texture t : atlas.getTextures())
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
@@ -108,7 +107,7 @@ public class Assets implements Disposable, AssetErrorListener
 		for (Texture t : atlasPause.getTextures())
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
-		// create game resource objects
+		// Creación de los recursos de creación de objetos
 		fonts = new AssetFonts();
 		astronaut = new AssetAstronaut(atlas);
 		astronautPower = new AssetAstronautPower(atlas);
@@ -128,8 +127,8 @@ public class Assets implements Disposable, AssetErrorListener
 		piece = new AssetPiece(atlas);
 		flyPower = new AssetFlyPower(atlas);
 		checkpoint = new AssetCheckpoint(atlas);
-		// Carrot
-		carrot = new AssetCarrot(atlas);
+		
+		ExtraLife = new AssetExtraLife(atlas);
 		// Goal
 		goal = new AssetGoal(atlas);
 		// Buttons
@@ -251,13 +250,11 @@ public class Assets implements Disposable, AssetErrorListener
 
 	public class AssetRock 
 	{
-		public final AtlasRegion edge;
-		public final AtlasRegion middle;
+		public final AtlasRegion rock;
 
 		public AssetRock(TextureAtlas atlas)
 		{
-			edge = atlas.findRegion("rock_edge");
-			middle = atlas.findRegion("rock_middle");
+			rock = atlas.findRegion("rock");
 		}
 	}
 
@@ -388,18 +385,18 @@ public class Assets implements Disposable, AssetErrorListener
 		}
 	}
 
-	// Carrot
-	public class AssetCarrot
+	// Vida extra
+	public class AssetExtraLife
 	{
-		public final AtlasRegion carrot;
+		public final AtlasRegion life;
 
-		public AssetCarrot(TextureAtlas atlas)
+		public AssetExtraLife(TextureAtlas atlas)
 		{
-			carrot = atlas.findRegion("carrot");
+			life = atlas.findRegion("life");
 		}
 	}
 	
-	// Goal
+	// Meta: notar que hay una imagen distinta por nivel
 	public class AssetGoal
 	{
 		public final AtlasRegion goal1;
@@ -522,18 +519,17 @@ public class Assets implements Disposable, AssetErrorListener
 
 		public AssetFonts() 
 		{
-			// create three fonts using Libgdx's 15px bitmap font
 			defaultSmall = new BitmapFont(
 					Gdx.files.internal("images/arial-15.fnt"), true);
 			defaultNormal = new BitmapFont(
 					Gdx.files.internal("images/arial-15.fnt"), true);
 			defaultBig = new BitmapFont(
 					Gdx.files.internal("images/arial-15.fnt"), true);
-			// set font sizes
+			
 			defaultSmall.setScale(0.75f);
 			defaultNormal.setScale(1.0f);
 			defaultBig.setScale(2.0f);
-			// enable linear texture filtering for smooth fonts
+			
 			defaultSmall.getRegion().getTexture()
 					.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			defaultNormal.getRegion().getTexture()

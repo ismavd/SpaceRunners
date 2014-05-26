@@ -20,7 +20,7 @@ public abstract class AbstractGameObject {
 	public Rectangle bounds;
 	public Body body;
 
-	// Animations
+	// Animaciones
 	public float stateTime;
 	public Animation animation;
 
@@ -62,27 +62,27 @@ public abstract class AbstractGameObject {
 				velocity.x = Math.min(velocity.x + friction.x * deltaTime, 0);
 			}
 		}
-		// Apply acceleration
+		// Aplicar aceleración
 		velocity.x += acceleration.x * deltaTime;
-		// Make sure the object's velocity does not exceed the
-		// positive or negative terminal velocity
+		// Hay que asegurarse de que la velocidad del objeto no 
+		// exceda la velocidad terminal positiva o negativa
 		velocity.x = MathUtils.clamp(velocity.x, -terminalVelocity.x,
 				terminalVelocity.x);
 	}
 
 	protected void updateMotionY(float deltaTime) {
 		if (velocity.y != 0) {
-			// Apply friction
+			// Aplicar fricción
 			if (velocity.y > 0) {
 				velocity.y = Math.max(velocity.y - friction.y * deltaTime, 0);
 			} else {
 				velocity.y = Math.min(velocity.y + friction.y * deltaTime, 0);
 			}
 		}
-		// Apply acceleration
+		// Aplicar aceleración
 		velocity.y += acceleration.y * deltaTime;
-		// Make sure the object's velocity does not exceed the
-		// positive or negative terminal velocity
+		// Hay que asegurarse de que la velocidad del objeto no 
+		// exceda la velocidad terminal positiva o negativa
 		velocity.y = MathUtils.clamp(velocity.y, -terminalVelocity.y,
 				terminalVelocity.y);
 	}

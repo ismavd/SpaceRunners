@@ -21,7 +21,7 @@ public class Enemy extends AbstractGameObject{
 	}
 
 	private void init() {
-		dimension.set(0.5f,0.5f);
+		dimension.set(0.8f,0.5f);
 		regEnemy = Assets.instance.enemy.enemy;
 		// Set bounding box for collision detection
 		bounds.set(0, 0, dimension.x, dimension.y);

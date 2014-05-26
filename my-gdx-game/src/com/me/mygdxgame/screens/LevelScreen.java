@@ -228,7 +228,7 @@ public class LevelScreen extends AbstractGameScreen {
 		ScreenTransition transition = ScreenTransitionSlice.init(2,
 				ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
 		game.setScreen(new GameScreen(game, level, pieces, score, time),
-				transition);
+				transition); 
 	}
 
 	// Para salir de la pantalla

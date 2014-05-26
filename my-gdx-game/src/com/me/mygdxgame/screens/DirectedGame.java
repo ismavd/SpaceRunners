@@ -31,15 +31,15 @@ public abstract class DirectedGame implements ApplicationListener {
 			batch = new SpriteBatch();
 			init = true;
 		}
-		// start new transition
+		// Empieza una nueva transición
 		nextScreen = screen;
-		nextScreen.show(); // activate next screen
+		nextScreen.show(); // Activación de la siguiente pantalla
 		nextScreen.resize(w, h);
 		nextScreen.render(0); // let screen update() once
 		if (currScreen != null)
 			currScreen.pause();
 		nextScreen.pause();
-		Gdx.input.setInputProcessor(null); // disable input
+		Gdx.input.setInputProcessor(null); // Inhabilita la entrada
 		this.screenTransition = screenTransition;
 		t = 0;
 	}

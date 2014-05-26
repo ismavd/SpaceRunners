@@ -79,11 +79,11 @@ public class WorldController extends InputAdapter implements Disposable {
 	public CameraHelper cameraHelper;
 	public Level level;
 	public int lives;
-	
+
 	public int pieces;
 	public int piecesNeeded;
 	public int piecesSave;
-	
+
 	public int score;
 	public int lastScore;
 	public int time;
@@ -104,14 +104,13 @@ public class WorldController extends InputAdapter implements Disposable {
 	private int nivel;
 	private boolean finMundo = false;
 
-	// public World b2world;
-
 	public WorldController(DirectedGame game) {
 		this.game = game;
 		init();
 	}
 
-	public WorldController(DirectedGame game, int level, int pieces, int score, int time) {
+	public WorldController(DirectedGame game, int level, int pieces, int score,
+			int time) {
 		this.game = game;
 		this.nivel = level;
 		this.score = score;
@@ -141,7 +140,8 @@ public class WorldController extends InputAdapter implements Disposable {
 				* Gdx.graphics.getHeight(),
 				(float) 0.058594 * Gdx.graphics.getWidth());
 
-		// Dimensiones de la pantalla en versión Desktop: Width = 1280; Height = 720
+		// Dimensiones de la pantalla en versión Desktop: Width = 1280; Height =
+		// 720
 		// Botones del menú de pausa
 		cPlay.set((float) 0.1515625 * Gdx.graphics.getWidth(),
 				(float) 0.2833333333333333 * Gdx.graphics.getHeight(),
@@ -171,7 +171,6 @@ public class WorldController extends InputAdapter implements Disposable {
 		time = startTime;
 		if (checkpointReached)
 			pieces = piecesSave;
-		// initPhysics();
 	}
 
 	private String getLevel(int level) {
@@ -195,24 +194,23 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// Reset game world
+		// Reseteo del mundo
 		if (keycode == Keys.R) {
 			init();
 			Gdx.app.debug(TAG, "Game world resetted");
 		}
-		// Toggle camera follow
+		// Fijar cámara en el personaje jugador
 		else if (keycode == Keys.ENTER) {
 			cameraHelper.setTarget(cameraHelper.hasTarget() ? null
 					: level.astronaut);
 			Gdx.app.debug(TAG,
 					"Camera follow enabled: " + cameraHelper.hasTarget());
 		}
-		// Back to Menu
-		else if (/* keycode == Keys.ESCAPE || */keycode == Keys.BACKSPACE) {
-			// backToMenu();
+		// Reinicio del nivel
+		else if (keycode == Keys.BACKSPACE) {
 			initLevel();
 		}
-		// Pause menu
+		// Menú de pausa
 		else if (keycode == Keys.MENU || keycode == Keys.BACK
 				|| keycode == Keys.ESCAPE) {
 			if (!paused) {
@@ -260,12 +258,10 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 			}
 		} else {
-			//if (!level.bunnyHead.wallJumping)
-				handleInputGame(deltaTime);
+			handleInputGame(deltaTime);
 		}
 		level.update(deltaTime);
 		testCollisions();
-		// b2world.step(deltaTime, 8, 3);
 		cameraHelper.update(deltaTime);
 		if (!isGameOver() && isPlayerInWater() && !enemyHitEffectOn) {
 			AudioManager.instance.play(Assets.instance.sounds.liveLost);
@@ -289,13 +285,14 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void nextLevel() {
-		//game.setScreen(new GameScreen(game, nivel + 1, score, 301));
 		ScreenTransition transition = ScreenTransitionSlice.init(2,
 				ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
 		if (nivel != 5)
-			game.setScreen(new GameScreen(game, nivel + 1, 20, score, 151), transition);
+			game.setScreen(new GameScreen(game, nivel + 1, 20, score, 151),
+					transition);
 		else
-			game.setScreen(new GameScreen(game, nivel + 1, 20, score, -1), transition);
+			game.setScreen(new GameScreen(game, nivel + 1, 20, score, -1),
+					transition);
 	}
 
 	// En este método vamos a poner las acciones a realizar en el menú de pausa
@@ -363,7 +360,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 
 		if (!cameraHelper.hasTarget(level.astronaut)) {
-			// Camera Controls (move)
+			// Movimiento manual de cámara en versión de escritorio
 			float camMoveSpeed = 5 * deltaTime;
 			float camMoveSpeedAccelerationFactor = 5;
 
@@ -387,7 +384,7 @@ public class WorldController extends InputAdapter implements Disposable {
 			}
 		}
 
-		// Camera Controls (zoom)
+		// Zoom
 		float camZoomSpeed = 1 * deltaTime;
 		float camZoomSpeedAccelerationFactor = 5;
 
@@ -409,24 +406,6 @@ public class WorldController extends InputAdapter implements Disposable {
 		x += cameraHelper.getPosition().x;
 		y += cameraHelper.getPosition().y;
 		cameraHelper.setPosition(x, y);
-	}
-
-	private Pixmap createProceduralPixmap(int width, int height) {
-		Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
-
-		// Fill square with red color at 50% opacity
-		pixmap.setColor(1, 0, 0, 0.5f);
-		pixmap.fill();
-
-		// Draw a yellow-colored X shape on square
-		pixmap.setColor(1, 1, 0, 1);
-		pixmap.drawLine(0, 0, width, height);
-		pixmap.drawLine(width, 0, 0, height);
-
-		// Draw a cyan-colored border around square
-		pixmap.setColor(0, 1, 1, 1);
-		pixmap.drawRectangle(0, 0, width, height);
-		return pixmap;
 	}
 
 	// Vuelve al menú principal.
@@ -536,10 +515,6 @@ public class WorldController extends InputAdapter implements Disposable {
 				astronaut.velocity.x = level.astronaut.terminalVelocity.x
 						+ platform.velocity.x;
 			} else {
-				// ((ForwardPlatform)platform).playerPosition =
-				// bunnyHead.position.x - platform.position.x;
-				// bunnyHead.position.x = platform.position.x +
-				// ((ForwardPlatform)platform).playerPosition;
 				astronaut.dustOn = false;
 				astronaut.viewDirectionOn = false;
 				astronaut.velocity.x = platform.velocity.x;
@@ -551,7 +526,8 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 	}
 
-	private void onCollisionAstronautWithBouncingPlatform(BouncingPlatform bouncingPlatform) {
+	private void onCollisionAstronautWithBouncingPlatform(
+			BouncingPlatform bouncingPlatform) {
 		if (!bouncingPlatform.active)
 			bouncingPlatform.active = true;
 		else
@@ -570,17 +546,13 @@ public class WorldController extends InputAdapter implements Disposable {
 			} else {
 				astronaut.position.x = wall.position.x - astronaut.bounds.width;
 			}
-			if (Gdx.input.isTouched(0) && cJump.contains((float) Gdx.input.getX(0), (float) Gdx.input.getY(0)) 
-					|| Gdx.input.isTouched(1) && cJump.contains((float) Gdx.input.getX(1), (float) Gdx.input.getY(1))
+			if (Gdx.input.isTouched(0)
+					&& cJump.contains((float) Gdx.input.getX(0),
+							(float) Gdx.input.getY(0))
+					|| Gdx.input.isTouched(1)
+					&& cJump.contains((float) Gdx.input.getX(1),
+							(float) Gdx.input.getY(1))
 					|| Gdx.input.isKeyPressed(Keys.SPACE)) {
-				/*if (!bunnyHead.wallJumping) {
-					bunnyHead.jumpState = JUMP_STATE.JUMP_FALLING;
-					bunnyHead.wallJumping = true;
-				} else {
-					bunnyHead.wallJumping = false;
-				}*/
-				//bunnyHead.velocity.x = bunnyHead.terminalVelocity.x;
-				//bunnyHead.setJumping(true);
 			}
 			return;
 		}
@@ -623,7 +595,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		flyPower.collected = true;
 		AudioManager.instance.play(Assets.instance.sounds.pickupFlyPower);
 		score += flyPower.getScore();
-		level.astronaut.setFeatherPowerup(true);
+		level.astronaut.setBarPowerup(true);
 		Gdx.app.log(TAG, "Feather collected");
 	}
 
@@ -684,13 +656,6 @@ public class WorldController extends InputAdapter implements Disposable {
 		case JUMP_FALLING:
 			astronaut.position.y = box.position.y + astronaut.bounds.height / 2
 					+ astronaut.origin.y;
-			/*
-			 * (Gdx.input.isTouched(0) && cJump.contains((float)
-			 * Gdx.input.getX(0), (float) Gdx.input.getY(0)) || Gdx.input
-			 * .isTouched(1) && cJump.contains((float) Gdx.input.getX(1),
-			 * (float) Gdx.input.getY(1))) ||
-			 * !Gdx.input.isKeyPressed(Keys.SPACE)
-			 */
 			if (isJumpPressed(0) || isJumpPressed(1)) {
 				astronaut.jumpState = JUMP_STATE.GROUNDED;
 			}
@@ -703,23 +668,10 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 	}
 
-	/*
-	 * private void onCollisionBoxWithBox(Box box1, Box box2) { float
-	 * heightDifference = Math.abs(box1.position.y - (box2.position.y +
-	 * box2.bounds.height)); if (heightDifference > 0.25f) { boolean hitLeftEdge
-	 * = box1.position.x > (box2.position.x + box2.bounds.width / 2.0f); if
-	 * (hitLeftEdge) { box1.position.x = box2.position.x + box2.bounds.width; if
-	 * (isLeftPressed(0) || isLeftPressed(1)) box2.velocity.x = box1.velocity.x;
-	 * else box2.velocity.x = 0; } else { box1.position.x = box2.position.x -
-	 * box1.bounds.width; if (isRightPressed(0) || isRightPressed(1))
-	 * box2.velocity.x = box1.velocity.x; else box2.velocity.x = 0; } return; }
-	 * }
-	 */
-
 	private void onCollisionAstronautWithEnemy() {
 		enemyHit = true;
 	}
-	
+
 	private void onCollisionAstronautWithGoal() {
 		if (pieces >= piecesNeeded)
 			goalReached = true;
@@ -765,134 +717,99 @@ public class WorldController extends InputAdapter implements Disposable {
 			r1.set(level.astronaut.position.x, level.astronaut.position.y,
 					level.astronaut.bounds.width, level.astronaut.bounds.height);
 
-			// Test collision: Astronaut <-> Rocks
+			// Colisión Astronauta <-> Suelo
 			for (Rock rock : level.rocks) {
 				r2.set(rock.position.x, rock.position.y, rock.bounds.width,
 						rock.bounds.height);
 				if (!r1.overlaps(r2)) {
 					continue;
 				}
-
 				onCollisionAstronautWithRock(rock);
-				// IMPORTANT: must do all collisions for valid
-				// edge testing on rocks.
 			}
-
+			// Colisión Astronauta <-> Plataforma fija
 			for (Platform platform : level.platforms) {
 				r2.set(platform.position.x, platform.position.y,
 						platform.bounds.width, platform.bounds.height);
 				Rectangle r1Bottom = new Rectangle();
-				// Rectangle r2Top = new Rectangle();
 				r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
-				// r2Top.set(r2.x,r2.y,r2.width,0.01f);
 
 				if (!r1Bottom.overlaps(r2)) {
-					// if (!r1.overlaps(r2))
 					continue;
 				}
 
 				onCollisionAstronautWithPlatform(platform);
-				// IMPORTANT: must do all collisions for valid
-				// edge testing on rocks.
 			}
-
+			// Colisión Astronauta <-> Plataforma de mov. vertical
 			for (MovingPlatform platform : level.movingPlatforms) {
 				r2.set(platform.position.x, platform.position.y,
 						platform.bounds.width, platform.bounds.height);
 				Rectangle r1Bottom = new Rectangle();
-				// Rectangle r2Top = new Rectangle();
 				r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
-				// r2Top.set(r2.x,r2.y,r2.width,0.01f);
-
 				if (!r1Bottom.overlaps(r2)) {
-					// if (!r1.overlaps(r2))
 					continue;
 				}
-
 				onCollisionAstronautWithPlatform(platform);
-				// IMPORTANT: must do all collisions for valid
-				// edge testing on rocks.
 			}
-
+			// Colisión Astronauta <-> Plataforma de mov. horizontal
 			for (ForwardPlatform platform : level.fwdPlatforms) {
 				r2.set(platform.position.x, platform.position.y,
 						platform.bounds.width, platform.bounds.height);
 				Rectangle r1Bottom = new Rectangle();
-				// Rectangle r2Top = new Rectangle();
 				r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
-				// r2Top.set(r2.x,r2.y,r2.width,0.01f);
-
 				if (!r1Bottom.overlaps(r2)) {
-					// if (!r1.overlaps(r2))
 					continue;
 				}
-
 				onCollisionAstronautWithForwardPlatform(platform);
-				// IMPORTANT: must do all collisions for valid
-				// edge testing on rocks.
 			}
-
+			// Colisión Astronauta <-> Plataforma de caída
 			for (FallingPlatform platform : level.fallPlatforms) {
 				r2.set(platform.position.x, platform.position.y,
 						platform.bounds.width, platform.bounds.height);
 				Rectangle r1Bottom = new Rectangle();
-				// Rectangle r2Top = new Rectangle();
 				r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
-				// r2Top.set(r2.x,r2.y,r2.width,0.01f);
 
 				if (!r1Bottom.overlaps(r2)) {
-					// if (!r1.overlaps(r2))
 					continue;
 				}
 				((FallingPlatform) platform).active = true;
 				onCollisionAstronautWithPlatform(platform);
-				// IMPORTANT: must do all collisions for valid
-				// edge testing on rocks.
 			}
-
+			// Colisión Astronauta <-> Plataforma elástica
 			for (BouncingPlatform bouncingPlatform : level.bouncingPlatforms) {
-				r2.set(bouncingPlatform.position.x, bouncingPlatform.position.y,
-						bouncingPlatform.bounds.width, bouncingPlatform.bounds.height);
+				r2.set(bouncingPlatform.position.x,
+						bouncingPlatform.position.y,
+						bouncingPlatform.bounds.width,
+						bouncingPlatform.bounds.height);
 				Rectangle r1Bottom = new Rectangle();
-				// Rectangle r2Top = new Rectangle();
 				r1Bottom.set(r1.x, r1.y, r1.width, 0.01f);
-				// r2Top.set(r2.x,r2.y,r2.width,0.01f);
 
 				if (!r1Bottom.overlaps(r2) && !bouncingPlatform.active) {
-					// if (!r1.overlaps(r2))
 					continue;
 				}
-				// ((BouncingPlatform)geiser).active = true;
-				if (!bouncingPlatform.active && (isJumpPressed(0) || isJumpPressed(1))) {
+				if (!bouncingPlatform.active
+						&& (isJumpPressed(0) || isJumpPressed(1))) {
 					bouncingPlatform.time = 50;
 				}
 				onCollisionAstronautWithBouncingPlatform(bouncingPlatform);
-				// IMPORTANT: must do all collisions for valid
-				// edge testing on rocks.
 			}
 
-			// Test collision: Astronaut <-> Walls
+			// Colisión Astronauta <-> Muro
 			for (Wall wall : level.walls) {
 				r2.set(wall.position.x, wall.position.y, wall.bounds.width,
 						wall.bounds.height);
 				if (!r1.overlaps(r2)) {
 					continue;
 				}
-
 				onCollisionAstronautWithWall(wall);
-				// IMPORTANT: must do all collisions for valid
-				// edge testing on rocks.
 			}
 
-			// Test collision: Astronaut <-> Gold Coins
+			// Colisión Astronauta <-> Pieza
 			for (Piece piece : level.pieces) {
 				if (piece.collected) {
 					continue;
 				}
-
-				r2.set(piece.position.x, piece.position.y,
-						piece.bounds.width, piece.bounds.height);
-
+				r2.set(piece.position.x, piece.position.y, piece.bounds.width,
+						piece.bounds.height);
 				if (!r1.overlaps(r2)) {
 					continue;
 				}
@@ -900,15 +817,13 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Astronaut <-> Feathers
+			// // Colisión Astronauta <-> Barra energética
 			for (FlyPower flyPower : level.flyPowers) {
 				if (flyPower.collected) {
 					continue;
 				}
-
 				r2.set(flyPower.position.x, flyPower.position.y,
 						flyPower.bounds.width, flyPower.bounds.height);
-
 				if (!r1.overlaps(r2)) {
 					continue;
 				}
@@ -916,57 +831,44 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Astronaut <-> Carrots
+			// Colisión Astronauta <-> Vida extra
 			for (ExtraLife extraLife : level.extraLifes) {
 				if (extraLife.collected) {
 					continue;
 				}
-
 				r2.set(extraLife.position.x, extraLife.position.y,
 						extraLife.bounds.width, extraLife.bounds.height);
-
 				if (!r1.overlaps(r2)) {
 					continue;
 				}
-
 				onCollisionAstronautWithExtraLife(extraLife);
 				break;
 			}
 
-			// Test collision: Astronaut <-> Checkpoint
+			// Colisión Astronauta <-> Checkpoint
 			for (Checkpoint checkpoint : level.checkpoint) {
 				if (checkpoint.active) {
 					continue;
 				}
-
 				r2.set(checkpoint.position.x, checkpoint.position.y,
 						checkpoint.bounds.width, checkpoint.bounds.height);
-
 				if (!r1.overlaps(r2)) {
 					continue;
 				}
-
 				onCollisionAstronautWithCheckpoint(checkpoint);
 				break;
 			}
 
-			// Test collision: Astronaut || Rock <-> Box
+			// Colisión Astronauta <-> Caja || Suelo <-> Caja
 			for (Box box : level.boxes) {
 				r2.set(box.position.x, box.position.y, box.bounds.width,
 						box.bounds.height);
 				if (r1.overlaps(r2)) {
 					onCollisionAstronautWithBox(box);
 				}
-				/*
-				 * for (Box box2 : level.boxes) { r2.set(box.position.x,
-				 * box.position.y, box.bounds.width, box.bounds.height); if
-				 * (r2.overlaps(r3)) onCollisionBoxWithBox(box,box2); }
-				 */
-
 				for (Rock rock : level.rocks) {
 					r3.set(rock.position.x, rock.position.y, rock.bounds.width,
 							rock.bounds.height);
-
 					if (!r2.overlaps(r3)) {
 						box.falling = true;
 					} else {
@@ -980,7 +882,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 			}
 
-			// Test collision: Astronaut <-> Enemy || Laser <-> Enemy
+			// Colisión Astronauta <-> Enemigo vertical || Laser <-> Enemigo vertical
 			for (Enemy enemy : level.enemies) {
 				r2.set(enemy.position.x, enemy.position.y, enemy.bounds.width,
 						enemy.bounds.height);
@@ -1000,8 +902,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Astronaut <-> Enemy Forward || Laser <-> Enemy
-			// Forward
+			// Colisión Astronauta <-> Babosa alienígena
 			for (EnemyForward enemy : level.enemiesFwd) {
 				r2.set(enemy.position.x, enemy.position.y, enemy.bounds.width,
 						enemy.bounds.height);
@@ -1027,7 +928,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				break;
 			}
 
-			// Test collision: Astronaut <-> Giant
+			// Colisión Astronauta <-> Gigante
 			if (level.giant != null) {
 				r2.set(level.giant.position.x, level.giant.position.y,
 						level.giant.bounds.width, level.giant.bounds.height);
@@ -1045,7 +946,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 			}
 
-			// Test collision: Astronaut <-> Goal
+			// Colisión Astronauta <-> Meta
 			if (!goalReached) {
 				r2.set(level.goal.bounds);
 				r2.x += level.goal.position.x;
@@ -1053,14 +954,11 @@ public class WorldController extends InputAdapter implements Disposable {
 
 				int x1 = new Float(r1.x).intValue();
 				int x2 = new Float(r2.x).intValue();
-				
+
 				int y1 = new Float(r1.y).intValue();
 				int y2 = new Float(r2.y).intValue();
-				
-				//System.out.println("x1:" + x1 + " x2: " + x2 + " y1: " + y1 + " y2:" + y2);
-				
-				//if (r1.overlaps(r2)) {
-				if ((x1==x2 || x1==x2-1) && (y1==y2 || y1==y2+1)) {
+
+				if ((x1 == x2 || x1 == x2 - 1) && (y1 == y2 || y1 == y2 + 1)) {
 					onCollisionAstronautWithGoal();
 				}
 			}
@@ -1072,23 +970,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		if (cameraHelper.hasTarget(level.astronaut)) {
 			if (isLeftPressed(0) || isLeftPressed(1) /* && !isRightPressed(1) */) {
 				level.astronaut.velocity.x = -level.astronaut.terminalVelocity.x;
-				/*
-				 * if (isRightPressed(0) || isRightPressed(1))
-				 * level.bunnyHead.velocity.x =
-				 * level.bunnyHead.terminalVelocity.x;
-				 */
 			} else if (isRightPressed(0) || isRightPressed(1)) {
 				level.astronaut.velocity.x = level.astronaut.terminalVelocity.x;
-				/*
-				 * if (isLeftPressed(0) || isLeftPressed(1))
-				 * level.bunnyHead.velocity.x =
-				 * -level.bunnyHead.terminalVelocity.x;
-				 */
 			}
-			// }
-			/*
-			 * else leftPressed = false;
-			 */
 			for (int i = 0; i < 2; i++) {
 				j = i == 0 ? 1 : 0;
 				// Controlamos si el usuario pulsa alguno de los controles.
@@ -1114,7 +998,6 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	// Devuelve True si el personaje está en el agua y False en caso contrario.
 	public boolean isPlayerInWater() {
-		//return level.astronaut.position.y < -5;
 		return level.astronaut.position.y < -1;
 	}
 
@@ -1151,15 +1034,14 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 	}
 
-	public boolean isShootPressed(int pointer) {
-		/*if (Gdx.app.getType() == ApplicationType.Android
-				|| Gdx.app.getType() == ApplicationType.iOS) {
-			return Gdx.input.isTouched(pointer)
-					&& cShoot.contains((float) Gdx.input.getX(pointer),
-							(float) Gdx.input.getY(pointer));
-		} else {
-			return Gdx.input.isKeyPressed(Keys.ALT_LEFT);
-		}*/
+	public boolean isShootPressed(int pointer) { // Código comentado para conservarlo para un futuro
+		/*
+		 * if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType()
+		 * == ApplicationType.iOS) { return Gdx.input.isTouched(pointer) &&
+		 * cShoot.contains((float) Gdx.input.getX(pointer), (float)
+		 * Gdx.input.getY(pointer)); } else { return
+		 * Gdx.input.isKeyPressed(Keys.ALT_LEFT); }
+		 */
 		return Gdx.input.isKeyPressed(Keys.ALT_LEFT);
 	}
 
@@ -1172,24 +1054,10 @@ public class WorldController extends InputAdapter implements Disposable {
 	public boolean isPaused() {
 		return paused;
 	}
-	
+
 	public int getNivel() {
 		return nivel;
 	}
-
-	/*
-	 * private void initPhysics() { if (b2world != null) b2world.dispose();
-	 * b2world = new World(new Vector2(0, -9.81f), true); // Rocks Vector2
-	 * origin = new Vector2(); for (Rock rock : level.rocks) { BodyDef bodyDef =
-	 * new BodyDef(); bodyDef.type = BodyType.KinematicBody;
-	 * bodyDef.position.set(rock.position); Body body =
-	 * b2world.createBody(bodyDef); rock.body = body; PolygonShape polygonShape
-	 * = new PolygonShape(); origin.x = rock.bounds.width / 2.0f; origin.y =
-	 * rock.bounds.height / 2.0f; polygonShape.setAsBox(rock.bounds.width /
-	 * 2.0f, rock.bounds.height / 2.0f, origin, 0); FixtureDef fixtureDef = new
-	 * FixtureDef(); fixtureDef.shape = polygonShape;
-	 * body.createFixture(fixtureDef); polygonShape.dispose(); } }
-	 */
 
 	@Override
 	public void dispose() {

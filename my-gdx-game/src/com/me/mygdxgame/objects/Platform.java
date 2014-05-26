@@ -16,14 +16,13 @@ public class Platform extends AbstractGameObject {
 	protected void init() {
 		dimension.set(1f, 0.5f);
 		regPlatform = Assets.instance.platform.platform;
-		// Start length of this platform
 		setLength(1);
 		terminalVelocity.set(2.0f, 3.0f);
 	}
 	
 	public void setLength(int length) {
 		this.length = length;
-		// Update bounding box for collision detection
+		// Se actualiza la caja de colisiones 
 		bounds.set(0, 0, dimension.x * length, dimension.y);
 	}
 	
@@ -36,7 +35,6 @@ public class Platform extends AbstractGameObject {
 		TextureRegion reg = null;
 		float relX = 0;
 		float relY = 0;
-		// Draw middle
 		reg = regPlatform;
 		for (int i = 0; i < length; i++) {
 			batch.draw(reg.getTexture(), position.x + relX, position.y + relY,

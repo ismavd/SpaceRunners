@@ -1,10 +1,8 @@
 package com.me.mygdxgame.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.game.Assets;
-import com.me.mygdxgame.game.WorldController;
 
 public class EnemyForward extends AbstractGameObject {
 	private TextureRegion regEnemy;

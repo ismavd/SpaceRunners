@@ -45,29 +45,20 @@ public class GameScreen extends AbstractGameScreen {
 
 	@Override
 	public void render(float deltaTime) {
-		// Do not update game world when paused.
+		// No actualizar el nivel con el juego en pausa
 		if (!paused) {
-			// Update game world by the time that has passed
-			// since last rendered frame.
+			// Actualización por cada frame renderizado
 			worldController.update(deltaTime);
 		} else {
 			worldController.updatePaused(deltaTime);
 		}
-
-		// Sets the clear screen color to: Cornflower Blue
-		/*
-		 * Gdx.gl.glClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xed / 255.0f, 0xff
-		 * / 255.0f);
-		 */
-
+		
+		// Se establece el color del cielo
 		Gdx.gl.glClearColor(0x9 / 255.0f, 0x23 / 255.0f, 0x47 / 255.0f,
 				0xff / 255.0f);
 
-		// Clears the screen
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		// Render game world to screen
 		worldRenderer.render();
-		// rebuildStage();
 	}
 
 	@Override
@@ -99,7 +90,7 @@ public class GameScreen extends AbstractGameScreen {
 	@Override
 	public void resume() {
 		super.resume();
-		// Only called on Android!
+		// La siguiente instrución se llama sólo en Android
 		paused = false;
 	}
 

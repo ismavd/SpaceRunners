@@ -15,7 +15,6 @@ public class FlyPower extends AbstractGameObject {
 	private void init() {
 		dimension.set(0.5f,0.5f);
 		regFeather = Assets.instance.flyPower.bar;
-		// Set bounding box for collision detection
 		bounds.set(0, 0, dimension.x, dimension.y);
 		collected = false;
 	}

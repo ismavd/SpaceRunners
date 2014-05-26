@@ -20,7 +20,6 @@ public class Mountains extends AbstractGameObject {
 		dimension.set(10, 2);
 		regMountainLeft = Assets.instance.levelDecoration.mountainLeft;
 		regMountainRight = Assets.instance.levelDecoration.mountainRight;
-		// shift mountain and extend length
 		origin.x = -dimension.x * 2;
 		length += dimension.x * 2;
 	}
@@ -31,13 +30,12 @@ public class Mountains extends AbstractGameObject {
 		batch.setColor(tintColor, tintColor, tintColor, 1);
 		float xRel = dimension.x * offsetX;
 		float yRel = dimension.y * offsetY;
-		// mountains span the whole level
+		// Montañas generadas en la base de todo el nivel
 		int mountainLength = 0;
 		mountainLength += MathUtils.ceil(length / (2 * dimension.x)
 				* (1 - parallaxSpeedX));
 		mountainLength += MathUtils.ceil(0.5f + offsetX);
 		for (int i = 0; i < mountainLength; i++) {
-			// mountain left
 			reg = regMountainLeft;
 			batch.draw(reg.getTexture(), origin.x + xRel + position.x
 					* parallaxSpeedX, origin.y + yRel + position.y, origin.x,
@@ -45,7 +43,6 @@ public class Mountains extends AbstractGameObject {
 					rotation, reg.getRegionX(), reg.getRegionY(),
 					reg.getRegionWidth(), reg.getRegionHeight(), false, false);
 			xRel += dimension.x;
-			// mountain right
 			reg = regMountainRight;
 			batch.draw(reg.getTexture(), origin.x + xRel + position.x
 					* parallaxSpeedX, origin.y + yRel + position.y, origin.x,
@@ -54,17 +51,16 @@ public class Mountains extends AbstractGameObject {
 					reg.getRegionWidth(), reg.getRegionHeight(), false, false);
 			xRel += dimension.x;
 		}
-		// reset color to white
 		batch.setColor(1, 1, 1, 1);
 	}
 
 	@Override
 	public void render(SpriteBatch batch) {
-		// 80% distant mountains (dark gray)
+		// Montañas a una distancia muy lejana
 		drawMountain(batch, 0.5f, 0.5f, 0.5f, 0.8f);
-		// 50% distant mountains (gray)
+		// Montañas a una distancia lejana
 		drawMountain(batch, 0.25f, 0.25f, 0.7f, 0.5f);
-		// 30% distant mountains (light gray)
+		// Montañas a una distancia cercana
 		drawMountain(batch, 0.0f, 0.0f, 0.9f, 0.3f);
 	}
 

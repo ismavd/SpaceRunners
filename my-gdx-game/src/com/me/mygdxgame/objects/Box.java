@@ -1,12 +1,8 @@
 package com.me.mygdxgame.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.me.mygdxgame.game.Assets;
-import com.me.mygdxgame.objects.Astronaut.JUMP_STATE;
-import com.me.mygdxgame.utils.AudioManager;
 
 public class Box extends AbstractGameObject {
 

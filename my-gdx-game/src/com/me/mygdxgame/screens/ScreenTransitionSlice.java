@@ -22,8 +22,7 @@ public class ScreenTransitionSlice implements ScreenTransition {
 		instance.duration = duration;
 		instance.direction = direction;
 		instance.easing = easing;
-		// create shuffled list of slice indices which determines
-		// the order of slice animation
+		// Creación de los índices de barra para determinar el orden de las barras de la animación
 		instance.sliceIndex.clear();
 		for (int i = 0; i < numSlices; i++)
 			instance.sliceIndex.add(i);
@@ -52,10 +51,9 @@ public class ScreenTransitionSlice implements ScreenTransition {
 		if (easing != null)
 			alpha = easing.apply(alpha);
 		for (int i = 0; i < sliceIndex.size; i++) {
-			// current slice/column
+			// Barra actual
 			x = i * sliceWidth;
-			// vertical displacement using randomized
-			// list of slice indices
+			
 			float offsetY = h
 					* (1 + sliceIndex.get(i) / (float) sliceIndex.size);
 			switch (direction) {

@@ -23,18 +23,17 @@ public class Astronaut extends AbstractGameObject {
 	}
 
 	public enum JUMP_STATE {
-		GROUNDED, FALLING, JUMP_RISING, JUMP_FALLING, WALL_JUMPING
+		GROUNDED, FALLING, JUMP_RISING, JUMP_FALLING
 	}
 
-	private TextureRegion regastronaut;
-	private TextureRegion regPower;
+	private TextureRegion regAstronaut;
 	public VIEW_DIRECTION viewDirection;
 	public float timeJumping;
 	public JUMP_STATE jumpState;
-	public boolean hasFeatherPowerup;
+	public boolean hasBarPowerup;
 	public boolean dustOn;
 	public boolean viewDirectionOn;
-	public float timeLeftFeatherPowerup;
+	public float timeLeftBarPowerup;
 
 	public boolean shooting;
 	public boolean wallJumping;
@@ -62,28 +61,27 @@ public class Astronaut extends AbstractGameObject {
 		// setAnimation(animMoving);
 		setAnimation(null);
 
-		regPower = Assets.instance.astronautPower.astronaut;
-		// Center image on game object
+		// Centro de la imagen
 		origin.set(dimension.x / 2, dimension.y / 2);
-		// Bounding box for collision detection
+		// Recuadro para la detección de colisiones entre objetos
 		bounds.set(0, 0, dimension.x, dimension.y);
-		// Set physics values
+		// Físicas
 		terminalVelocity.set(3.0f, 4.0f);
 		friction.set(12.0f, 0.0f);
 		acceleration.set(0.0f, -25.0f);
-		// View direction
+		// Dirección de vista del personaje
 		viewDirection = VIEW_DIRECTION.RIGHT;
-		// Jump state
+		// Estado del salto
 		jumpState = JUMP_STATE.FALLING;
 		timeJumping = 0;
 		// Power-ups
-		hasFeatherPowerup = false;
-		timeLeftFeatherPowerup = 0;
+		hasBarPowerup = false;
+		timeLeftBarPowerup = 0;
 
 		shooting = false;
 		wallJumping = false;
 
-		// Particles
+		// Pârtículas de polvo
 		dustParticles.load(Gdx.files.internal("particles/dust.pfx"),
 				Gdx.files.internal("particles"));
 		dustOn = true;
@@ -92,7 +90,7 @@ public class Astronaut extends AbstractGameObject {
 
 	public void setJumping(boolean jumpKeyPressed) {
 		switch (jumpState) {
-		case GROUNDED: // Character is standing on a platform
+		case GROUNDED: // El personaje permanece en una plataforma
 			if (jumpKeyPressed) {
 				AudioManager.instance.play(Assets.instance.sounds.jump);
 				// Start counting jump time from the beginning
@@ -100,38 +98,34 @@ public class Astronaut extends AbstractGameObject {
 				jumpState = JUMP_STATE.JUMP_RISING;
 			}
 			break;
-		case JUMP_RISING: // Rising in the air
+		case JUMP_RISING: // Elevación en el aire
 			if (!jumpKeyPressed)
 				jumpState = JUMP_STATE.JUMP_FALLING;
-			else if (jumpKeyPressed && hasFeatherPowerup) {
+			else if (jumpKeyPressed && hasBarPowerup) {
 				AudioManager.instance.play(
 						Assets.instance.sounds.jumpWithFlyPower, 1,
 						MathUtils.random(1.0f, 1.1f));
 				timeJumping = JUMP_TIME_OFFSET_FLYING;
 			}
 			break;
-		/*
-		 * case WALL_JUMPING: if (!jumpKeyPressed) jumpState =
-		 * JUMP_STATE.JUMP_FALLING; break;
-		 */
-		case FALLING:// Falling down
-		case JUMP_FALLING: // Falling down after jump
+		case FALLING:// Caída
+		case JUMP_FALLING: // Caída después de saltar
 			break;
 		}
 	}
 
-	public void setFeatherPowerup(boolean pickedUp) {
-		hasFeatherPowerup = pickedUp;
+	public void setBarPowerup(boolean pickedUp) {
+		hasBarPowerup = pickedUp;
 		if (pickedUp) {
-			timeLeftFeatherPowerup = Constants.ITEM_FEATHER_POWERUP_DURATION;
+			timeLeftBarPowerup = Constants.ITEM_FEATHER_POWERUP_DURATION;
 			terminalVelocity.set(5.0f, 4.0f);
 		} else {
 			terminalVelocity.set(3.0f, 4.0f);
 		}
 	}
 
-	public boolean hasFeatherPowerup() {
-		return hasFeatherPowerup && timeLeftFeatherPowerup > 0;
+	public boolean hasBarPowerup() {
+		return hasBarPowerup && timeLeftBarPowerup > 0;
 	}
 
 	@Override
@@ -146,26 +140,23 @@ public class Astronaut extends AbstractGameObject {
 			setAnimation(null);
 		if (!viewDirectionOn)
 			viewDirectionOn = true;
-		if (timeLeftFeatherPowerup > 0) {
+		if (timeLeftBarPowerup > 0) {
 			if (animation == animCopterTransformBack) {
-				// Restart "Transform" animation if another feather power-up
-				// was picked up during "TransformBack" animation. Otherwise,
-				// the "TransformBack" animation would be stuck while the
-				// power-up is still active.
 				setAnimation(animCopterTransform);
 			}
-			timeLeftFeatherPowerup -= deltaTime;
-			if (timeLeftFeatherPowerup < 0) {
-				// disable power-up
-				timeLeftFeatherPowerup = 0;
-				setFeatherPowerup(false);
+			timeLeftBarPowerup -= deltaTime;
+			if (timeLeftBarPowerup < 0) {
+				// Inhabilitar power-up
+				timeLeftBarPowerup = 0;
+				setBarPowerup(false);
 				setAnimation(animCopterTransformBack);
 			}
 		}
 		dustParticles.update(deltaTime);
-		// Change animation state according to feather power-up
-		if (hasFeatherPowerup) {
+		// Cambio de animación para la habilidad de vuelo
+		if (hasBarPowerup) {
 			if (animation == animMoving) {
+				System.out.println("Paso");
 				setAnimation(animCopterTransform);
 			} else if (animation == animCopterTransform) {
 				if (animation.isAnimationFinished(stateTime))
@@ -178,21 +169,6 @@ public class Astronaut extends AbstractGameObject {
 			} else if (animation == animCopterTransformBack) {
 				if (animation.isAnimationFinished(stateTime))
 					setAnimation(animMoving);
-			}
-		}
-		if (wallJumping) {
-			// Add delta times to track jump time
-			timeJumping += deltaTime;
-			// Jump to minimal height if jump key was pressed too short
-			if (timeJumping > 0 && timeJumping <= 0.8) {
-				// Still jumping
-				velocity.x = -terminalVelocity.x;
-				velocity.y = terminalVelocity.y;
-			} else {
-				velocity.x = 0;
-				velocity.y = 0;
-				wallJumping = false;
-				jumpState = JUMP_STATE.JUMP_FALLING;
 			}
 		}
 	}
@@ -209,28 +185,21 @@ public class Astronaut extends AbstractGameObject {
 			}
 			break;
 		case JUMP_RISING:
-			// Keep track of jump time
+			// Comprobación del tiempo de salto
 			timeJumping += deltaTime;
-			// Jump time left?
+			// ¿Queda tiempo de salto?
 			if (timeJumping <= JUMP_TIME_MAX) {
-				// Still jumping
+				// Saltando
 				velocity.y = terminalVelocity.y;
 			}
 			break;
-		/*
-		 * case WALL_JUMPING: // Keep track of jump time timeJumping +=
-		 * deltaTime; // Jump time left? if (timeJumping <= JUMP_TIME_MAX) { //
-		 * Still jumping System.out.println("Wall jump"); velocity.x =
-		 * terminalVelocity.x; velocity.y = terminalVelocity.y; } break;
-		 */
 		case FALLING:
 			break;
 		case JUMP_FALLING:
-			// Add delta times to track jump time
+			// Comprobación del tiempo de salto
 			timeJumping += deltaTime;
-			// Jump to minimal height if jump key was pressed too short
 			if (timeJumping > 0 && timeJumping <= JUMP_TIME_MIN) {
-				// Still jumping
+				// Saltando
 				velocity.y = terminalVelocity.y;
 			}
 		}
@@ -246,10 +215,9 @@ public class Astronaut extends AbstractGameObject {
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
 
-		// Draw Particles
+		// Dibuja partículas de polvo
 		dustParticles.draw(batch);
 
-		// Apply Skin Color
 		batch.setColor(CharacterSkin.values()[GamePreferences.instance.charSkin]
 				.getColor());
 
@@ -260,18 +228,10 @@ public class Astronaut extends AbstractGameObject {
 		 * = 0.2f; }
 		 */
 
-		// Set special color when game object has a feather power-up
-		if (hasFeatherPowerup)
+		if (hasBarPowerup)
 			batch.setColor(1.0f, 0.8f, 0.0f, 1.0f);
-		reg = regastronaut;
+		reg = regAstronaut;
 
-		// Código para cambiar de imagen al obtener una pluma (la imagen debe
-		// llamarse astronaut_power.png)
-		/*
-		 * if (hasFeatherPowerup) reg = regPower; else reg = regastronaut;
-		 */
-
-		// Draw image
 		if (animation != null)
 			reg = animation.getKeyFrame(stateTime, true);
 		else
@@ -282,7 +242,6 @@ public class Astronaut extends AbstractGameObject {
 				reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
 				reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT,
 				false);
-		// Reset color to white
 		batch.setColor(1, 1, 1, 1);
 	}
 }

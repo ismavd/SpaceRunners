@@ -27,11 +27,9 @@ public class CameraHelper
 	{
 		if (!hasTarget()) return;
 
-		//position.lerp(target.position, FOLLOW_SPEED * deltaTime);
-		
 		position.x = target.position.x + target.origin.x;
 		position.y = target.position.y + target.origin.y;
-		// Prevent camera from moving down too far
+		// Evita que la cámara se mueva demasiado hacia abajo
 		position.y = Math.max(-1f, position.y);
 	}
 

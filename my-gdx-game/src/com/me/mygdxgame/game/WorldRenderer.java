@@ -21,12 +21,7 @@ public class WorldRenderer implements Disposable {
 	private OrthographicCamera cameraGUI;
 	private SpriteBatch batch;
 	private WorldController worldController;
-
-	/*
-	 * private static final boolean DEBUG_DRAW_BOX2D_WORLD = false; private
-	 * Box2DDebugRenderer b2debugRenderer;
-	 */
-
+	
 	// Constructor
 	public WorldRenderer(WorldController worldController) {
 		this.worldController = worldController;
@@ -42,9 +37,8 @@ public class WorldRenderer implements Disposable {
 		cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH,
 				Constants.VIEWPORT_GUI_HEIGHT);
 		cameraGUI.position.set(0, 0, 0);
-		cameraGUI.setToOrtho(true); // flip y-axis
+		cameraGUI.setToOrtho(true); // Invierte el eje y
 		cameraGUI.update();
-		// b2debugRenderer = new Box2DDebugRenderer();
 	}
 
 	public void render() {
@@ -58,11 +52,6 @@ public class WorldRenderer implements Disposable {
 		batch.begin();
 		worldController.level.render(batch);
 		batch.end();
-
-		/*
-		 * if (DEBUG_DRAW_BOX2D_WORLD) {
-		 * b2debugRenderer.render(worldController.b2world, camera.combined); }
-		 */
 	}
 
 	public void resize(int width, int height) {
@@ -80,8 +69,10 @@ public class WorldRenderer implements Disposable {
 	public void dispose() {
 		batch.dispose();
 	}
+	
+	// Nota: la distribución de la GUI es distinta según el menú de pausa
 
-	private void renderGuiScrews(SpriteBatch batch) {
+	private void renderGuiPîeces(SpriteBatch batch) {
 		float x = -15;
 		float y = -15;
 		if (!worldController.isPaused()) {
@@ -93,17 +84,6 @@ public class WorldRenderer implements Disposable {
 					.draw(batch, "Consigue " + worldController.piecesNeeded
 							+ " piezas", x + 150, y + 37);
 		} else {
-
-			/*
-			 * x = cameraGUI.viewportWidth - 190; y = 40;
-			 * batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100,
-			 * 100, 0.35f, -0.35f, 0);
-			 * Assets.instance.fonts.defaultBig.draw(batch, "" +
-			 * worldController.screws, x + 75, y + 37);
-			 */
-
-			// Cuando decidamos incluir puntuación o tiempo habrá que poner este
-			// código
 			x = cameraGUI.viewportWidth - 200;
 			y = 110;
 			batch.draw(Assets.instance.piece.pieceIcon, x, y, 50, 50, 100, 100,
@@ -149,20 +129,6 @@ public class WorldRenderer implements Disposable {
 		}
 	}
 
-	private void renderGuiScore(SpriteBatch batch) {
-		/*
-		 * float x; float y; if (!worldController.isPaused()) { x =
-		 * cameraGUI.viewportWidth - 600; y = -15;
-		 * Assets.instance.fonts.defaultBig.draw(batch, "PUNTOS:", x + 75, y +
-		 * 37); Assets.instance.fonts.defaultBig.draw(batch, "" +
-		 * worldController.score, x + 220, y + 37); } else { x =
-		 * cameraGUI.viewportWidth - 160; y = 70;
-		 * Assets.instance.fonts.defaultBig.draw(batch, "PUNTOS:", x, y);
-		 * Assets.instance.fonts.defaultBig.draw(batch, "" +
-		 * worldController.score, x, y + 37); }
-		 */
-	}
-
 	private void renderGuiExtraLive(SpriteBatch batch) {
 		float x = cameraGUI.viewportWidth - 200;
 		float y = -15;
@@ -184,35 +150,34 @@ public class WorldRenderer implements Disposable {
 		BitmapFont fpsFont = Assets.instance.fonts.defaultNormal;
 
 		if (fps >= 45) {
-			// 45 or more FPS show up in green
+			// 45 o más FPS se muestran en verde
 			fpsFont.setColor(0, 1, 0, 1);
 		} else if (fps >= 30) {
-			// 30 or more FPS show up in yellow
+			// Entre 30 y 44 FPS se muestra en amarillo
 			fpsFont.setColor(1, 1, 0, 1);
 		} else {
-			// less than 30 FPS show up in red
+			// Menos de 30 FPS se muestra en rojo
 			fpsFont.setColor(1, 0, 0, 1);
 		}
 		fpsFont.draw(batch, "FPS: " + fps, x, y);
-		fpsFont.setColor(1, 1, 1, 1); // white
+		fpsFont.setColor(1, 1, 1, 1); // blanco
 	}
 
 	private void renderGui(SpriteBatch batch) {
 		batch.setProjectionMatrix(cameraGUI.combined);
 		batch.begin();
 
-		// draw collected gold coins icon + text
-		// (anchored to top left edge)
-		renderGuiScrews(batch);
-		// draw time (anchored to top center)
+		// Dibuja el icono de piezas, la cantidad actual y la necesaria para superar el nivel 
+		// (anclado arriba a la izquierda)
+		renderGuiPîeces(batch);
+		// Dibuja el tiempo (anclado arriba al centro)
 		renderGuiTime(batch);
-		// renderGuiScore(batch);
-		// draw collected feather icon (anchored to top left edge)
+		// Dibuja el tiempo restante de vuelo (anclado arriba a la izquierda)
 		renderGuiPowerBarPowerup(batch);
-		// draw extra lives icon + text (anchored to top right edge)
+		// Dibuja las vidas extra (anchored to top right edge)
 		renderGuiExtraLive(batch);
 
-		// //Sólo en dispositivos móviles mostramos los botones.
+		// Sólo en dispositivos móviles mostramos los botones.
 		if (Gdx.app.getType() == ApplicationType.Android
 				|| Gdx.app.getType() == ApplicationType.iOS) {
 			renderGuiLeftButton(batch);
@@ -220,16 +185,16 @@ public class WorldRenderer implements Disposable {
 			// renderGuiShootButton(batch);
 			renderGuiJumpButton(batch);
 		}
-		// draw FPS text (anchored to bottom right edge)
+		// Dibuja el texto con los FPS (anchored to bottom right edge)
 		if (GamePreferences.instance.showFpsCounter) {
 			renderGuiFpsCounter(batch);
 		}
 
-		// draw game over text
+		// Dibuja el texto de Game Over
 		renderGuiGameOverMessage(batch);
-		// draw goal text
+		// Dibuja el texto de nivel completado
 		renderGuiGoalMessage(batch);
-		// draw pause menu
+		// Dibuja el menú de pausa
 		renderPauseMenu(batch);
 
 		batch.end();
@@ -294,11 +259,9 @@ public class WorldRenderer implements Disposable {
 	private void renderGuiPowerBarPowerup(SpriteBatch batch) {
 		float x = -15;
 		float y = 30;
-		float timeLeftPowerBarPowerup = worldController.level.astronaut.timeLeftFeatherPowerup;
+		float timeLeftPowerBarPowerup = worldController.level.astronaut.timeLeftBarPowerup;
 		if (timeLeftPowerBarPowerup > 0) {
-			// Start icon fade in/out if the left power-up time
-			// is less than 4 seconds. The fade interval is set
-			// to 5 changes per second.
+			
 			if (timeLeftPowerBarPowerup < 4) {
 				if (((int) (timeLeftPowerBarPowerup * 5) % 2) != 0) {
 					batch.setColor(1, 1, 1, 0.5f);
@@ -327,6 +290,7 @@ public class WorldRenderer implements Disposable {
 				1f, -1f, 0);
 	}
 
+	// Método usado pero conservado para una futura ampliación del juego
 	private void renderGuiShootButton(SpriteBatch batch) {
 		float x = cameraGUI.viewportWidth - 200;
 		float y = cameraGUI.viewportHeight - 100;
