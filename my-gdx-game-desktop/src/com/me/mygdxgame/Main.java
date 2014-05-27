@@ -6,7 +6,7 @@ import com.badlogic.gdx.tools.imagepacker.TexturePacker2;
 import com.badlogic.gdx.tools.imagepacker.TexturePacker2.Settings;
 
 public class Main {
-	private static boolean rebuildAtlas = true;
+	private static boolean rebuildAtlas = false;
 	private static boolean drawDebugOutline = false;
 
 	public static void main(String[] args) {
