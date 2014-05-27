@@ -158,6 +158,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		cSound.set((float) 0.24609375 * Gdx.graphics.getWidth(),
 				(float) 0.9097222222222222 * Gdx.graphics.getHeight(),
 				(float) 0.058594 * Gdx.graphics.getWidth());
+		AudioManager.instance.play(Assets.instance.music.song02);
 	}
 
 	private void initLevel() {
@@ -322,6 +323,7 @@ public class WorldController extends InputAdapter implements Disposable {
 				game.getScreen().resume();
 				paused = false;
 				game.setScreen(new LevelScreen(game));
+				AudioManager.instance.play(Assets.instance.music.song01);
 			}
 			// Menu principal
 			if (Gdx.input.isTouched()
@@ -410,7 +412,8 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	// Vuelve al menú principal.
 	private void backToMenu() {
-		game.setScreen(new MenuScreen(game));
+		AudioManager.instance.play(Assets.instance.music.song01);
+		game.setScreen(new MenuScreen(game));	
 	}
 
 	private void onCollisionAstronautWithRock(Rock rock) {
@@ -882,7 +885,8 @@ public class WorldController extends InputAdapter implements Disposable {
 				}
 			}
 
-			// Colisión Astronauta <-> Enemigo vertical || Laser <-> Enemigo vertical
+			// Colisión Astronauta <-> Enemigo vertical || Laser <-> Enemigo
+			// vertical
 			for (Enemy enemy : level.enemies) {
 				r2.set(enemy.position.x, enemy.position.y, enemy.bounds.width,
 						enemy.bounds.height);
@@ -968,7 +972,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	private void handleInputGame(float deltaTime) {
 		int j;
 		if (cameraHelper.hasTarget(level.astronaut)) {
-			if (isLeftPressed(0) || isLeftPressed(1) /* && !isRightPressed(1) */) {
+			if (isLeftPressed(0) || isLeftPressed(1)) {
 				level.astronaut.velocity.x = -level.astronaut.terminalVelocity.x;
 			} else if (isRightPressed(0) || isRightPressed(1)) {
 				level.astronaut.velocity.x = level.astronaut.terminalVelocity.x;
@@ -1034,7 +1038,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		}
 	}
 
-	public boolean isShootPressed(int pointer) { // Código comentado para conservarlo para un futuro
+	public boolean isShootPressed(int pointer) { // Código comentado para
+													// conservarlo para un
+													// futuro
 		/*
 		 * if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType()
 		 * == ApplicationType.iOS) { return Gdx.input.isTouched(pointer) &&

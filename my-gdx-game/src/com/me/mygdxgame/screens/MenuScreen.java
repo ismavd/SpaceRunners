@@ -1,6 +1,5 @@
 package com.me.mygdxgame.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
@@ -38,7 +37,7 @@ public class MenuScreen extends AbstractGameScreen {
 	// Botones e imágenes del menú principal.
 	private Image imgBackground;
 	private Image imgLogo;
-	private Image imgInfo;
+	private Image imgTitle;
 
 	private Image imgMoon;
 	private Image imgAstronaut;
@@ -57,14 +56,11 @@ public class MenuScreen extends AbstractGameScreen {
 	private Slider sldMusic;
 	private SelectBox selCharSkin;
 	private Image imgCharSkin;
-	private CheckBox chkShowFpsCounter;
 
 	// Debug
 	private final float DEBUG_REBUILD_INTERVAL = 5.0f;
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
-
-	private static final String TAG = MenuScreen.class.getName();
 
 	private Skin skinLibgdx;
 	private Button btnMenuExit;
@@ -83,7 +79,6 @@ public class MenuScreen extends AbstractGameScreen {
 		sldMusic.setValue(prefs.volMusic);
 		selCharSkin.setSelection(prefs.charSkin);
 		onCharSkinSelected(prefs.charSkin);
-		chkShowFpsCounter.setChecked(prefs.showFpsCounter);
 	}
 
 	private void saveSettings() {
@@ -93,7 +88,6 @@ public class MenuScreen extends AbstractGameScreen {
 		prefs.music = chkMusic.isChecked();
 		prefs.volMusic = sldMusic.getValue();
 		prefs.charSkin = selCharSkin.getSelectionIndex();
-		prefs.showFpsCounter = chkShowFpsCounter.isChecked();
 		prefs.save();
 	}
 
@@ -105,7 +99,6 @@ public class MenuScreen extends AbstractGameScreen {
 	private void onSaveClicked() {
 		saveSettings();
 		onCancelClicked();
-		AudioManager.instance.onSettingsUpdated();
 	}
 
 	private void onCancelClicked() {
@@ -128,7 +121,7 @@ public class MenuScreen extends AbstractGameScreen {
 		Table layerLogos = buildLogosLayer();
 		Table layerControls = buildControlsLayer();
 		Table layerOptionsWindow = buildOptionsWindowLayer();
-		
+
 		stage.clear();
 		Stack stack = new Stack();
 		stage.addActor(stack);
@@ -155,46 +148,57 @@ public class MenuScreen extends AbstractGameScreen {
 
 		imgMoon = new Image(skinSpaceRunners, "moon");
 		layer.addActor(imgMoon);
-		imgMoon.setPosition(130, 10);
+		imgMoon.setPosition(180, 40);
+		imgMoon.setWidth(300);
+		imgMoon.setHeight(300);
 
 		imgAstronaut = new Image(skinSpaceRunners, "astronaut");
 		layer.addActor(imgAstronaut);
 		imgAstronaut.setPosition(180, 50);
 		imgAstronaut.setOrigin(imgAstronaut.getWidth(),
 				imgAstronaut.getHeight());
-		
+
 		imgAsteroids = new Image(skinSpaceRunners, "asteroids");
 		layer.addActor(imgAsteroids);
-		imgAsteroids.setPosition(50, 0);
-		imgAsteroids.setWidth(500);
-		imgAsteroids.setHeight(450);
-		
+		imgAsteroids.setPosition(130, 10);
+		imgAsteroids.setWidth(400);
+		imgAsteroids.setHeight(400);
+
 		imgShuttle = new Image(skinSpaceRunners, "shuttle");
 		layer.addActor(imgShuttle);
 		imgShuttle.setPosition(10, 250);
 		imgShuttle.setWidth(120);
 		imgShuttle.setHeight(110);
-		
-		imgAstronaut.addAction(Actions.forever(Actions.sequence(
-				rotateBy(22.5f, 2, Interpolation.linear),
-				rotateBy(-22.5f, 2, Interpolation.linear),
-				rotateBy(-22.5f, 2, Interpolation.linear),
-				rotateBy(22.5f, 2, Interpolation.linear))));
+
+		// Para realizar movimientos como el de la rotación de la imagen,
+		// primero debemos establecer el origen de la misma.
+		imgAstronaut.setOrigin(imgAstronaut.getWidth() / 2,
+				imgAstronaut.getHeight() / 2);
+
+		// Por último añadimos una acción que se repita constantemente.
+		imgAstronaut.addAction(Actions.forever(rotateBy(22.5f, 2,
+				Interpolation.linear)));
 		return layer;
 	}
 
 	private Table buildLogosLayer() {
 		Table layer = new Table();
-		layer.left().top();
 
-		// + Game Logo
-		/*
-		 * imgLogo = new Image(skinSpaceRunners, "logo"); layer.add(imgLogo);
-		 * layer.row().expandY();
-		 * 
-		 * // + Info Logos imgInfo = new Image(skinSpaceRunners, "info");
-		 * layer.add(imgInfo).bottom();
-		 */
+		// Título
+		
+		imgTitle = new Image(skinSpaceRunners, "title");
+		layer.addActor(imgTitle);
+		imgTitle.setPosition(30, 370);
+		imgTitle.setWidth(700);
+		imgTitle.setHeight(100);
+
+		// Logo de Isseral Studios
+
+		imgLogo = new Image(skinSpaceRunners, "isseral");
+		layer.addActor(imgLogo);
+		imgLogo.setPosition(20, 10);
+		imgLogo.setWidth(90);
+		imgLogo.setHeight(120);
 
 		if (debugEnabled) {
 			layer.debug();
@@ -205,6 +209,7 @@ public class MenuScreen extends AbstractGameScreen {
 	private Table buildControlsLayer() {
 		Table layer = new Table();
 		layer.defaults().expand().right().padRight(40.0f);
+		
 		// Botón Jugar
 		btnMenuPlay = new Button(skinSpaceRunners, "play");
 		layer.add(btnMenuPlay);
@@ -257,26 +262,23 @@ public class MenuScreen extends AbstractGameScreen {
 	}
 
 	private Table buildOptionsWindowLayer() {
-		winOptions = new Window("Options", skinLibgdx);
-		
+		winOptions = new Window("Opciones", skinLibgdx);
+
 		winOptions.add(buildOptWinAudioSettings()).row();
-		
+
 		winOptions.add(buildOptWinSkinSelection()).row();
-		
-		winOptions.add(buildOptWinDebug()).row();
-		
+
 		winOptions.add(buildOptWinButtons()).pad(10, 0, 10, 0);
-		
+
 		winOptions.setColor(1, 1, 1, 0.8f);
-		
+
 		winOptions.setVisible(false);
 		if (debugEnabled) {
 			winOptions.debug();
 		}
 
-		
 		winOptions.pack();
-		
+
 		winOptions.setPosition(
 				Constants.VIEWPORT_GUI_WIDTH - winOptions.getWidth() - 50, 50);
 		return winOptions;
@@ -298,33 +300,34 @@ public class MenuScreen extends AbstractGameScreen {
 
 		// Mostramos el menú de opciones.
 		winOptions.setVisible(true);
+
 	}
 
 	private Table buildOptWinAudioSettings() {
 		Table tbl = new Table();
 
-		
 		tbl.pad(10, 10, 0, 10);
 		tbl.add(new Label("Audio", skinLibgdx, "default-font", Color.ORANGE))
 				.colspan(3);
 
 		tbl.row();
+
 		tbl.columnDefaults(0).padRight(10);
 		tbl.columnDefaults(1).padRight(10);
 
-		
 		chkSound = new CheckBox("", skinLibgdx);
 		tbl.add(chkSound);
-		tbl.add(new Label("Sound", skinLibgdx));
+		tbl.add(new Label("Sonido", skinLibgdx));
 		sldSound = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
 		tbl.add(sldSound);
+		sldSound.setWidth(500);
+		sldSound.setHeight(50);
 
 		tbl.row();
 
-		
 		chkMusic = new CheckBox("", skinLibgdx);
 		tbl.add(chkMusic);
-		tbl.add(new Label("Music", skinLibgdx));
+		tbl.add(new Label("Musica", skinLibgdx));
 		sldMusic = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
 		tbl.add(sldMusic);
 
@@ -336,14 +339,12 @@ public class MenuScreen extends AbstractGameScreen {
 	private Table buildOptWinSkinSelection() {
 		Table tbl = new Table();
 
-		
 		tbl.pad(10, 10, 0, 10);
-		tbl.add(new Label("Character Skin", skinLibgdx, "default-font",
+		tbl.add(new Label("Skins del astronauta", skinLibgdx, "default-font",
 				Color.ORANGE)).colspan(2);
 
 		tbl.row();
 
-		
 		selCharSkin = new SelectBox(CharacterSkin.values(), skinLibgdx);
 		selCharSkin.addListener(new ChangeListener() {
 			@Override
@@ -354,32 +355,8 @@ public class MenuScreen extends AbstractGameScreen {
 
 		tbl.add(selCharSkin).width(120).padRight(20);
 
-		
 		imgCharSkin = new Image(Assets.instance.astronaut.astronaut);
-		tbl.add(imgCharSkin).width(50).height(50);
-
-		return tbl;
-	}
-
-	private Table buildOptWinDebug() {
-		Table tbl = new Table();
-
-		
-		tbl.pad(10, 10, 0, 10);
-		tbl.add(new Label("Debug", skinLibgdx, "default-font", Color.RED))
-				.colspan(3);
-
-		tbl.row();
-
-		tbl.columnDefaults(0).padRight(10);
-		tbl.columnDefaults(1).padRight(10);
-
-		
-		chkShowFpsCounter = new CheckBox("", skinLibgdx);
-		tbl.add(new Label("Show FPS Counter", skinLibgdx));
-		tbl.add(chkShowFpsCounter);
-
-		tbl.row();
+		tbl.add(imgCharSkin).width(25).height(50);
 
 		return tbl;
 	}
@@ -387,7 +364,6 @@ public class MenuScreen extends AbstractGameScreen {
 	private Table buildOptWinButtons() {
 		Table tbl = new Table();
 
-		
 		Label lbl = null;
 		lbl = new Label("", skinLibgdx);
 		lbl.setColor(0.75f, 0.75f, 0.75f, 1);
@@ -405,8 +381,7 @@ public class MenuScreen extends AbstractGameScreen {
 
 		tbl.row();
 
-		
-		btnWinOptSave = new TextButton("Save", skinLibgdx);
+		btnWinOptSave = new TextButton("Guardar", skinLibgdx);
 		tbl.add(btnWinOptSave).padRight(30);
 
 		btnWinOptSave.addListener(new ChangeListener() {
@@ -416,8 +391,7 @@ public class MenuScreen extends AbstractGameScreen {
 			}
 		});
 
-		
-		btnWinOptCancel = new TextButton("Cancel", skinLibgdx);
+		btnWinOptCancel = new TextButton("Cancelar", skinLibgdx);
 		tbl.add(btnWinOptCancel);
 
 		btnWinOptCancel.addListener(new ChangeListener() {

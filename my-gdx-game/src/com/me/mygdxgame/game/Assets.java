@@ -24,7 +24,6 @@ public class Assets implements Disposable, AssetErrorListener
 	public static final Assets instance = new Assets();
 	private AssetManager assetManager;
 	public AssetAstronaut astronaut;
-	public AssetAstronautPower astronautPower;
 	public AssetLife life;
 	
 	// Enmigos
@@ -90,7 +89,8 @@ public class Assets implements Disposable, AssetErrorListener
 		assetManager.load("sounds/pickup_feather.wav", Sound.class);
 		assetManager.load("sounds/live_lost.wav", Sound.class);
 		
-		assetManager.load("music/keith303_-_brand_new_highscore.mp3", Music.class);
+		assetManager.load("music/Stellardrone - Billions And Billions.mp3", Music.class);
+		assetManager.load("music/Stellardrone - Eclipse On The Moon.mp3", Music.class);
 		
 		
 		assetManager.finishLoading();
@@ -110,7 +110,6 @@ public class Assets implements Disposable, AssetErrorListener
 		// Creación de los recursos de creación de objetos
 		fonts = new AssetFonts();
 		astronaut = new AssetAstronaut(atlas);
-		astronautPower = new AssetAstronautPower(atlas);
 		life = new AssetLife(atlas);
 		enemy = new AssetEnemy(atlas);
 		enemyFwd = new AssetEnemyForward(atlas);
@@ -129,17 +128,17 @@ public class Assets implements Disposable, AssetErrorListener
 		checkpoint = new AssetCheckpoint(atlas);
 		
 		ExtraLife = new AssetExtraLife(atlas);
-		// Goal
+		// Meta
 		goal = new AssetGoal(atlas);
-		// Buttons
+		// Botones
 		leftButton = new AssetLeftButton(atlas);
 		rightButton = new AssetRightButton(atlas);
 		jumpButton = new AssetJumpButton(atlas);
 		levelDecoration = new AssetLevelDecoration(atlas);
-		// Sound
+		// Sonido
 		sounds = new AssetSounds(assetManager);
 		music = new AssetMusic(assetManager);
-		// Pause menu
+		// Menú de pausa
 		pause = new AssetPause(atlasPause);
 	}
 
@@ -158,53 +157,34 @@ public class Assets implements Disposable, AssetErrorListener
 		Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception) throwable);
 	}
 
-	/*
-	 * @Override public void error(String filename, Class type, Throwable
-	 * throwable) { Gdx.app.error(TAG, "Couldn't load asset '" + filename + "'",
-	 * (Exception) throwable); }
-	 */
-
 	public class AssetAstronaut 
 	{
 		public final AtlasRegion astronaut;
-		//public final Animation animNormal;
+		public final Animation animStanding;
 		public final Animation animMoving;
-		public final Animation animCopterTransform;
-		public final Animation animCopterTransformBack;
-		public final Animation animCopterRotate;
+		public final Animation animJumping;
+		public final Animation animFlying;
 
 		public AssetAstronaut(TextureAtlas atlas) 
 		{
-			astronaut = atlas.findRegion("anim_astronaut_normal");
+			//astronaut = atlas.findRegion("anim_astronaut_normal");
+			astronaut = atlas.findRegion("astronaut");
 			Array<AtlasRegion> regions = null;
 			//AtlasRegion region = astronaut;
 			
-			// Animation: astronaut Normal
-			regions = atlas.findRegions("anim_astronaut_normal");
+			regions = atlas.findRegions("astronaut-stand");
+			animStanding = new Animation(8.0f / 10.0f, regions,
+			Animation.LOOP_PINGPONG);
+			
+			regions = atlas.findRegions("astronaut-moving");
 			animMoving = new Animation(1.0f / 10.0f, regions,
 			Animation.LOOP_PINGPONG);
-			// Animation: astronaut Copter - knot ears
-			regions = atlas.findRegions("anim_astronaut_copter");
-			animCopterTransform = new Animation(1.0f / 10.0f, regions);
-			// Animation: astronaut Copter - unknot ears
-			regions = atlas.findRegions("anim_astronaut_copter");
-			animCopterTransformBack = new Animation(1.0f / 10.0f, regions,
-			Animation.REVERSED);
-			// Animation: astronaut Copter - rotate ears
-			regions = new Array<AtlasRegion>();
-			regions.add(atlas.findRegion("anim_astronaut_copter", 4));
-			regions.add(atlas.findRegion("anim_astronaut_copter", 5));
-			animCopterRotate = new Animation(1.0f / 15.0f, regions);
-		}
-	}
-
-	public class AssetAstronautPower
-	{
-		public final AtlasRegion astronaut;
-
-		public AssetAstronautPower(TextureAtlas atlas) 
-		{
-			astronaut = atlas.findRegion("astronaut_power");
+			
+			regions = atlas.findRegions("astronaut-jump");
+			animJumping = new Animation(1.0f / 10.0f, regions);
+			
+			regions = atlas.findRegions("astronaut-jump");
+			animFlying = new Animation(1.0f / 10.0f, regions);
 		}
 	}
 	
@@ -346,6 +326,8 @@ public class Assets implements Disposable, AssetErrorListener
 		public final AtlasRegion piece3;
 		public final AtlasRegion piece4;
 		public final AtlasRegion piece5;
+		public final AtlasRegion piece6;
+		public final AtlasRegion piece7;
 		//public final Animation animPiece;
 
 		public AssetPiece(TextureAtlas atlas) 
@@ -356,12 +338,8 @@ public class Assets implements Disposable, AssetErrorListener
 			piece3 = atlas.findRegion("piece3");
 			piece4 = atlas.findRegion("piece4");
 			piece5 = atlas.findRegion("piece5");
-			// Animation: Gold Coin
-			/*Array<AtlasRegion> regions = atlas.findRegions("anim_gold_coin");
-			AtlasRegion region = regions.first();
-			for (int i = 0; i < 10; i++)
-				regions.insert(0, region);
-			animPiece = new Animation(1.0f / 20.0f, regions, Animation.LOOP_PINGPONG);*/
+			piece6 = atlas.findRegion("piece6");
+			piece7 = atlas.findRegion("piece7");
 		}
 	}
 
@@ -496,18 +474,20 @@ public class Assets implements Disposable, AssetErrorListener
 	public class AssetLevelDecoration 
 	{
 		public final AtlasRegion cloud;
-		public final AtlasRegion satellite;
-		public final AtlasRegion mountainLeft;
-		public final AtlasRegion mountainRight;
+		public final AtlasRegion mountain1;
+		public final AtlasRegion mountain2;
+		public final AtlasRegion mountain3;
+		
 		public final AtlasRegion poisonOverlay;
 
 		public AssetLevelDecoration(TextureAtlas atlas) 
 		{
 			cloud = atlas.findRegion("nube-de-polvo");
-			satellite = atlas.findRegion("shooting-star");
-			mountainLeft = atlas.findRegion("mountain_left");
-			mountainRight = atlas.findRegion("mountain_right");
+			mountain1 = atlas.findRegion("mountains1");
+			mountain2 = atlas.findRegion("mountains2");
+			mountain3 = atlas.findRegion("mountains3");
 			poisonOverlay = atlas.findRegion("poison_overlay");
+			
 		}
 	}
 
@@ -561,14 +541,14 @@ public class Assets implements Disposable, AssetErrorListener
 	public class AssetMusic 
 	{
 		public final Music song01;
-		//public final Music song02;
+		public final Music song02;
 
 		public AssetMusic(AssetManager am) 
 		{
-			song01 = am.get("music/keith303_-_brand_new_highscore.mp3",
+			song01 = am.get("music/Stellardrone - Billions And Billions.mp3",
 					Music.class);
-			/*song02 = am.get("music/song02.mp3",
-					Music.class);*/
+			song02 = am.get("music/Stellardrone - Eclipse On The Moon.mp3",
+					Music.class);
 		}
 	}
 

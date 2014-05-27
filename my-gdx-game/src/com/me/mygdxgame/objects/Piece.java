@@ -21,6 +21,8 @@ public class Piece extends AbstractGameObject {
 		regPieces.add(Assets.instance.piece.piece3);
 		regPieces.add(Assets.instance.piece.piece4);
 		regPieces.add(Assets.instance.piece.piece5);
+		regPieces.add(Assets.instance.piece.piece6);
+		regPieces.add(Assets.instance.piece.piece7);
 		regPiece = regPieces.random();
 		bounds.set(0, 0, dimension.x, dimension.y);
 		collected = false;

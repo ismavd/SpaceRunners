@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 
 public enum CharacterSkin {
 
-	WHITE("White", 1.0f, 1.0f, 1.0f), GRAY("Gray", 0.7f, 0.7f, 0.7f), BROWN(
-			"Brown", 0.7f, 0.5f, 0.3f);
+	WHITE("Blanco", 1.0f, 1.0f, 1.0f), GRAY("Gris", 0.7f, 0.7f, 0.7f), BROWN(
+			"Marron", 0.7f, 0.5f, 0.3f);
 	private String name;
 	private Color color = new Color();
 

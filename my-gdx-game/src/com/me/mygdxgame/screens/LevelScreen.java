@@ -2,34 +2,22 @@ package com.me.mygdxgame.screens;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.esotericsoftware.tablelayout.Cell;
 import com.me.mygdxgame.game.Assets;
+import com.me.mygdxgame.utils.AudioManager;
 import com.me.mygdxgame.utils.Constants;
-import com.me.mygdxgame.utils.GamePreferences;
-import com.me.mygdxgame.utils.CharacterSkin;
 
 public class LevelScreen extends AbstractGameScreen {
 
@@ -52,8 +40,6 @@ public class LevelScreen extends AbstractGameScreen {
 	private final float DEBUG_REBUILD_INTERVAL = 5.0f;
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
-
-	private static final String TAG = MenuScreen.class.getName();
 
 	private Skin skinLibgdx;
 
@@ -92,7 +78,6 @@ public class LevelScreen extends AbstractGameScreen {
 		Table layerNextWorld = buildNextWorldLayer(); // Capa con el botón de
 														// cambio de mundo
 		// layerExit.setSize(1, 1);
-		// assemble stage for menu screen
 		stage.clear(); // Limpiamos
 
 		// Creamos una nueva pila donde incluiremos las capas con las diferentes
@@ -108,7 +93,6 @@ public class LevelScreen extends AbstractGameScreen {
 		stack.add(layerObjects);
 		stack.add(layerExit);
 		stack.add(layerNextWorld);
-		// layerExit.setSize(1,1);
 	}
 
 	// Devuelve un elemento Table (capa) que contiene el fondo del menú
@@ -207,6 +191,8 @@ public class LevelScreen extends AbstractGameScreen {
 		layer.padBottom(-300.0f);
 		btnExit = new Button(skinCanyonBunny, "back");
 		layer.add(btnExit);
+		btnExit.setWidth(150);
+		btnExit.setHeight(150);
 		btnExit.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				onExitClicked();
@@ -240,6 +226,7 @@ public class LevelScreen extends AbstractGameScreen {
 	public void show() {
 		stage = new Stage();
 		rebuildStage();
+		//AudioManager.instance.play(Assets.instance.music.song01);
 	}
 
 	@Override

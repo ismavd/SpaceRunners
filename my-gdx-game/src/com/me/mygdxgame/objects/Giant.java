@@ -15,7 +15,7 @@ public class Giant extends AbstractGameObject {
 	}
 	
 	private void init() {
-		dimension.set(3.5f,4f);
+		dimension.set(3f,3f);
 		regGiant = Assets.instance.giant.giant;
 		bounds.set(0, 0, dimension.x - 1, dimension.y);
 		terminalVelocity.set(2.3f, 3.0f);
@@ -29,7 +29,7 @@ public class Giant extends AbstractGameObject {
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x,
 				origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation,
 				reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
-				reg.getRegionHeight(), false, false);
+				reg.getRegionHeight(), true, false);
 	}
 	
 	@Override

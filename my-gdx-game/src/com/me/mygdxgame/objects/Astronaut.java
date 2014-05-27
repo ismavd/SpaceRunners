@@ -36,30 +36,26 @@ public class Astronaut extends AbstractGameObject {
 	public float timeLeftBarPowerup;
 
 	public boolean shooting;
-	public boolean wallJumping;
 
 	public ParticleEffect dustParticles = new ParticleEffect();
 
-	// private Animation animNormal;
+	private Animation animStanding;
 	private Animation animMoving;
-	private Animation animCopterTransform;
-	private Animation animCopterTransformBack;
-	private Animation animCopterRotate;
+	private Animation animJumping;
+	private Animation animFlying;
 
 	public Astronaut() {
 		init();
 	}
 
 	public void init() {
-		dimension.set(1, 1);
-		// regastronaut = Assets.instance.astronaut.astronaut;
-		// animNormal = Assets.instance.astronaut.animNormal;
+		dimension.set(0.5f, 1f);
+		
+		animStanding = Assets.instance.astronaut.animStanding;
 		animMoving = Assets.instance.astronaut.animMoving;
-		animCopterTransform = Assets.instance.astronaut.animCopterTransform;
-		animCopterTransformBack = Assets.instance.astronaut.animCopterTransformBack;
-		animCopterRotate = Assets.instance.astronaut.animCopterRotate;
-		// setAnimation(animMoving);
-		setAnimation(null);
+		animJumping = Assets.instance.astronaut.animJumping;
+		animFlying = Assets.instance.astronaut.animFlying;
+		setAnimation(animStanding);
 
 		// Centro de la imagen
 		origin.set(dimension.x / 2, dimension.y / 2);
@@ -79,7 +75,6 @@ public class Astronaut extends AbstractGameObject {
 		timeLeftBarPowerup = 0;
 
 		shooting = false;
-		wallJumping = false;
 
 		// Pârtículas de polvo
 		dustParticles.load(Gdx.files.internal("particles/dust.pfx"),
@@ -132,45 +127,38 @@ public class Astronaut extends AbstractGameObject {
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		if (velocity.x != 0 && viewDirectionOn) {
+			
 			viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT
 					: VIEW_DIRECTION.RIGHT;
-			if (animation == null)
+			if (animation == animStanding) {
+				dimension.set(1f, 1f);
 				setAnimation(animMoving);
-		} else
-			setAnimation(null);
+			}
+		} 
+		if (jumpState == JUMP_STATE.FALLING) {
+			if (velocity.x != 0 && animation == animJumping) {
+				dimension.set(1f, 1f);
+				setAnimation(animMoving);
+			} else if (velocity.x == 0 && animation != animStanding){
+				dimension.set(0.5f, 1f);
+				setAnimation(animStanding);
+			}
+		}
+		if (jumpState != JUMP_STATE.FALLING) {
+			dimension.set(1f, 1f);
+			setAnimation(animJumping);
+		}
 		if (!viewDirectionOn)
 			viewDirectionOn = true;
 		if (timeLeftBarPowerup > 0) {
-			if (animation == animCopterTransformBack) {
-				setAnimation(animCopterTransform);
-			}
 			timeLeftBarPowerup -= deltaTime;
 			if (timeLeftBarPowerup < 0) {
 				// Inhabilitar power-up
 				timeLeftBarPowerup = 0;
 				setBarPowerup(false);
-				setAnimation(animCopterTransformBack);
 			}
 		}
 		dustParticles.update(deltaTime);
-		// Cambio de animación para la habilidad de vuelo
-		if (hasBarPowerup) {
-			if (animation == animMoving) {
-				System.out.println("Paso");
-				setAnimation(animCopterTransform);
-			} else if (animation == animCopterTransform) {
-				if (animation.isAnimationFinished(stateTime))
-					setAnimation(animCopterRotate);
-			}
-		} else {
-			if (animation == animCopterRotate) {
-				if (animation.isAnimationFinished(stateTime))
-					setAnimation(animCopterTransformBack);
-			} else if (animation == animCopterTransformBack) {
-				if (animation.isAnimationFinished(stateTime))
-					setAnimation(animMoving);
-			}
-		}
 	}
 
 	@Override
@@ -221,26 +209,20 @@ public class Astronaut extends AbstractGameObject {
 		batch.setColor(CharacterSkin.values()[GamePreferences.instance.charSkin]
 				.getColor());
 
-		float dimCorrectionX = 0;
-		float dimCorrectionY = 0;
-		/*
-		 * if (animation != animMoving) { dimCorrectionX = 0.05f; dimCorrectionY
-		 * = 0.2f; }
-		 */
-
+		reg = regAstronaut;
 		if (hasBarPowerup)
 			batch.setColor(1.0f, 0.8f, 0.0f, 1.0f);
-		reg = regAstronaut;
-
-		if (animation != null)
+		//System.out.println(animation.);
+		if (animation != null) {
 			reg = animation.getKeyFrame(stateTime, true);
-		else
+		} else
 			reg = Assets.instance.astronaut.astronaut;
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x,
-				origin.y, dimension.x + dimCorrectionX, dimension.y
-						+ dimCorrectionY, scale.x, scale.y, rotation,
+				origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation,
 				reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
-				reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT,
+				reg.getRegionHeight(), 
+				animation == animJumping || animation == animFlying ?
+						viewDirection == VIEW_DIRECTION.RIGHT : viewDirection == VIEW_DIRECTION.LEFT,
 				false);
 		batch.setColor(1, 1, 1, 1);
 	}
